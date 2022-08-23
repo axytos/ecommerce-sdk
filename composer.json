@@ -7,7 +7,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "../openapi-client-sdk"
+            "url": "../financial-services-api-sdk"
         }
     ],
     "require": {
