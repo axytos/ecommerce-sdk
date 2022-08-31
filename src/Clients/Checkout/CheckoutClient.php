@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Checkout;
 
@@ -12,8 +14,7 @@ class CheckoutClient implements CheckoutClientInterface
     public function __construct(
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
         CheckoutApiInterface $checkoutApi
-        )
-    {
+    ) {
         $this->paymentMethodConfiguration = $paymentMethodConfiguration;
         $this->checkoutApi = $checkoutApi;
     }
@@ -26,12 +27,9 @@ class CheckoutClient implements CheckoutClientInterface
 
     public function getCreditCheckAgreementInfo(): string
     {
-        try 
-        {
+        try {
             return $this->checkoutApi->getCreditCheckAgreementText();
-        } 
-        catch (\Throwable $th) 
-        {
+        } catch (\Throwable $th) {
             throw new CreditCheckAgreementLoadFailedException($th);
         }
     }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -24,24 +26,20 @@ class DtoArrayMapper
      */
     private function toArrayValue($value)
     {
-        if ($value instanceof DateTimeInterface)
-        {
+        if ($value instanceof DateTimeInterface) {
             $serializer = new DateTimeSerializer();
             return $serializer->serialize($value);
         }
 
-        if ($value instanceof DtoInterface)
-        {
+        if ($value instanceof DtoInterface) {
             return $this->toArrayValue(get_object_vars($value));
         }
 
-        if ($value instanceof DtoCollection)
-        {
+        if ($value instanceof DtoCollection) {
             return array_map([$this,'toArrayValue'], $value->getElements());
         }
 
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             return array_map([$this,'toArrayValue'], $value);
         }
 
@@ -61,12 +59,10 @@ class DtoArrayMapper
         /** @phpstan-var T */
         $dto = $reflector->newInstanceWithoutConstructor();
 
-        foreach ($reflector->getProperties() as $property)
-        {
+        foreach ($reflector->getProperties() as $property) {
             $name = $property->getName();
 
-            if (array_key_exists($name, $array))
-            {
+            if (array_key_exists($name, $array)) {
                 $value = $this->fromArrayValue($array[$name], $property->getType());
                 $property->setValue($dto, $value);
             }
@@ -82,23 +78,19 @@ class DtoArrayMapper
      */
     private function fromArrayValue($value, ?ReflectionType $type)
     {
-        if ($type instanceof ReflectionNamedType)
-        {
-            if (is_string($value) && is_a($type->getName(), DateTimeInterface::class, true))
-            {
+        if ($type instanceof ReflectionNamedType) {
+            if (is_string($value) && is_a($type->getName(), DateTimeInterface::class, true)) {
                 $serializer = new DateTimeSerializer();
                 return $serializer->deserialize($value);
             }
 
-            if (is_array($value) && is_a($type->getName(), DtoInterface::class, true))
-            {
+            if (is_array($value) && is_a($type->getName(), DtoInterface::class, true)) {
                 /** @phpstan-var class-string<DtoInterface> */
                 $dtoClassName = $type->getName();
                 return $this->fromArray($value, $dtoClassName);
             }
 
-            if (is_array($value) && is_a($type->getName(), DtoCollection::class, true))
-            {
+            if (is_array($value) && is_a($type->getName(), DtoCollection::class, true)) {
                 /** @phpstan-var class-string<DtoCollection> */
                 $dtoCollectionClassName = $type->getName();
                 return $this->createDtoCollection($value, $dtoCollectionClassName);
@@ -119,7 +111,7 @@ class DtoArrayMapper
         /** @phpstan-var class-string<DtoInterface> */
         $dtoClassName = $dtoCollectionClassName::getElementClass();
 
-        $elements = array_map(function($value) use ($dtoClassName){
+        $elements = array_map(function ($value) use ($dtoClassName) {
             return $this->fromArray($value, $dtoClassName);
         }, $values);
 

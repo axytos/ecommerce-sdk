@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
@@ -13,18 +15,19 @@ class PaymentControlOrderDataHashCalculator
 {
     private DtoArrayMapper $dtoArrayMapper;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->dtoArrayMapper = new DtoArrayMapper();
     }
 
     public function computeOrderDataHash(PaymentControlOrderData $data): string
     {
         $hash = '';
-        
-        $hash = $this->computeHash($hash.$this->hasCustomerData($data->personalData));
-        $hash = $this->computeHash($hash.$this->hashInvoiceAddress($data->invoiceAddress));
-        $hash = $this->computeHash($hash.$this->hashDeliveryAddress($data->deliveryAddress));
-        $hash = $this->computeHash($hash.$this->hashPaymentControlBasket($data->basket));
+
+        $hash = $this->computeHash($hash . $this->hasCustomerData($data->personalData));
+        $hash = $this->computeHash($hash . $this->hashInvoiceAddress($data->invoiceAddress));
+        $hash = $this->computeHash($hash . $this->hashDeliveryAddress($data->deliveryAddress));
+        $hash = $this->computeHash($hash . $this->hashPaymentControlBasket($data->basket));
         return $hash;
     }
 
@@ -48,7 +51,8 @@ class PaymentControlOrderDataHashCalculator
         return $this->computeDtoHash($paymentControlBasket);
     }
 
-    private function computeDtoHash(DtoInterface $dto): string {
+    private function computeDtoHash(DtoInterface $dto): string
+    {
         $arrayDto = $this->dtoArrayMapper->toArray($dto);
         $serializedDto = serialize($arrayDto);
         return $this->computeHash($serializedDto);

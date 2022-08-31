@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataTransferObjects;
 
@@ -17,6 +19,6 @@ class PaymentControlBasketPositionDto implements DtoInterface
     public ?float $taxPercent = null;
 
     public ?float $netPositionTotal = null;
-    
+
     public ?float $grossPositionTotal = null;
 }

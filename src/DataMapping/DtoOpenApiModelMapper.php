@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -116,28 +118,24 @@ class DtoOpenApiModelMapper
     public function toOpenApiModel(DtoInterface $dataTransferObject, string $openApiModelName): ModelInterface
     {
         $dtoClassName = get_class($dataTransferObject);
-     
-        if (!is_subclass_of($openApiModelName, ModelInterface::class))
-        {
+
+        if (!is_subclass_of($openApiModelName, ModelInterface::class)) {
             throw new InvalidArgumentException("$openApiModelName does not implement " . ModelInterface::class);
         }
-    
-        if (!$this->mappings->hasMapping($dtoClassName, $openApiModelName))
-        {
+
+        if (!$this->mappings->hasMapping($dtoClassName, $openApiModelName)) {
             throw new InvalidArgumentException("Undefined mapping: {$dtoClassName} - {$openApiModelName}");
         }
 
         $dtoReflector = new ReflectionClass($dataTransferObject);
 
         /** @phpstan-var T */
-        $openApiModel = new $openApiModelName;
+        $openApiModel = new $openApiModelName();
 
         $attributeInfos = OpenApiModelAttributeInfo::getAttributeInfos($openApiModel);
 
-        foreach ($attributeInfos as $attributeInfo)
-        {
-            if (!$dtoReflector->hasProperty($attributeInfo->getName()))
-            {
+        foreach ($attributeInfos as $attributeInfo) {
+            if (!$dtoReflector->hasProperty($attributeInfo->getName())) {
                 continue;
             }
 
@@ -161,13 +159,11 @@ class DtoOpenApiModelMapper
     {
         $openApiModelName = get_class($openApiModel);
 
-        if (!is_subclass_of($dataTransferObjectName, DtoInterface::class))
-        {
+        if (!is_subclass_of($dataTransferObjectName, DtoInterface::class)) {
             throw new InvalidArgumentException("$dataTransferObjectName does not implement " . DtoInterface::class);
         }
 
-        if (!$this->mappings->hasMapping($dataTransferObjectName, $openApiModelName))
-        {
+        if (!$this->mappings->hasMapping($dataTransferObjectName, $openApiModelName)) {
             throw new InvalidArgumentException("Undefined mapping: {$dataTransferObjectName} - {$openApiModelName}");
         }
 
@@ -178,10 +174,8 @@ class DtoOpenApiModelMapper
 
         $attributeInfos = OpenApiModelAttributeInfo::getAttributeInfos($openApiModel);
 
-        foreach ($attributeInfos as $attributeInfo)
-        {
-            if (!$reflector->hasProperty($attributeInfo->getName()))
-            {
+        foreach ($attributeInfos as $attributeInfo) {
+            if (!$reflector->hasProperty($attributeInfo->getName())) {
                 continue;
             }
 
@@ -201,24 +195,20 @@ class DtoOpenApiModelMapper
      */
     private function toOpenApiValue($value)
     {
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             return $this->toOpenApiArray($value);
         }
 
-        if ($value instanceof DateTimeInterface)
-        {
+        if ($value instanceof DateTimeInterface) {
             return $this->toOpenApiDateTime($value);
         }
 
-        if ($value instanceof DtoInterface)
-        {
+        if ($value instanceof DtoInterface) {
             $oaModelName = $this->mappings->lookupOpenApiModelName($value);
             return $this->toOpenApiModel($value, $oaModelName);
         }
 
-        if ($value instanceof DtoCollection)
-        {
+        if ($value instanceof DtoCollection) {
             return $this->toOpenApiValue($value->getElements());
         }
 
@@ -229,8 +219,7 @@ class DtoOpenApiModelMapper
     {
         $models = [];
 
-        foreach($values as $value)
-        {
+        foreach ($values as $value) {
             array_push($models, $this->toOpenApiValue($value));
         }
 
@@ -249,22 +238,18 @@ class DtoOpenApiModelMapper
      */
     private function toDataTransferObjectValue($value, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
     {
-        if (is_array($value))
-        {
-            if ($dtoPropertyInfo->hasDtoCollectionType())
-            {
+        if (is_array($value)) {
+            if ($dtoPropertyInfo->hasDtoCollectionType()) {
                 return $this->toDtoCollection($value, $dtoPropertyInfo);
             }
             return $this->toDataTransferObjectArray($value, $attributeInfo, $dtoPropertyInfo);
         }
 
-        if (is_string($value) && $attributeInfo->getFormat() === 'date-time')
-        {
+        if (is_string($value) && $attributeInfo->getFormat() === 'date-time') {
             return $this->toDataTransferObjectDateTime($value);
         }
 
-        if ($value instanceof ModelInterface)
-        {
+        if ($value instanceof ModelInterface) {
             $dtoClassName = $this->mappings->lookupDtoClassName($value);
             return $this->toDataTransferObject($value, $dtoClassName);
         }
@@ -279,11 +264,11 @@ class DtoOpenApiModelMapper
 
         /** @phpstan-var class-string<DtoInterface> */
         $dataTransferObjectName = $dtoCollectionClassName::getElementClass();
-        
-        $elements = array_map(function($x) use ($dataTransferObjectName){
+
+        $elements = array_map(function ($x) use ($dataTransferObjectName) {
             return $this->toDataTransferObject($x, $dataTransferObjectName);
         }, $values);
-        
+
         return new $dtoCollectionClassName(...$elements);
     }
 
@@ -291,8 +276,7 @@ class DtoOpenApiModelMapper
     {
         $dtos = [];
 
-        foreach ($values as $value)
-        {
+        foreach ($values as $value) {
             array_push($dtos, $this->toDataTransferObjectValue($value, $attributeInfo, $dtoPropertyInfo));
         }
 

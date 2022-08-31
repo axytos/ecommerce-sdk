@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Invoice;
 
@@ -21,8 +23,8 @@ class InvoiceClient implements InvoiceClientInterface
 
     public function __construct(
         InvoiceApiInterface $invoiceApi,
-        DtoArrayMapper $dtoArrayMapper)
-    {
+        DtoArrayMapper $dtoArrayMapper
+    ) {
         $this->invoiceApi = $invoiceApi;
         $this->dtoArrayMapper = $dtoArrayMapper;
     }
@@ -38,14 +40,13 @@ class InvoiceClient implements InvoiceClientInterface
         $requestDto->invoiceAddress = $orderContext->getInvoiceAddress();
         $requestDto->deliveryAddress = $orderContext->getDeliveryAddress();
         $requestDto->basket = $orderContext->getBasket();
-        
+
         $responseDto = $this->invoiceApi->precheck($requestDto);
 
         $preCheckResponseData = $this->dtoArrayMapper->toArray($responseDto);
         $orderContext->setPreCheckResponseData($preCheckResponseData);
 
-        if (in_array($responseDto->decision,[CheckDecisions::SAFE, CheckDecisions::REJECT]))
-        {
+        if (in_array($responseDto->decision, [CheckDecisions::SAFE, CheckDecisions::REJECT])) {
             return ShopActions::CHANGE_PAYMENT_METHOD;
         }
 
@@ -89,7 +90,7 @@ class InvoiceClient implements InvoiceClientInterface
         $reportDto = new ReportShippingDto();
         $reportDto->externalOrderId = $orderContext->getOrderNumber();
         $reportDto->basketPositions = $orderContext->getShippingBasketPositions();
-        
+
         $this->invoiceApi->reportShipping($reportDto);
     }
 
@@ -125,8 +126,7 @@ class InvoiceClient implements InvoiceClientInterface
 
         $externalOrderId = $paymentResponse->externalOrderId;
 
-        if (is_null($externalOrderId))
-        {
+        if (is_null($externalOrderId)) {
             throw new Exception('ExternalOrderId not found');
         }
 
@@ -137,8 +137,7 @@ class InvoiceClient implements InvoiceClientInterface
     {
         $paymentState = $this->invoiceApi->paymentState($orderId)->paymentState;
 
-        if (is_null($paymentState))
-        {
+        if (is_null($paymentState)) {
             throw new Exception('PaymentState not found');
         }
 

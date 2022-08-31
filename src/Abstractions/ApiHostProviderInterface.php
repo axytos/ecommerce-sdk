@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Abstractions;
 
 interface ApiHostProviderInterface
 {
-    function getApiHost(): string;
+    public function getApiHost(): string;
 }

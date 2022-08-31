@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
@@ -22,8 +24,8 @@ class PaymentControlClient implements PaymentControlClientInterface
     public function __construct(
         PaymentControlApiInterface $paymentControlApi,
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
-        PaymentControlOrderDataHashCalculator $paymentControlOrderDataHashCalculator)
-    {
+        PaymentControlOrderDataHashCalculator $paymentControlOrderDataHashCalculator
+    ) {
         $this->paymentControlApi = $paymentControlApi;
         $this->paymentMethodConfiguration = $paymentMethodConfiguration;
         $this->paymentControlOrderDataHashCalculator = $paymentControlOrderDataHashCalculator;
@@ -31,31 +33,25 @@ class PaymentControlClient implements PaymentControlClientInterface
 
     public function check(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): string
     {
-        try 
-        {
+        try {
             $paymentTypeSecurity = $this->getPaymentTypeSecurity($data->paymentMethodId);
 
-            if ($paymentTypeSecurity === null)
-            {
+            if ($paymentTypeSecurity === null) {
                 return PaymentControlAction::COMPLETE_ORDER;
             }
 
             $currentHash = $this->paymentControlOrderDataHashCalculator->computeOrderDataHash($data);
 
-            if ($paymentTypeSecurity !== PaymentTypeSecurities::UNSAFE)
-            {
+            if ($paymentTypeSecurity !== PaymentTypeSecurities::UNSAFE) {
                 $previousCheckResponse = $paymentControlCache->getCheckResponse();
-                if ($previousCheckResponse !== null)
-                {
+                if ($previousCheckResponse !== null) {
                     $expirationTimestamp = $previousCheckResponse->transactionMetadata->transactionExpirationTimestamp;
                     $currentTime = new DateTimeImmutable();
 
-                    if ($currentTime < $expirationTimestamp)
-                    {
+                    if ($currentTime < $expirationTimestamp) {
                         $previousHash = $paymentControlCache->getCheckRequestHash();
 
-                        if ($previousHash === $currentHash)
-                        {
+                        if ($previousHash === $currentHash) {
                             return PaymentControlAction::COMPLETE_ORDER;
                         }
                     }
@@ -70,35 +66,30 @@ class PaymentControlClient implements PaymentControlClientInterface
             $requestData->invoiceAddress = $data->invoiceAddress;
             $requestData->deliveryAddress = $data->deliveryAddress;
             $requestData->basket = $data->basket;
-            
+
             $response = $this->paymentControlApi->paymentControlCheck($requestData);
-    
+
             $paymentControlCache->setCheckResponse($response);
             $paymentControlCache->setCheckRequestHash($currentHash);
-    
-            return $this->getPaymentControlAction($paymentTypeSecurity, $response->decision);    
-        } 
-        catch (\Throwable $th)
-        {
-            throw new PaymentControlCheckFailedException($th);   
+
+            return $this->getPaymentControlAction($paymentTypeSecurity, $response->decision);
+        } catch (\Throwable $th) {
+            throw new PaymentControlCheckFailedException($th);
         }
     }
 
     public function confirm(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): void
     {
-        try 
-        {
+        try {
             $paymentMethodId = $data->paymentMethodId;
 
             $checkResponse = $paymentControlCache->getCheckResponse();
 
-            if ($checkResponse === null)
-            {
+            if ($checkResponse === null) {
                 throw new Exception('$checkResponse should not be null');
             }
 
-            if ($this->paymentMethodConfiguration->isSafe($paymentMethodId))
-            {
+            if ($this->paymentMethodConfiguration->isSafe($paymentMethodId)) {
                 $requestData = new PaymentControlConfirmRequestDto();
                 $requestData->paymentTypeSecurity = PaymentTypeSecurities::SAFE;
                 $requestData->personalData = $data->personalData;
@@ -109,9 +100,8 @@ class PaymentControlClient implements PaymentControlClientInterface
 
                 $this->paymentControlApi->paymentControlConfirm($requestData);
             }
-            
-            if ($this->paymentMethodConfiguration->isUnsafe($paymentMethodId))
-            {
+
+            if ($this->paymentMethodConfiguration->isUnsafe($paymentMethodId)) {
                 $requestData = new PaymentControlConfirmRequestDto();
                 $requestData->paymentTypeSecurity = PaymentTypeSecurities::UNSAFE;
                 $requestData->personalData = $data->personalData;
@@ -122,27 +112,22 @@ class PaymentControlClient implements PaymentControlClientInterface
 
                 $this->paymentControlApi->paymentControlConfirm($requestData);
             }
-        } 
-        catch (\Throwable $th) 
-        {
+        } catch (\Throwable $th) {
             throw new PaymentControlConfirmFailedException($th);
         }
     }
 
     private function getPaymentTypeSecurity(string $paymentMethodId): ?string
     {
-        if ($this->paymentMethodConfiguration->isIgnored($paymentMethodId))
-        {
+        if ($this->paymentMethodConfiguration->isIgnored($paymentMethodId)) {
             return null;
         }
 
-        if ($this->paymentMethodConfiguration->isSafe($paymentMethodId))
-        {
+        if ($this->paymentMethodConfiguration->isSafe($paymentMethodId)) {
             return PaymentTypeSecurities::SAFE;
         }
-        
-        if ($this->paymentMethodConfiguration->isUnsafe($paymentMethodId))
-        {
+
+        if ($this->paymentMethodConfiguration->isUnsafe($paymentMethodId)) {
             return PaymentTypeSecurities::UNSAFE;
         }
 
@@ -152,8 +137,7 @@ class PaymentControlClient implements PaymentControlClientInterface
     private function getPaymentControlAction(?string $paymentTypeSecurity, ?string $decision): string
     {
         if ($paymentTypeSecurity === PaymentTypeSecurities::SAFE) {
-            switch ($decision)
-            {
+            switch ($decision) {
                 case CheckDecisions::REJECT:
                     return PaymentControlAction::CANCEL_ORDER;
                 default:
@@ -162,8 +146,7 @@ class PaymentControlClient implements PaymentControlClientInterface
         }
 
         if ($paymentTypeSecurity === PaymentTypeSecurities::UNSAFE) {
-            switch ($decision)
-            {
+            switch ($decision) {
                 case CheckDecisions::SAFE:
                     return PaymentControlAction::CHANGE_PAYMENT_METHOD;
                 case CheckDecisions::UNSAFE:

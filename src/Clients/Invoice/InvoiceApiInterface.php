@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Invoice;
 
@@ -14,21 +16,21 @@ use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 
 interface InvoiceApiInterface
 {
-    function precheck(OrderPreCheckRequestDto $request): OrderPreCheckResponseDto;
+    public function precheck(OrderPreCheckRequestDto $request): OrderPreCheckResponseDto;
 
-    function confirm(OrderCreateRequestDto $request): void;
+    public function confirm(OrderCreateRequestDto $request): void;
 
-    function cancelOrder(string $orderNumber): void;
+    public function cancelOrder(string $orderNumber): void;
 
-    function createInvoice(CreateInvoiceRequestDto $requestDto): void;
+    public function createInvoice(CreateInvoiceRequestDto $requestDto): void;
 
-    function reportShipping(ReportShippingDto $reportDto): void;
+    public function reportShipping(ReportShippingDto $reportDto): void;
 
-    function refund(RefundRequestDto $request): void;
+    public function refund(RefundRequestDto $request): void;
 
-    function return(ReturnRequestModelDto $requestDto): void;
+    public function return(ReturnRequestModelDto $requestDto): void;
 
-    function payment(string $paymentId): PaymentResponseDto;
+    public function payment(string $paymentId): PaymentResponseDto;
 
-    function paymentState(string $orderId): PaymentStateResponseDto;
+    public function paymentState(string $orderId): PaymentStateResponseDto;
 }

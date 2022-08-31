@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
@@ -16,6 +18,6 @@ class PaymentControlOrderData
     public DeliveryAddressDto $deliveryAddress;
 
     public PaymentControlBasketDto $basket;
-    
+
     public string $paymentMethodId;
 }

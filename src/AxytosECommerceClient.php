@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce;
 
@@ -47,7 +49,6 @@ use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculato
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 
-
 final class AxytosECommerceClient extends ClientFacade
 {
     public const CLASS_MAP = [
@@ -55,7 +56,7 @@ final class AxytosECommerceClient extends ClientFacade
         UserAgentFactory::class => [
             UserAgentFactory::class
         ],
-    
+
         CheckoutClient::class => [
             CheckoutClientInterface::class
         ],
@@ -63,19 +64,19 @@ final class AxytosECommerceClient extends ClientFacade
         CheckoutApiAdapter::class => [
             CheckoutApiInterface::class
         ],
-        
+
         PaymentControlClient::class => [
             PaymentControlClientInterface::class
         ],
-        
+
         PaymentControlApiAdapter::class => [
             PaymentControlApiInterface::class
         ],
-        
+
         CredentialValidationClient::class => [
             CredentialValidationClientInterface::class
         ],
-        
+
         CredentialValidationApiAdapter::class => [
             CredentialValidationApiInterface::class
         ],
@@ -107,8 +108,8 @@ final class AxytosECommerceClient extends ClientFacade
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
         FallbackModeConfigurationInterface $fallbackModeConfiguration,
         UserAgentInfoProviderInterface $userAgentInfoProvider,
-        LoggerAdapterInterface $logger): Container
-    {
+        LoggerAdapterInterface $logger
+    ): Container {
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->registerClassMap(self::CLASS_MAP);
         $containerBuilder->registerInstanceMap([
@@ -120,11 +121,11 @@ final class AxytosECommerceClient extends ClientFacade
             LoggerAdapterInterface::class => $logger,
         ]);
 
-        $containerBuilder->registerFactory(ClientInterface::class, function($container){
+        $containerBuilder->registerFactory(ClientInterface::class, function ($container) {
             return new Client();
         });
 
-        $containerBuilder->registerFactory(Configuration::class, function($container){
+        $containerBuilder->registerFactory(Configuration::class, function ($container) {
             $apiHostProvider = $container->get(ApiHostProviderInterface::class);
             $apiKeyProvider = $container->get(ApiKeyProviderInterface::class);
             $userAgentFactory = $container->get(UserAgentFactory::class);
@@ -135,51 +136,51 @@ final class AxytosECommerceClient extends ClientFacade
             return $configuration;
         });
 
-        $containerBuilder->registerFactory(StaticContentApi::class, function($container){
+        $containerBuilder->registerFactory(StaticContentApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new StaticContentApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(CredentialsApi::class, function($container){
+        $containerBuilder->registerFactory(CredentialsApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new CredentialsApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(CheckApi::class, function($container){
+        $containerBuilder->registerFactory(CheckApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new CheckApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(ErrorApi::class, function($container){
+        $containerBuilder->registerFactory(ErrorApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new ErrorApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(PaymentsApi::class, function($container){
+        $containerBuilder->registerFactory(PaymentsApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new PaymentsApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(PaymentApi::class, function($container){
+        $containerBuilder->registerFactory(PaymentApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
             return new PaymentApi($client, $configuration);
         });
 
-        $containerBuilder->registerFactory(DtoOpenApiModelMapper::class, function(){
+        $containerBuilder->registerFactory(DtoOpenApiModelMapper::class, function () {
             return new DtoOpenApiModelMapper();
         });
 
-        $containerBuilder->registerFactory(DtoArrayMapper::class, function(){
+        $containerBuilder->registerFactory(DtoArrayMapper::class, function () {
             return new DtoArrayMapper();
         });
 
-        $containerBuilder->registerFactory(DtoToDtoMapper::class, function(){
+        $containerBuilder->registerFactory(DtoToDtoMapper::class, function () {
             return new DtoToDtoMapper();
         });
 
@@ -192,8 +193,8 @@ final class AxytosECommerceClient extends ClientFacade
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
         FallbackModeConfigurationInterface $fallbackModeConfiguration,
         UserAgentInfoProviderInterface $userAgentInfoProvider,
-        LoggerAdapterInterface $logger)
-    {
+        LoggerAdapterInterface $logger
+    ) {
         parent::__construct(self::buildContainer(
             $apiHostProvider,
             $apiKeyProvider,
@@ -203,5 +204,4 @@ final class AxytosECommerceClient extends ClientFacade
             $logger
         ));
     }
-    
 }

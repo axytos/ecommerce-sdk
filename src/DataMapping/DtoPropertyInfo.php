@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -36,9 +38,8 @@ class DtoPropertyInfo
     {
         $type = $this->property->getType();
 
-        if ($type instanceof ReflectionNamedType)
-        {
-            return $type->getName();    
+        if ($type instanceof ReflectionNamedType) {
+            return $type->getName();
         }
 
         return 'mixed';

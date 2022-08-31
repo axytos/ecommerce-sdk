@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DependencyInjection;
 
@@ -30,10 +32,9 @@ class Container
      */
     public function get(string $key)
     {
-        if ($this->has($key))
-        {
+        if ($this->has($key)) {
             $containerEntry = $this->containerEntries[$key];
-	        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
             return $containerEntry->getInstance($this);
         }
 

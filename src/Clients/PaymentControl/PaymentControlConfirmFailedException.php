@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
-use \Exception;
+use Exception;
 
 class PaymentControlConfirmFailedException extends Exception
 {

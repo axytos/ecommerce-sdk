@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\ErrorReporting;
 
@@ -32,8 +34,7 @@ class ErrorReportingClient implements ErrorReportingClientInterface
     {
         $title = $throwable->getMessage();
 
-        if (empty($title))
-        {
+        if (empty($title)) {
             return get_class($throwable);
         }
 
@@ -44,8 +45,7 @@ class ErrorReportingClient implements ErrorReportingClientInterface
     {
         $description = $throwable->getTraceAsString();
 
-        if (empty($description))
-        {
+        if (empty($description)) {
             return "No Description Available";
         }
 

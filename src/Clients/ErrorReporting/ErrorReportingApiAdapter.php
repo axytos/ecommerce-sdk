@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\ErrorReporting;
 
@@ -23,14 +25,11 @@ class ErrorReportingApiAdapter implements ErrorReportingApiInterface
 
     public function reportError(ErrorRequestModelDto $errorRequestModelDto): void
     {
-        try 
-        {
+        try {
             $errorRequest = $this->mapper->toOpenApiModel($errorRequestModelDto, AxytosApiModelsErrorRequestModel::class);
 
             $this->errorApi->apiV1ErrorReportPost($errorRequest);
-        } 
-        catch (\Throwable $th)
-        {
+        } catch (\Throwable $th) {
             // fire and forget
         }
     }

@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DependencyInjection;
 
 interface ContainerEntryInterface
 {
     /** @return mixed */
-    function getInstance(Container $container);
+    public function getInstance(Container $container);
 }

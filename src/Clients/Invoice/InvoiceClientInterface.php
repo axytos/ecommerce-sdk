@@ -1,22 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Invoice;
 
 interface InvoiceClientInterface
 {
-    function precheck(InvoiceOrderContextInterface $orderContext): string;
+    public function precheck(InvoiceOrderContextInterface $orderContext): string;
 
-    function confirmOrder(InvoiceOrderContextInterface $orderContext): void;
+    public function confirmOrder(InvoiceOrderContextInterface $orderContext): void;
 
-    function cancelOrder(InvoiceOrderContextInterface $orderContext): void;
+    public function cancelOrder(InvoiceOrderContextInterface $orderContext): void;
 
-    function createInvoice(InvoiceOrderContextInterface $orderContext): void;
+    public function createInvoice(InvoiceOrderContextInterface $orderContext): void;
 
-    function reportShipping(InvoiceOrderContextInterface $orderContext): void;
+    public function reportShipping(InvoiceOrderContextInterface $orderContext): void;
 
-    function refund(InvoiceOrderContextInterface $orderContext): void;
+    public function refund(InvoiceOrderContextInterface $orderContext): void;
 
-    function return(InvoiceOrderContextInterface $orderContext): void;
+    public function return(InvoiceOrderContextInterface $orderContext): void;
 
-    function getInvoiceOrderPaymentUpdate(string $paymentId): InvoiceOrderPaymentUpdate;
+    public function getInvoiceOrderPaymentUpdate(string $paymentId): InvoiceOrderPaymentUpdate;
 }

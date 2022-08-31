@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
@@ -8,7 +10,7 @@ use Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto;
 
 interface PaymentControlApiInterface
 {
-    function paymentControlCheck(PaymentControlCheckRequestDto $requestData): PaymentControlCheckResponseDto;
+    public function paymentControlCheck(PaymentControlCheckRequestDto $requestData): PaymentControlCheckResponseDto;
 
-    function paymentControlConfirm(PaymentControlConfirmRequestDto $requestData): void;
+    public function paymentControlConfirm(PaymentControlConfirmRequestDto $requestData): void;
 }

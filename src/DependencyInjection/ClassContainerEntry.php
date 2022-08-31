@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DependencyInjection;
 
@@ -16,8 +18,8 @@ class ClassContainerEntry implements ContainerEntryInterface
     {
         $this->className = $className;
     }
-    /** 
-     * @return object|null 
+    /**
+     * @return object|null
      */
     public function getInstance(Container $container)
     {
@@ -33,14 +35,13 @@ class ClassContainerEntry implements ContainerEntryInterface
         $reflectionClass = new ReflectionClass($className);
         $constructor = $reflectionClass->getConstructor();
 
-        if (is_null($constructor))
-        {
+        if (is_null($constructor)) {
             return $reflectionClass->newInstance();
         }
 
         $constructorArguments = self::createConstructorArguments($constructor, $container);
-        
-        return $reflectionClass->newInstanceArgs($constructorArguments); 
+
+        return $reflectionClass->newInstanceArgs($constructorArguments);
     }
 
     /** @return array */
@@ -49,17 +50,13 @@ class ClassContainerEntry implements ContainerEntryInterface
         $constructorArguments = [];
         $constructorParameters = $constructor->getParameters();
 
-        foreach ($constructorParameters as $constructorParameter)
-        {
+        foreach ($constructorParameters as $constructorParameter) {
             $type = $constructorParameter->getType();
-            if ($type instanceof ReflectionNamedType)
-            {
+            if ($type instanceof ReflectionNamedType) {
                 /** @phpstan-ignore-next-line */
                 $constructorArgument = $container->get($type->getName());
                 array_push($constructorArguments, $constructorArgument);
-            }
-            else
-            {
+            } else {
                 throw new MissingConstructorParameterTypeException($constructor->getDeclaringClass(), $constructorParameter);
             }
         }

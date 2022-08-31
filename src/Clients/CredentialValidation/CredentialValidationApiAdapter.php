@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\CredentialValidation;
 
@@ -10,19 +12,17 @@ class CredentialValidationApiAdapter implements CredentialValidationApiInterface
 {
     private CredentialsApi $credentialsApi;
 
-    public function __construct(CredentialsApi $credentialsApi) {
+    public function __construct(CredentialsApi $credentialsApi)
+    {
         $this->credentialsApi = $credentialsApi;
     }
-    
+
     public function getCredentialsValidation(): bool
     {
-        try 
-        {
+        try {
             $this->credentialsApi->apiV1CredentialsValidateGetWithHttpInfo();
             return true;
-        }
-        catch (ApiException $e)
-        {
+        } catch (ApiException $e) {
             return false;
         }
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Abstractions;
 
-abstract class FallbackModes 
+abstract class FallbackModes
 {
     const ALL_PAYMENT_METHODS = 'ALL_PAYMENT_METHODS';
     const NO_UNSAFE_PAYMENT_METHODS = 'NO_UNSAFE_PAYMENT_METHODS';

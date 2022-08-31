@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -29,8 +31,8 @@ class DtoOpenApiModelModelMappings
             && $this->mappings[$dtoClassName] === $oaModelName;
     }
 
-    /** 
-     * @phpstan-return class-string<ModelInterface> 
+    /**
+     * @phpstan-return class-string<ModelInterface>
      */
     public function lookupOpenApiModelName(DtoInterface $dto): string
     {

@@ -47,16 +47,16 @@ class DtoToDtoMapper
         foreach ($toDtoProperties as $toDtoProperty) {
             $toDtoPropertyName = $toDtoProperty->getName();
             $toDtoPropertyType = $toDtoProperty->getType();
-            if(!$fromDtoReflector->hasProperty($toDtoPropertyName)) {
+            if (!$fromDtoReflector->hasProperty($toDtoPropertyName)) {
                 continue;
             }
             $fromDtoPropertyType = $fromDtoReflector->getProperty($toDtoPropertyName)->getType();
-            if(!$toDtoPropertyType instanceof ReflectionNamedType || !$fromDtoPropertyType instanceof ReflectionNamedType) {
+            if (!$toDtoPropertyType instanceof ReflectionNamedType || !$fromDtoPropertyType instanceof ReflectionNamedType) {
                 continue;
             }
             $toDtoPropertyTypeName = $toDtoPropertyType->getName();
             $fromDtoPropertyTypeName = $fromDtoPropertyType->getName();
-            if($toDtoPropertyTypeName !== $fromDtoPropertyTypeName) {
+            if ($toDtoPropertyTypeName !== $fromDtoPropertyTypeName) {
                 continue;
             }
             if (is_subclass_of($toDtoPropertyTypeName, DtoCollection::class)) {

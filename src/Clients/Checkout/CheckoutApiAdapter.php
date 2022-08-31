@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Checkout;
 
@@ -10,7 +12,7 @@ class CheckoutApiAdapter implements CheckoutApiInterface
 {
     private ClientInterface $httpClient;
     private StaticContentApi $staticContentApi;
-    
+
     public function __construct(
         ClientInterface $httpClient,
         StaticContentApi $staticContentApi
@@ -28,7 +30,7 @@ class CheckoutApiAdapter implements CheckoutApiInterface
          * - https://stackoverflow.com/a/34883260
          * - https://curl.se/docs/caextract.html
          * - https://curl.se/libcurl/c/libcurl-errors.html
-         * 
+         *
          * This might be related to some system configuration issues.
          * The failure happened executing within phpunit against the sandbox api
          */

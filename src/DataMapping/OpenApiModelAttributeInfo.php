@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -31,14 +33,15 @@ class OpenApiModelAttributeInfo
         /** @var string[] */
         $keys = array_keys($names);
 
-        return array_map(function($key) use ($oaModelName, $names, $types, $formats, $getters, $setters){
+        return array_map(function ($key) use ($oaModelName, $names, $types, $formats, $getters, $setters) {
             return new OpenApiModelAttributeInfo(
                 $oaModelName,
                 $names[$key],
                 $types[$key],
                 $formats[$key],
                 $getters[$key],
-                $setters[$key]);
+                $setters[$key]
+            );
         }, $keys);
     }
 
@@ -65,8 +68,8 @@ class OpenApiModelAttributeInfo
         string $typeName,
         ?string $format,
         string $getterName,
-        string $setterName)
-    {
+        string $setterName
+    ) {
         $this->modelName = $modelName;
         $this->name = $name;
         $this->typeName = $typeName;

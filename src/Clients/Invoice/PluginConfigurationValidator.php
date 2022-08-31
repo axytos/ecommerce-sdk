@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\Clients\Invoice;
 
@@ -11,23 +13,20 @@ class PluginConfigurationValidator
     private ApiKeyProviderInterface $apiKeyProvider;
 
     public function __construct(
-        ApiHostProviderInterface $apiHostProvider, 
-        ApiKeyProviderInterface $apiKeyProvider)
-    {
+        ApiHostProviderInterface $apiHostProvider,
+        ApiKeyProviderInterface $apiKeyProvider
+    ) {
         $this->apiHostProvider = $apiHostProvider;
         $this->apiKeyProvider = $apiKeyProvider;
     }
 
     public function isInvalid(): bool
     {
-        try 
-        {
+        try {
             return $this->apiHostIsNotConfigured()
-                || $this->apiKeyIsNotConfigured();    
-        } 
-        catch (\Throwable $th) 
-        {
-            return true;   
+                || $this->apiKeyIsNotConfigured();
+        } catch (\Throwable $th) {
+            return true;
         }
     }
 

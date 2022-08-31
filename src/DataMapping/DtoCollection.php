@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
@@ -22,7 +24,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
      * @phpstan-var T[]
      */
     private array $values;
-    
+
     /**
      * @phpstan-param T[] $values
      */
@@ -38,7 +40,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     {
         return $this->values;
     }
-    
+
     /**
      * @phpstan-return Traversable<T>
      */

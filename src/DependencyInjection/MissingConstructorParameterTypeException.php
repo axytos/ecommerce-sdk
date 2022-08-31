@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DependencyInjection;
 
@@ -10,9 +12,9 @@ class MissingConstructorParameterTypeException extends Exception
 {
     /** @param ReflectionClass<object> $reflectionClass */
     public function __construct(
-        ReflectionClass $reflectionClass, 
-        ReflectionParameter $constructorParameter)
-    {
+        ReflectionClass $reflectionClass,
+        ReflectionParameter $constructorParameter
+    ) {
         $className = $reflectionClass->getName();
         $parameterName = $constructorParameter->getName();
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Axytos\ECommerce\DependencyInjection;
 
@@ -10,11 +12,10 @@ class ContainerBuilder
     public function registerClass(string $className, string ...$aliasNames): void
     {
         if (!class_exists($className)) {
-			return;
-		}
-        
-        foreach($aliasNames as $aliasName)
-        {
+            return;
+        }
+
+        foreach ($aliasNames as $aliasName) {
             $this->containerEntries[$aliasName] = new ClassContainerEntry($className);
         }
     }
@@ -22,8 +23,7 @@ class ContainerBuilder
     public function registerClassMap(array $classMap): void
     {
         /** @var class-string|string $className */
-        foreach($classMap as $className => $aliasNames)
-        {
+        foreach ($classMap as $className => $aliasNames) {
             $this->registerClass($className, ...$aliasNames);
         }
     }
@@ -31,16 +31,14 @@ class ContainerBuilder
     /** @param InstanceContainerEntry $instance */
     public function registerInstance($instance, string ...$aliasNames): void
     {
-        foreach($aliasNames as $aliasName)
-        {
+        foreach ($aliasNames as $aliasName) {
             $this->containerEntries[$aliasName] = new InstanceContainerEntry($instance);
         }
     }
 
     public function registerInstanceMap(array $instanceMap): void
     {
-        foreach($instanceMap as $aliasName => $instance)
-        {
+        foreach ($instanceMap as $aliasName => $instance) {
             $this->registerInstance($instance, $aliasName);
         }
     }
