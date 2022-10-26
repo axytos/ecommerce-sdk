@@ -7,8 +7,8 @@ namespace Axytos\ECommerce\Clients\ErrorReporting;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
 use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
-use Axytos\FinancialServicesAPI\Client\Api\ErrorApi;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsErrorRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
 
 class ErrorReportingApiAdapter implements ErrorReportingApiInterface
 {

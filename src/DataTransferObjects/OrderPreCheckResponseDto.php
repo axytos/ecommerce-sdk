@@ -12,6 +12,6 @@ class OrderPreCheckResponseDto implements DtoInterface
     public ?string $processId = null;
     public ?string $decision = null;
     public ?string $step = null;
-    public TransactionMetadataDto $transactionMetadata;
+    public ?TransactionMetadataDto $transactionMetadata = null;
     public ?string $riskTaker = null;
 }

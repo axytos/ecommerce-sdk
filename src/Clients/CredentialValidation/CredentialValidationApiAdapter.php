@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Axytos\ECommerce\Clients\CredentialValidation;
 
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
-use Axytos\FinancialServicesAPI\Client\Api\CredentialsApi;
-use Axytos\FinancialServicesAPI\Client\ApiException;
+use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
+use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 
 class CredentialValidationApiAdapter implements CredentialValidationApiInterface
 {

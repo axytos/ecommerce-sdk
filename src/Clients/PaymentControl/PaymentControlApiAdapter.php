@@ -8,11 +8,11 @@ use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto;
-use Axytos\FinancialServicesAPI\Client\Api\CheckApi;
-use Axytos\FinancialServicesAPI\Client\ApiException;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse;
+use Axytos\FinancialServices\OpenAPI\Client\Api\CheckApi;
+use Axytos\FinancialServices\OpenAPI\Client\ApiException;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse;
 
 class PaymentControlApiAdapter implements PaymentControlApiInterface
 {

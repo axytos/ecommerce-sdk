@@ -14,14 +14,14 @@ use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
-use Axytos\FinancialServicesAPI\Client\Api\PaymentsApi;
-use Axytos\FinancialServicesAPI\Client\Api\PaymentApi;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsRefundRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsReportShippingModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsReturnRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 
 class InvoiceApiAdapter implements InvoiceApiInterface
 {

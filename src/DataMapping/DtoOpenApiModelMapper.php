@@ -23,6 +23,7 @@ use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto;
+use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto;
@@ -33,36 +34,37 @@ use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsErrorRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsRefundRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsReportShippingModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosApiModelsReturnRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonModelsOrderRefundBasket;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonModelsOrderRefundBasketTaxGroup;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonModelsOrderRefundPositionModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonModelsOrderReturnPositionModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCompanyRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCustomerDataRequestModel;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsCommonDeliveryAddress;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsCommonInvoiceAddress;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasket;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasketPosition;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasketTaxGroup;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderBasket;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderBasketPosition;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsOrderShippingBasketPosition;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasket;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasketPosition;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse;
-use Axytos\FinancialServicesAPI\Client\Model\AxytosCommonPublicAPITransactionTransactionMetadata;
-use Axytos\FinancialServicesAPI\Client\Model\ModelInterface;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasket;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasketTaxGroup;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundPositionModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderReturnPositionModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCompanyRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCustomerDataRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonDeliveryAddress;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonInvoiceAddress;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasket;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasketPosition;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsInvoiceInvoiceBasketTaxGroup;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderBasket;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderBasketPosition;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderShippingBasketPosition;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasket;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasketPosition;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPITransactionTransactionMetadata;
+use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
 use DateTimeInterface;
 use InvalidArgumentException;
 use ReflectionClass;
@@ -99,7 +101,8 @@ class DtoOpenApiModelMapper
         RefundBasketTaxGroupDto::class => AxytosCommonModelsOrderRefundBasketTaxGroup::class,
         ReturnRequestModelDto::class => AxytosApiModelsReturnRequestModel::class,
         ReturnPositionModelDto::class => AxytosCommonModelsOrderReturnPositionModel::class,
-        PaymentStateResponseDto::class => AxytosApiModelsPaymentStateResponseModel::class
+        PaymentStateResponseDto::class => AxytosApiModelsPaymentStateResponseModel::class,
+        PaymentResponseDto::class => AxytosApiModelsPaymentResponseModel::class,
     ];
 
     private DtoOpenApiModelModelMappings $mappings;

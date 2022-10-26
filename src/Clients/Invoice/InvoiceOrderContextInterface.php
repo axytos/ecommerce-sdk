@@ -18,7 +18,6 @@ interface InvoiceOrderContextInterface
 {
     public function getOrderNumber(): string;
     public function getOrderInvoiceNumber(): string;
-    public function setOrderInvoiceNumber(string $invoiceNumber): void;
     public function getOrderDateTime(): DateTimeInterface;
     public function getPersonalData(): CustomerDataDto;
     public function getInvoiceAddress(): InvoiceAddressDto;

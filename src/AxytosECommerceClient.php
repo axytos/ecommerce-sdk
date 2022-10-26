@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace Axytos\ECommerce;
 
-use Error;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-use Axytos\FinancialServicesAPI\Client\Api\CheckApi;
-use Axytos\FinancialServicesAPI\Client\Api\ErrorApi;
-use Axytos\FinancialServicesAPI\Client\Configuration;
-use Axytos\FinancialServicesAPI\Client\Api\PaymentApi;
+use Axytos\FinancialServices\GuzzleHttp\Client;
+use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
+use Axytos\FinancialServices\OpenAPI\Client\Api\CheckApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
+use Axytos\FinancialServices\OpenAPI\Client\Configuration;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\StaticContentApi;
 use Axytos\ECommerce\Clients\ClientFacade;
-use Axytos\FinancialServicesAPI\Client\Api\PaymentsApi;
-use Axytos\FinancialServicesAPI\Client\Api\CredentialsApi;
-use Axytos\FinancialServicesAPI\Client\Api\StaticContentApi;
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\ECommerce\UserAgent\UserAgentFactory;
@@ -122,7 +121,12 @@ final class AxytosECommerceClient extends ClientFacade
         ]);
 
         $containerBuilder->registerFactory(ClientInterface::class, function ($container) {
-            return new Client();
+            $clientAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+            return new Client([
+                'headers' => [
+                    'X-ClientAddr' => $clientAddr
+                ]
+            ]);
         });
 
         $containerBuilder->registerFactory(Configuration::class, function ($container) {

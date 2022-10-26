@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Axytos\ECommerce\Clients\Checkout;
 
 use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
-use Axytos\FinancialServicesAPI\Client\Api\StaticContentApi;
-use GuzzleHttp\ClientInterface;
+use Axytos\FinancialServices\OpenAPI\Client\Api\StaticContentApi;
+use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 
 class CheckoutApiAdapter implements CheckoutApiInterface
 {

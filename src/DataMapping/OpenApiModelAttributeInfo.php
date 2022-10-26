@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Axytos\ECommerce\DataMapping;
 
-use Axytos\FinancialServicesAPI\Client\Model\ModelInterface;
+use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
 
 /**
  * @phpstan-template T of ModelInterface
