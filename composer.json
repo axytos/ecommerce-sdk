@@ -11,13 +11,11 @@
     "license": "proprietary",
     "type": "library",
     "require": {
-        "php": ">=7.4.0",
-        "axytos/financial-services-api-sdk": "^1.2.0"
+        "php": ">=5.6.0",
+        "axytos/financial-services-api-sdk": "^1.3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5",
-        "phpstan/phpstan": "^1.4",
-        "phpstan/phpstan-phpunit": "^1.0"
+        "phpunit/phpunit": "^5.7 || ^9.5"
     },
     "autoload": {
         "psr-4": {
@@ -31,8 +29,7 @@
     },
     "scripts": {
         "test": [
-            "@test-unit",
-            "@phpstan"
+            "@test-unit"
         ],
         "test-unit": [
             "@phpunit --testsuite Unit"
@@ -40,7 +37,6 @@
         "test-integration": [
             "@phpunit --testsuite Integration"
         ],
-        "phpunit": "./vendor/bin/phpunit --colors=always",
-        "phpstan": "./vendor/bin/phpstan analyse --memory-limit=1G"
+        "phpunit": "./vendor/bin/phpunit --colors=always"
     }
 }

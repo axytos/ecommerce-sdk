@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients;
 
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
@@ -23,23 +21,30 @@ use PHPUnit\Framework\MockObject\MockObject;
 class ClientFacadeTest extends TestCase
 {
     /** @var CheckoutClientInterface&MockObject */
-    private CheckoutClientInterface $checkoutClient;
+    private $checkoutClient;
 
     /** @var CredentialValidationClientInterface&MockObject */
-    private CredentialValidationClientInterface $CredentialValidationClient;
+    private $CredentialValidationClient;
 
     /** @var PaymentControlClientInterface&MockObject */
-    private PaymentControlClientInterface $paymentControlClient;
+    private $paymentControlClient;
 
     /** @var ErrorReportingClientInterface&MockObject  */
-    private ErrorReportingClientInterface $errorReportingClient;
+    private $errorReportingClient;
 
     /** @var InvoiceClientInterface&MockObject  */
-    private InvoiceClientInterface $invoiceClient;
+    private $invoiceClient;
 
-    private ClientFacade $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\ClientFacade
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->checkoutClient = $this->createMock(CheckoutClientInterface::class);
         $this->CredentialValidationClient = $this->createMock(CredentialValidationClientInterface::class);
@@ -58,7 +63,10 @@ class ClientFacadeTest extends TestCase
         $this->sut = new ClientFacade($container);
     }
 
-    private function createContainerMock(array $containerConfig): Container
+    /**
+     * @return \Axytos\ECommerce\DependencyInjection\Container
+     */
+    private function createContainerMock(array $containerConfig)
     {
         $returnValueMap = [];
         foreach ($containerConfig as $key => $value) {
@@ -72,7 +80,10 @@ class ClientFacadeTest extends TestCase
         return $container;
     }
 
-    public function test_mustShowCreditCheckAgreement_delegates_to_checkout_client(): void
+    /**
+     * @return void
+     */
+    public function test_mustShowCreditCheckAgreement_delegates_to_checkout_client()
     {
         $paymentMethodId = 'paymentMethodId';
         $expected = true;
@@ -87,7 +98,10 @@ class ClientFacadeTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_getCreditCheckAgreementInfo_delegates_to_checkout_client(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementInfo_delegates_to_checkout_client()
     {
         $expected = 'credit check agreement';
 
@@ -100,7 +114,10 @@ class ClientFacadeTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_validateApiKey_delegates_to_service_availibility_client(): void
+    /**
+     * @return void
+     */
+    public function test_validateApiKey_delegates_to_service_availibility_client()
     {
         $expected = true;
 
@@ -113,7 +130,10 @@ class ClientFacadeTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_check_delegates_to_payment_control_client(): void
+    /**
+     * @return void
+     */
+    public function test_check_delegates_to_payment_control_client()
     {
         $checkData = $this->createMock(PaymentControlOrderData::class);
         $paymentControlCache = $this->createMock(PaymentControlCacheInterface::class);
@@ -129,7 +149,10 @@ class ClientFacadeTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
-    public function test_confirm_delegates_to_payment_control_client(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_delegates_to_payment_control_client()
     {
         $checkData = $this->createMock(PaymentControlOrderData::class);
         $paymentControlCache = $this->createMock(PaymentControlCacheInterface::class);
@@ -142,7 +165,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->confirm($checkData, $paymentControlCache);
     }
 
-    public function test_reportError_delegates_to_error_reporting_client(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_delegates_to_error_reporting_client()
     {
         $throwable = new Exception();
 
@@ -154,7 +180,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->reportError($throwable);
     }
 
-    public function test_precheck_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_precheck_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -171,7 +200,10 @@ class ClientFacadeTest extends TestCase
         $this->assertSame($shopAction, $actual);
     }
 
-    public function test_confirmOrder_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_confirmOrder_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -183,7 +215,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->confirmOrder($orderContext);
     }
 
-    public function test_cancelOrder_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_cancelOrder_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -195,7 +230,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->cancelOrder($orderContext);
     }
 
-    public function test_createInvoice_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_createInvoice_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -207,7 +245,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->createInvoice($orderContext);
     }
 
-    public function test_reportShipping_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_reportShipping_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -219,19 +260,25 @@ class ClientFacadeTest extends TestCase
         $this->sut->reportShipping($orderContext);
     }
 
-    public function test_return_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_return_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
-            ->method('return')
+            ->method('returnOrder')
             ->with($orderContext);
 
-        $this->sut->return($orderContext);
+        $this->sut->returnOrder($orderContext);
     }
 
-    public function test_refund_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_refund_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
@@ -243,7 +290,10 @@ class ClientFacadeTest extends TestCase
         $this->sut->refund($orderContext);
     }
 
-    public function test_getInvoiceOrderPaymentUpdate_delegates_to_invoice_client(): void
+    /**
+     * @return void
+     */
+    public function test_getInvoiceOrderPaymentUpdate_delegates_to_invoice_client()
     {
         $paymentId = 'paymentId';
 

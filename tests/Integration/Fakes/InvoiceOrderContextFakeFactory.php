@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Axytos\ECommerce\Tests\Integration;
+namespace Axytos\ECommerce\Tests\Integration\Fakes;
 
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
@@ -24,11 +22,14 @@ use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
 use DateTime;
 use DateTimeInterface;
 
-class InvoiceOrderContextFactory
+class InvoiceOrderContextFakeFactory
 {
-    public function createInvoiceOrderContext(): InvoiceOrderContext
+    /**
+     * @return \Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFake
+     */
+    public function createInvoiceOrderContext()
     {
-        $orderContext = new InvoiceOrderContext();
+        $orderContext = new InvoiceOrderContextFake();
 
         $orderContext->setOrderNumber($this->createOrderNumber());
         $orderContext->setOrderInvoiceNumber($this->createOrderInvoiceNumber());
@@ -44,25 +45,42 @@ class InvoiceOrderContextFactory
         $orderContext->setReturnPositions($this->createReturnPositions($basket));
         $orderContext->setRefundBasket($this->createRefundBasket($basket));#
 
+        $orderContext->setDeliveryWeight(42.6);
+        $orderContext->setTrackingIds(['trackingId']);
+        $orderContext->setLogistician('logistician');
+        $orderContext->setDeliveryInformation('deliveryInformation');
+
         return $orderContext;
     }
 
-    public function createOrderNumber(): string
+    /**
+     * @return string
+     */
+    public function createOrderNumber()
     {
         return uniqid('integration-test-order-number-');
     }
 
-    public function createOrderInvoiceNumber(): string
+    /**
+     * @return string
+     */
+    public function createOrderInvoiceNumber()
     {
         return uniqid('integration-test-order-invoice-number-');
     }
 
-    public function createOrderDateTime(): DateTimeInterface
+    /**
+     * @return \DateTimeInterface
+     */
+    public function createOrderDateTime()
     {
         return new DateTime();
     }
 
-    public function createPersonalData(): CustomerDataDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     */
+    public function createPersonalData()
     {
         $dto = new CustomerDataDto();
         $dto->externalCustomerId = 'ecommerce-sdk-integration-test-customer';
@@ -70,7 +88,10 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createInvoiceAddress(): InvoiceAddressDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     */
+    public function createInvoiceAddress()
     {
         $dto = new InvoiceAddressDto();
         $dto->firstname = 'firstname';
@@ -83,7 +104,10 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createDeliveryAddress(): DeliveryAddressDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     */
+    public function createDeliveryAddress()
     {
         $dto = new DeliveryAddressDto();
         $dto->firstname = 'firstname';
@@ -96,7 +120,10 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createBasket(): BasketDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
+     */
+    public function createBasket()
     {
         $positions = [];
         $positions[0] = $this->createBasketPosition();
@@ -115,7 +142,10 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createBasketPosition(): BasketPositionDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
+     */
+    public function createBasketPosition()
     {
         $dto = new BasketPositionDto();
         $dto->productId = uniqid('productId-');
@@ -129,7 +159,11 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createCreateInvoiceBasket(BasketDto $basket): CreateInvoiceBasketDto
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     */
+    public function createCreateInvoiceBasket($basket)
     {
         $mapper = new DtoToDtoMapper();
 
@@ -141,13 +175,21 @@ class InvoiceOrderContextFactory
         return $dto;
     }
 
-    public function createShippingBasketPositions(BasketDto $basket): ShippingBasketPositionDtoCollection
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
+     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
+     */
+    public function createShippingBasketPositions($basket)
     {
         $mapper = new DtoToDtoMapper();
         return $mapper->mapDtoCollection($basket->positions, ShippingBasketPositionDtoCollection::class);
     }
 
-    public function createReturnPositions(BasketDto $basket): ReturnPositionModelDtoCollection
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
+     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
+     */
+    public function createReturnPositions($basket)
     {
         $positions = array_map(function (BasketPositionDto $position) {
             $dto = new ReturnPositionModelDto();
@@ -158,7 +200,11 @@ class InvoiceOrderContextFactory
         return new ReturnPositionModelDtoCollection(...$positions);
     }
 
-    public function createRefundBasket(BasketDto $basket): RefundBasketDto
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    public function createRefundBasket($basket)
     {
         $positions = array_map(function (BasketPositionDto $position) {
             $dto = new RefundBasketPositionDto();

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
@@ -13,14 +11,26 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 
 class PaymentControlOrderDataHashCalculator
 {
-    private DtoArrayMapper $dtoArrayMapper;
+    /**
+     * @var HashAlgorithmInterface
+     */
+    private $hashAlgorithm;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoArrayMapper
+     */
+    private $dtoArrayMapper;
 
-    public function __construct()
+    public function __construct(HashAlgorithmInterface $hashAlgorithm)
     {
+        $this->hashAlgorithm = $hashAlgorithm;
         $this->dtoArrayMapper = new DtoArrayMapper();
     }
 
-    public function computeOrderDataHash(PaymentControlOrderData $data): string
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @return string
+     */
+    public function computeOrderDataHash($data)
     {
         $hash = '';
 
@@ -31,35 +41,54 @@ class PaymentControlOrderDataHashCalculator
         return $hash;
     }
 
-    private function hasCustomerData(CustomerDataDto $customerDataDto): string
+    /**
+     * @return string
+     */
+    private function hasCustomerData(CustomerDataDto $customerDataDto)
     {
         return $this->computeDtoHash($customerDataDto);
     }
 
-    private function hashInvoiceAddress(InvoiceAddressDto $invoiceAddress): string
+    /**
+     * @return string
+     */
+    private function hashInvoiceAddress(InvoiceAddressDto $invoiceAddress)
     {
         return $this->computeDtoHash($invoiceAddress);
     }
 
-    private function hashDeliveryAddress(DeliveryAddressDto $deliveryAddress): string
+    /**
+     * @return string
+     */
+    private function hashDeliveryAddress(DeliveryAddressDto $deliveryAddress)
     {
         return $this->computeDtoHash($deliveryAddress);
     }
 
-    private function hashPaymentControlBasket(PaymentControlBasketDto $paymentControlBasket): string
+    /**
+     * @return string
+     */
+    private function hashPaymentControlBasket(PaymentControlBasketDto $paymentControlBasket)
     {
         return $this->computeDtoHash($paymentControlBasket);
     }
 
-    private function computeDtoHash(DtoInterface $dto): string
+    /**
+     * @return string
+     */
+    private function computeDtoHash(DtoInterface $dto)
     {
         $arrayDto = $this->dtoArrayMapper->toArray($dto);
         $serializedDto = serialize($arrayDto);
         return $this->computeHash($serializedDto);
     }
 
-    private function computeHash(string $input): string
+    /**
+     * @param string $input
+     * @return string
+     */
+    private function computeHash($input)
     {
-        return hash('sha256', $input);
+        return $this->hashAlgorithm->compute($input);
     }
 }

@@ -1,36 +1,73 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class InvoiceAddressDto implements DtoInterface
 {
-    public ?string $company = null;
+    /**
+     * @var string|null
+     */
+    public $company;
 
-    public ?string $salutation = null;
+    /**
+     * @var string|null
+     */
+    public $salutation;
 
-    public ?string $firstname = null;
+    /**
+     * @var string|null
+     */
+    public $firstname;
 
-    public ?string $lastname = null;
+    /**
+     * @var string|null
+     */
+    public $lastname;
 
-    public ?string $zipCode = null;
+    /**
+     * @var string|null
+     */
+    public $zipCode;
 
-    public ?string $city = null;
+    /**
+     * @var string|null
+     */
+    public $city;
 
-    public ?string $region = null;
+    /**
+     * @var string|null
+     */
+    public $region;
 
-    public ?string $country = null;
+    /**
+     * @var string|null
+     */
+    public $country;
 
-    public ?string $vatId = null;
+    /**
+     * @var string|null
+     */
+    public $vatId;
 
-    public ?string $addressLine1 = null;
+    /**
+     * @var string|null
+     */
+    public $addressLine1;
 
-    public ?string $addressLine2 = null;
+    /**
+     * @var string|null
+     */
+    public $addressLine2;
 
-    public ?string $addressLine3 = null;
+    /**
+     * @var string|null
+     */
+    public $addressLine3;
 
-    public ?string $addressLine4 = null;
+    /**
+     * @var string|null
+     */
+    public $addressLine4;
 }

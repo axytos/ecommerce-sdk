@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
@@ -17,14 +15,21 @@ use Throwable;
 class ErrorReportingClientTest extends TestCase
 {
     /** @var ErrorReportingApiInterface&MockObject */
-    private ErrorReportingApiInterface $errorReportingApi;
+    private $errorReportingApi;
 
     /** @var LoggerAdapterInterface&MockObject */
-    private LoggerAdapterInterface $logger;
+    private $logger;
 
-    private ErrorReportingClient $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->errorReportingApi = $this->createMock(ErrorReportingApiInterface::class);
         $this->logger = $this->createMock(LoggerAdapterInterface::class);
@@ -35,7 +40,10 @@ class ErrorReportingClientTest extends TestCase
         );
     }
 
-    public function test_reportError_uses_message_as_title(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_uses_message_as_title()
     {
         $exception = new Exception('message');
 
@@ -51,7 +59,10 @@ class ErrorReportingClientTest extends TestCase
         $this->sut->reportError($exception);
     }
 
-    public function test_reportError_uses_class_name_as_title_if_message_is_empty(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_uses_class_name_as_title_if_message_is_empty()
     {
         $exception = new Exception();
 
@@ -67,7 +78,10 @@ class ErrorReportingClientTest extends TestCase
         $this->sut->reportError($exception);
     }
 
-    public function test_reportError_sets_description(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_sets_description()
     {
         $exception = new Exception();
 
@@ -83,7 +97,10 @@ class ErrorReportingClientTest extends TestCase
         $this->sut->reportError($exception);
     }
 
-    public function test_reportError_sets_timeStamp(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_sets_timeStamp()
     {
         $exception = new Exception();
 

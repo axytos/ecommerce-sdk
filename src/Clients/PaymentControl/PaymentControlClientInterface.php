@@ -1,12 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
 interface PaymentControlClientInterface
 {
-    public function check(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): string;
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return string
+     */
+    public function check($data, $paymentControlCache);
 
-    public function confirm(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return void
+     */
+    public function confirm($data, $paymentControlCache);
 }

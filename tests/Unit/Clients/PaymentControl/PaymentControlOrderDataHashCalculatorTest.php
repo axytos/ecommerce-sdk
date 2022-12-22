@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
 
+use Axytos\ECommerce\Clients\PaymentControl\HashAlgorithmInterface;
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData;
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator;
 use Axytos\ECommerce\DataTransferObjects\CompanyDto;
@@ -14,17 +13,34 @@ use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDtoCollection;
 use DateTimeImmutable;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PaymentControlOrderDataHashCalculatorTest extends TestCase
 {
-    private PaymentControlOrderDataHashCalculator $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\HashAlgorithmInterface&MockObject
+     */
+    private $hashAlgorithm;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator
+     */
+    private $sut;
 
-    private PaymentControlOrderData $paymentControlOrderData;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData
+     */
+    private $paymentControlOrderData;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
-        $this->sut = new PaymentControlOrderDataHashCalculator();
+        $this->hashAlgorithm = $this->createMock(HashAlgorithmInterface::class);
+
+        $this->sut = new PaymentControlOrderDataHashCalculator($this->hashAlgorithm);
 
         $personalData = new CustomerDataDto();
         $personalData->dateOfBirth = new DateTimeImmutable('07-01-2022');
@@ -89,14 +105,22 @@ class PaymentControlOrderDataHashCalculatorTest extends TestCase
         $this->paymentControlOrderData = $paymentControlOrderData;
     }
 
-    public function test_computeOrderDataHash_computes_hash_correctly(): void
+    /**
+     * @return void
+     */
+    public function test_computeOrderDataHash_computes_hash_correctly()
     {
+        $this->hashAlgorithm->method('compute')->willReturn('computed hash');
+
         $actual = $this->sut->computeOrderDataHash($this->paymentControlOrderData);
-        $expected = '8c5e31327671d7edc4e0ab61597e5d40c6bbc5a6b5325c641742964116ee2a0a';
+        $expected = 'computed hash';
         $this->assertEquals($expected, $actual);
     }
 
-    public function test_computeOrderDataHash_ignores_paymentMethodId(): void
+    /**
+     * @return void
+     */
+    public function test_computeOrderDataHash_ignores_paymentMethodId()
     {
         $hash1 = $this->sut->computeOrderDataHash($this->paymentControlOrderData);
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\PackageInfo;
 
 use Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider;
@@ -10,14 +8,24 @@ use PHPUnit\Framework\TestCase;
 
 class ComposerPackageInfoProviderTest extends TestCase
 {
-    private ComposerPackageInfoProvider $sut;
+    /**
+     * @var \Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->sut = new ComposerPackageInfoProvider();
     }
 
-    public function getComposerPackageName(): string
+    /**
+     * @return string
+     */
+    public function getComposerPackageName()
     {
         /** @var string */
         $composerJson = file_get_contents(__DIR__ . '/../../../composer.json');
@@ -27,40 +35,58 @@ class ComposerPackageInfoProviderTest extends TestCase
         return $config["name"];
     }
 
-    public function test_isInstalled_phpunit(): void
+    /**
+     * @return void
+     */
+    public function test_isInstalled_phpunit()
     {
         $this->assertTrue($this->sut->isInstalled('phpunit/phpunit'));
     }
 
-    public function test_isInstalled_returns_true_for_actual_plugin_package_name(): void
+    /**
+     * @return void
+     */
+    public function test_isInstalled_returns_true_for_actual_plugin_package_name()
     {
         $packageName = $this->getComposerPackageName();
 
         $this->assertTrue($this->sut->isInstalled($packageName));
     }
 
-    public function test_isInstalled_returns_false_if_package_does_not_exist(): void
+    /**
+     * @return void
+     */
+    public function test_isInstalled_returns_false_if_package_does_not_exist()
     {
         $this->assertFalse($this->sut->isInstalled("does-not-exist"));
     }
 
-    public function test_getVersion_phpunit(): void
+    /**
+     * @return void
+     */
+    public function test_getVersion_phpunit()
     {
         $version = $this->sut->getVersion('phpunit/phpunit');
 
         $this->assertNotNull($version);
-        $this->assertIsString($version);
+        $this->assertTrue(is_string($version));
         $this->assertNotEmpty($version);
     }
 
-    public function test_getVersion_returns_not_null_for_actual_plugin_package_name(): void
+    /**
+     * @return void
+     */
+    public function test_getVersion_returns_not_null_for_actual_plugin_package_name()
     {
         $packageName = $this->getComposerPackageName();
 
         $this->assertNotNull($this->sut->getVersion($packageName));
     }
 
-    public function test_getVersion_throws_OutOfBoundsException_if_package_does_not_exist(): void
+    /**
+     * @return void
+     */
+    public function test_getVersion_throws_OutOfBoundsException_if_package_does_not_exist()
     {
         $this->expectException(OutOfBoundsException::class);
 

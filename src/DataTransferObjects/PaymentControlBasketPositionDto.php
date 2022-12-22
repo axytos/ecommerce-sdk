@@ -1,24 +1,43 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class PaymentControlBasketPositionDto implements DtoInterface
 {
-    public ?string $productId = null;
+    /**
+     * @var string|null
+     */
+    public $productId;
 
-    public ?string $productName = null;
+    /**
+     * @var string|null
+     */
+    public $productName;
 
-    public ?string $productCategory = null;
+    /**
+     * @var string|null
+     */
+    public $productCategory;
 
-    public ?int $quantity = null;
+    /**
+     * @var int|null
+     */
+    public $quantity;
 
-    public ?float $taxPercent = null;
+    /**
+     * @var float|null
+     */
+    public $taxPercent;
 
-    public ?float $netPositionTotal = null;
+    /**
+     * @var float|null
+     */
+    public $netPositionTotal;
 
-    public ?float $grossPositionTotal = null;
+    /**
+     * @var float|null
+     */
+    public $grossPositionTotal;
 }

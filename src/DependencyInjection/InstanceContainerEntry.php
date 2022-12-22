@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DependencyInjection;
 
 class InstanceContainerEntry implements ContainerEntryInterface
@@ -15,8 +13,9 @@ class InstanceContainerEntry implements ContainerEntryInterface
         $this->instance = $instance;
     }
 
-    /** @return mixed */
-    public function getInstance(Container $container)
+    /** @return mixed
+     * @param \Axytos\ECommerce\DependencyInjection\Container $container */
+    public function getInstance($container)
     {
         return $this->instance;
     }

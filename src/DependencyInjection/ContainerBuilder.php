@@ -1,54 +1,51 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DependencyInjection;
 
 class ContainerBuilder
 {
-    private array $containerEntries = [];
+    /**
+     * @var mixed[]
+     */
+    private $containerEntries = [];
 
-    /** @param class-string|string $className */
-    public function registerClass(string $className, string ...$aliasNames): void
-    {
-        if (!class_exists($className)) {
-            return;
-        }
-
-        foreach ($aliasNames as $aliasName) {
-            $this->containerEntries[$aliasName] = new ClassContainerEntry($className);
-        }
-    }
-
-    public function registerClassMap(array $classMap): void
-    {
-        /** @var class-string|string $className */
-        foreach ($classMap as $className => $aliasNames) {
-            $this->registerClass($className, ...$aliasNames);
-        }
-    }
-
-    /** @param InstanceContainerEntry $instance */
-    public function registerInstance($instance, string ...$aliasNames): void
+    /**
+     * @param mixed $instance
+     * @param string ...$aliasNames
+     * @return void
+     */
+    public function registerInstance($instance, ...$aliasNames)
     {
         foreach ($aliasNames as $aliasName) {
             $this->containerEntries[$aliasName] = new InstanceContainerEntry($instance);
         }
     }
 
-    public function registerInstanceMap(array $instanceMap): void
+    /**
+     * @param mixed[] $instanceMap
+     * @return void
+     */
+    public function registerInstanceMap($instanceMap)
     {
         foreach ($instanceMap as $aliasName => $instance) {
             $this->registerInstance($instance, $aliasName);
         }
     }
 
-    public function registerFactory(string $aliasName, callable $factory): void
+    /**
+     * @param string $aliasName
+     * @param callable $factory
+     * @return void
+     */
+    public function registerFactory($aliasName, $factory)
     {
         $this->containerEntries[$aliasName] = new FactoryContainerEntry($factory);
     }
 
-    public function build(): Container
+    /**
+     * @return \Axytos\ECommerce\DependencyInjection\Container
+     */
+    public function build()
     {
         return new Container($this->containerEntries);
     }

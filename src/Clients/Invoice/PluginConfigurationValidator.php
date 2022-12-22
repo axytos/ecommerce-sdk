@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
@@ -9,8 +7,14 @@ use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 
 class PluginConfigurationValidator
 {
-    private ApiHostProviderInterface $apiHostProvider;
-    private ApiKeyProviderInterface $apiKeyProvider;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface
+     */
+    private $apiHostProvider;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     */
+    private $apiKeyProvider;
 
     public function __construct(
         ApiHostProviderInterface $apiHostProvider,
@@ -20,22 +24,33 @@ class PluginConfigurationValidator
         $this->apiKeyProvider = $apiKeyProvider;
     }
 
-    public function isInvalid(): bool
+    /**
+     * @return bool
+     */
+    public function isInvalid()
     {
         try {
             return $this->apiHostIsNotConfigured()
                 || $this->apiKeyIsNotConfigured();
         } catch (\Throwable $th) {
             return true;
+        } catch (\Exception $th) { // @phpstan-ignore-line / php5 compatibility
+            return true;
         }
     }
 
-    private function apiHostIsNotConfigured(): bool
+    /**
+     * @return bool
+     */
+    private function apiHostIsNotConfigured()
     {
         return empty($this->apiHostProvider->getApiHost());
     }
 
-    private function apiKeyIsNotConfigured(): bool
+    /**
+     * @return bool
+     */
+    private function apiKeyIsNotConfigured()
     {
         return empty($this->apiKeyProvider->getApiKey());
     }

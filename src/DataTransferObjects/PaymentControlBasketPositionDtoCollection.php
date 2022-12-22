@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoCollection;
@@ -13,8 +11,9 @@ class PaymentControlBasketPositionDtoCollection extends DtoCollection
 {
     /**
      * @phpstan-return class-string<PaymentControlBasketPositionDto>
+     * @return string
      */
-    public static function getElementClass(): string
+    public static function getElementClass()
     {
         return PaymentControlBasketPositionDto::class;
     }

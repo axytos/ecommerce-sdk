@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\AxytosECommerceClient;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
+use Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFakeFactory;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiHostProvider;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiKeyProvider;
 use Axytos\ECommerce\Tests\Integration\Providers\FallbackModeConfiguration;
@@ -17,26 +16,32 @@ use PHPUnit\Framework\TestCase;
 
 class InvoiceClientIntegrationTest extends TestCase
 {
-    private InvoiceClientInterface $invoiceClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
 
-    private InvoiceOrderContext $orderContext;
+    /**
+     * @var \Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFake
+     */
+    private $orderContext;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
-        $this->invoiceClient = new AxytosECommerceClient(
-            new ApiHostProvider(),
-            new ApiKeyProvider(),
-            new PaymentMethodConfiguration(),
-            new FallbackModeConfiguration(),
-            new UserAgentInfoProvider(),
-            $this->createMock(LoggerAdapterInterface::class),
-        );
+        $this->invoiceClient = new AxytosECommerceClient(new ApiHostProvider(), new ApiKeyProvider(), new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
 
-        $invoiceOrderContextFactory = new InvoiceOrderContextFactory();
+        $invoiceOrderContextFactory = new InvoiceOrderContextFakeFactory();
         $this->orderContext = $invoiceOrderContextFactory->createInvoiceOrderContext();
     }
 
-    public function test_precheck_confirm(): void
+    /**
+     * @return void
+     */
+    public function test_precheck_confirm()
     {
         $this->assertEmpty($this->orderContext->getPreCheckResponseData());
 
@@ -46,7 +51,10 @@ class InvoiceClientIntegrationTest extends TestCase
         $this->assertNotEmpty($this->orderContext->getPreCheckResponseData());
     }
 
-    public function test_precheck_confirm_createInvoice_shipping_return_refund(): void
+    /**
+     * @return void
+     */
+    public function test_precheck_confirm_createInvoice_shipping_return_refund()
     {
         $this->invoiceClient->precheck($this->orderContext);
 
@@ -56,14 +64,19 @@ class InvoiceClientIntegrationTest extends TestCase
 
         $this->invoiceClient->reportShipping($this->orderContext);
 
-        $this->invoiceClient->return($this->orderContext);
+        $this->invoiceClient->trackingInformation($this->orderContext);
+
+        $this->invoiceClient->returnOrder($this->orderContext);
 
         $this->invoiceClient->refund($this->orderContext);
 
         $this->assertTrue(true);
     }
 
-    public function test_precheck_confirm_cancel(): void
+    /**
+     * @return void
+     */
+    public function test_precheck_confirm_cancel()
     {
 
         $this->invoiceClient->precheck($this->orderContext);

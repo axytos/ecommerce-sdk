@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
 
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
@@ -31,39 +29,45 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class PaymentControlClientTest extends TestCase
 {
-    private const PAYMENT_METHOD_ID = 'PAYMENT_METHOD_ID';
+    const PAYMENT_METHOD_ID = 'PAYMENT_METHOD_ID';
 
     /** @var PaymentControlApiInterface&MockObject */
-    private PaymentControlApiInterface $paymentControlApi;
+    private $paymentControlApi;
 
     /** @var PaymentMethodConfigurationInterface&MockObject */
-    private PaymentMethodConfigurationInterface $paymentMethodConfiguration;
+    private $paymentMethodConfiguration;
 
     /** @var PaymentControlOrderDataHashCalculator&MockObject */
-    private PaymentControlOrderDataHashCalculator $paymentControlOrderDataHashCalculator;
+    private $paymentControlOrderDataHashCalculator;
 
     /** @var PaymentControlCacheInterface&MockObject */
-    private PaymentControlCacheInterface $paymentControlCache;
+    private $paymentControlCache;
 
-    private PaymentControlOrderData $data;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData
+     */
+    private $data;
 
-    private PaymentControlClient $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlClient
+     */
+    private $sut;
 
     /** @var PaymentControlCheckResponseDto&MockObject */
-    private PaymentControlCheckResponseDto $checkResponse;
+    private $checkResponse;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->paymentControlApi = $this->createMock(PaymentControlApiInterface::class);
         $this->paymentMethodConfiguration = $this->createMock(PaymentMethodConfigurationInterface::class);
         $this->paymentControlOrderDataHashCalculator = $this->createMock(PaymentControlOrderDataHashCalculator::class);
         $this->paymentControlCache = $this->createMock(PaymentControlCacheInterface::class);
 
-        $this->sut = new PaymentControlClient(
-            $this->paymentControlApi,
-            $this->paymentMethodConfiguration,
-            $this->paymentControlOrderDataHashCalculator,
-        );
+        $this->sut = new PaymentControlClient($this->paymentControlApi, $this->paymentMethodConfiguration, $this->paymentControlOrderDataHashCalculator);
 
         $this->checkResponse = $this->createMock(PaymentControlCheckResponseDto::class);
 
@@ -71,7 +75,10 @@ class PaymentControlClientTest extends TestCase
         $this->setUpPaymetControlOrderData();
     }
 
-    private function setUpCheckResponse(): void
+    /**
+     * @return void
+     */
+    private function setUpCheckResponse()
     {
         $this->checkResponse->transactionMetadata = $this->createMock(TransactionMetadataDto::class);
         $this->checkResponse->transactionMetadata->transactionTimestamp = new DateTimeImmutable();
@@ -84,7 +91,10 @@ class PaymentControlClientTest extends TestCase
             ->willReturn($this->checkResponse);
     }
 
-    private function setUpPaymetControlOrderData(): void
+    /**
+     * @return void
+     */
+    private function setUpPaymetControlOrderData()
     {
         $this->data = new PaymentControlOrderData();
         $this->data->paymentMethodId = self::PAYMENT_METHOD_ID;
@@ -94,7 +104,11 @@ class PaymentControlClientTest extends TestCase
         $this->data->basket = $this->createMock(PaymentControlBasketDto::class);
     }
 
-    private function setUpPaymentTypeSecurity(?string $paymentTypeSecurity): void
+    /**
+     * @param string|null $paymentTypeSecurity
+     * @return void
+     */
+    private function setUpPaymentTypeSecurity($paymentTypeSecurity)
     {
         if ($paymentTypeSecurity === PaymentTypeSecurities::SAFE) {
             $this->paymentMethodConfiguration
@@ -111,15 +125,24 @@ class PaymentControlClientTest extends TestCase
         }
     }
 
-    private function setUpDecision(string $decision): void
+    /**
+     * @return void
+     * @param string $decision
+     */
+    private function setUpDecision($decision)
     {
+        $decision = (string) $decision;
         $this->checkResponse->decision = $decision;
     }
 
     /**
      * @dataProvider dataProvider_test_check_returns_correct_payment_control_action
+     * @param string|null $paymentTypeSecurity
+     * @param string $decision
+     * @param string $expectedAction
+     * @return void
      */
-    public function test_check_returns_correct_payment_control_action(?string $paymentTypeSecurity, string $decision, string $expectedAction): void
+    public function test_check_returns_correct_payment_control_action($paymentTypeSecurity, $decision, $expectedAction)
     {
         $this->setUpPaymentTypeSecurity($paymentTypeSecurity);
         $this->setUpDecision($decision);
@@ -129,7 +152,10 @@ class PaymentControlClientTest extends TestCase
         $this->assertEquals($expectedAction, $actual);
     }
 
-    public function dataProvider_test_check_returns_correct_payment_control_action(): array
+    /**
+     * @return mixed[]
+     */
+    public function dataProvider_test_check_returns_correct_payment_control_action()
     {
         return [
             [null, CheckDecisions::SAFE, PaymentControlAction::COMPLETE_ORDER],
@@ -146,7 +172,10 @@ class PaymentControlClientTest extends TestCase
         ];
     }
 
-    public function test_check_sends_request_mode_single_step(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_request_mode_single_step()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -163,7 +192,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_sends_proof_of_interest_AAE(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_proof_of_interest_AAE()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -182,8 +214,10 @@ class PaymentControlClientTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_check_sends_correct_payment_type_security
+     * @param string $paymentTypeSecurity
+     * @return void
      */
-    public function test_check_sends_correct_payment_type_security(string $paymentTypeSecurity): void
+    public function test_check_sends_correct_payment_type_security($paymentTypeSecurity)
     {
         $this->setUpPaymentTypeSecurity($paymentTypeSecurity);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -200,7 +234,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function dataProvider_test_check_sends_correct_payment_type_security(): array
+    /**
+     * @return mixed[]
+     */
+    public function dataProvider_test_check_sends_correct_payment_type_security()
     {
         return [
             [PaymentTypeSecurities::SAFE],
@@ -208,7 +245,10 @@ class PaymentControlClientTest extends TestCase
         ];
     }
 
-    public function test_check_sends_personal_data(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_personal_data()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -225,7 +265,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_sends_invoice_address(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_invoice_address()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -242,7 +285,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_sends_delivery_address(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_delivery_address()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -259,7 +305,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_sends_basket(): void
+    /**
+     * @return void
+     */
+    public function test_check_sends_basket()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -276,7 +325,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_throws_PaymentControlCheckFailedException(): void
+    /**
+     * @return void
+     */
+    public function test_check_throws_PaymentControlCheckFailedException()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -289,7 +341,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->check($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_saves_response_in_chache(): void
+    /**
+     * @return void
+     */
+    public function test_check_saves_response_in_chache()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -304,11 +359,12 @@ class PaymentControlClientTest extends TestCase
 
     //=================================================================================
     // confirm
-
     /**
      * @dataProvider dataProvider_test_confirm_sends_correct_payment_type_security
+     * @param string $paymentTypeSecurity
+     * @return void
      */
-    public function test_confirm_sends_correct_payment_type_security(string $paymentTypeSecurity): void
+    public function test_confirm_sends_correct_payment_type_security($paymentTypeSecurity)
     {
         $this->setUpPaymentTypeSecurity($paymentTypeSecurity);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -325,7 +381,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function dataProvider_test_confirm_sends_correct_payment_type_security(): array
+    /**
+     * @return mixed[]
+     */
+    public function dataProvider_test_confirm_sends_correct_payment_type_security()
     {
         return [
             [PaymentTypeSecurities::SAFE],
@@ -333,7 +392,10 @@ class PaymentControlClientTest extends TestCase
         ];
     }
 
-    public function test_confirm_sends_personal_data(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_sends_personal_data()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -350,7 +412,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_confirm_sends_invoice_address(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_sends_invoice_address()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -367,7 +432,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_confirm_sends_delivery_address(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_sends_delivery_address()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -384,7 +452,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_confirm_sends_basket(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_sends_basket()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -401,7 +472,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_confirm_sends_response(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_sends_response()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -418,7 +492,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_confirm_throws_PaymentControlChonfirmFailedException(): void
+    /**
+     * @return void
+     */
+    public function test_confirm_throws_PaymentControlChonfirmFailedException()
     {
         $this->setUpPaymentTypeSecurity(PaymentTypeSecurities::SAFE);
         $this->setUpDecision(CheckDecisions::SAFE);
@@ -431,7 +508,10 @@ class PaymentControlClientTest extends TestCase
         $this->sut->confirm($this->data, $this->paymentControlCache);
     }
 
-    public function test_check_returns_COMPLETE_ORDER_if_request_matches_previous_request_and_only_paymentMethod_is_changed(): void
+    /**
+     * @return void
+     */
+    public function test_check_returns_COMPLETE_ORDER_if_request_matches_previous_request_and_only_paymentMethod_is_changed()
     {
         $hash = 'hash';
         $now = new DateTimeImmutable();

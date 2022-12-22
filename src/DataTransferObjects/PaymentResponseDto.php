@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
@@ -9,15 +7,33 @@ use DateTimeImmutable;
 
 class PaymentResponseDto implements DtoInterface
 {
-    public ?string $id = null;
+    /**
+     * @var string|null
+     */
+    public $id;
 
-    public ?DateTimeImmutable $date = null;
+    /**
+     * @var \DateTimeImmutable|null
+     */
+    public $date;
 
-    public ?string $invoiceNumber;
+    /**
+     * @var string|null
+     */
+    public $invoiceNumber;
 
-    public ?string $externalOrderId;
+    /**
+     * @var string|null
+     */
+    public $externalOrderId;
 
-    public ?float $amount = null;
+    /**
+     * @var float|null
+     */
+    public $amount;
 
-    public ?string $currency;
+    /**
+     * @var string|null
+     */
+    public $currency;
 }

@@ -1,12 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Checkout;
 
 interface CheckoutClientInterface
 {
-    public function mustShowCreditCheckAgreement(string $selectedPaymentMethodId): bool;
+    /**
+     * @param string $selectedPaymentMethodId
+     * @return bool
+     */
+    public function mustShowCreditCheckAgreement($selectedPaymentMethodId);
 
-    public function getCreditCheckAgreementInfo(): string;
+    /**
+     * @return string
+     */
+    public function getCreditCheckAgreementInfo();
 }

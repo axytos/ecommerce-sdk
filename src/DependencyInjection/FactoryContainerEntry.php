@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DependencyInjection;
 
 class FactoryContainerEntry implements ContainerEntryInterface
@@ -14,7 +12,10 @@ class FactoryContainerEntry implements ContainerEntryInterface
         $this->factory = $factory;
     }
 
-    public function getInstance(Container $container)
+    /**
+     * @param \Axytos\ECommerce\DependencyInjection\Container $container
+     */
+    public function getInstance($container)
     {
         return call_user_func($this->factory, $container);
     }

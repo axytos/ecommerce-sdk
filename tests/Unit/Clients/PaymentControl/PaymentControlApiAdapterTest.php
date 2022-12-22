@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
 
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter;
@@ -19,14 +17,21 @@ use PHPUnit\Framework\MockObject\MockObject;
 class PaymentControlApiAdapterTest extends TestCase
 {
     /** @var CheckApi&MockObject */
-    private CheckApi $checkApi;
+    private $checkApi;
 
     /** @var DtoOpenApiModelMapper&MockObject */
-    private DtoOpenApiModelMapper $mapper;
+    private $mapper;
 
-    private PaymentControlApiAdapter $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->checkApi = $this->createMock(CheckApi::class);
         $this->mapper = $this->createMock(DtoOpenApiModelMapper::class);
@@ -37,7 +42,10 @@ class PaymentControlApiAdapterTest extends TestCase
         );
     }
 
-    public function test_postPaymentControlCheck_returns_mapped_result_from_response(): void
+    /**
+     * @return void
+     */
+    public function test_postPaymentControlCheck_returns_mapped_result_from_response()
     {
         $requestData = $this->createMock(PaymentControlCheckRequestDto::class);
         $result = $this->createMock(PaymentControlCheckResponseDto::class);
@@ -64,7 +72,10 @@ class PaymentControlApiAdapterTest extends TestCase
         $this->assertSame($result, $actual);
     }
 
-    public function test_postPaymentControlConfirm_sends_payment_control_confirm_request(): void
+    /**
+     * @return void
+     */
+    public function test_postPaymentControlConfirm_sends_payment_control_confirm_request()
     {
         $requestData = $this->createMock(PaymentControlConfirmRequestDto::class);
         $request = $this->createMock(AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest::class);

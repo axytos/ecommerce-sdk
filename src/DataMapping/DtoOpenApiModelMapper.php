@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
@@ -33,6 +31,7 @@ use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto;
+use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
@@ -41,6 +40,7 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateRes
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsShippingTrackingInformationRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasket;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasketTaxGroup;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundPositionModel;
@@ -72,7 +72,7 @@ use ReflectionClass;
 class DtoOpenApiModelMapper
 {
     /** @var array<string,string> */
-    private const MAPPINGS = [
+    const MAPPINGS = [
         CustomerDataDto::class => AxytosCommonPublicAPIModelsCommonCustomerDataRequestModel::class,
         CompanyDto::class => AxytosCommonPublicAPIModelsCommonCompanyRequestModel::class,
         InvoiceAddressDto::class => AxytosCommonPublicAPIModelsCommonInvoiceAddress::class,
@@ -103,9 +103,13 @@ class DtoOpenApiModelMapper
         ReturnPositionModelDto::class => AxytosCommonModelsOrderReturnPositionModel::class,
         PaymentStateResponseDto::class => AxytosApiModelsPaymentStateResponseModel::class,
         PaymentResponseDto::class => AxytosApiModelsPaymentResponseModel::class,
+        ShippingTrackingInformationRequestModelDto::class => AxytosApiModelsShippingTrackingInformationRequestModel::class,
     ];
 
-    private DtoOpenApiModelModelMappings $mappings;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelModelMappings
+     */
+    private $mappings;
 
     public function __construct()
     {
@@ -117,8 +121,11 @@ class DtoOpenApiModelMapper
      * @phpstan-param DtoInterface $dataTransferObject
      * @phpstan-param class-string<T> $openApiModelName
      * @phpstan-return T
+     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dataTransferObject
+     * @param string $openApiModelName
+     * @return \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
      */
-    public function toOpenApiModel(DtoInterface $dataTransferObject, string $openApiModelName): ModelInterface
+    public function toOpenApiModel($dataTransferObject, $openApiModelName)
     {
         $dtoClassName = get_class($dataTransferObject);
 
@@ -157,8 +164,11 @@ class DtoOpenApiModelMapper
      * @phpstan-param ModelInterface $openApiModel
      * @phpstan-param class-string<T> $dataTransferObjectName
      * @phpstan-return T
+     * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $openApiModel
+     * @param string $dataTransferObjectName
+     * @return \Axytos\ECommerce\DataMapping\DtoInterface
      */
-    public function toDataTransferObject(ModelInterface $openApiModel, string $dataTransferObjectName): DtoInterface
+    public function toDataTransferObject($openApiModel, $dataTransferObjectName)
     {
         $openApiModelName = get_class($openApiModel);
 
@@ -218,7 +228,10 @@ class DtoOpenApiModelMapper
         return $value;
     }
 
-    private function toOpenApiArray(array $values): array
+    /**
+     * @return mixed[]
+     */
+    private function toOpenApiArray(array $values)
     {
         $models = [];
 
@@ -229,7 +242,10 @@ class DtoOpenApiModelMapper
         return $models;
     }
 
-    private function toOpenApiDateTime(DateTimeInterface $dateTime): string
+    /**
+     * @return string
+     */
+    private function toOpenApiDateTime(DateTimeInterface $dateTime)
     {
         $serializer = new DateTimeSerializer();
         return $serializer->serialize($dateTime);
@@ -260,7 +276,10 @@ class DtoOpenApiModelMapper
         return $value;
     }
 
-    private function toDtoCollection(array $values, DtoPropertyInfo $dtoPropertyInfo): DtoCollection
+    /**
+     * @return \Axytos\ECommerce\DataMapping\DtoCollection
+     */
+    private function toDtoCollection(array $values, DtoPropertyInfo $dtoPropertyInfo)
     {
         /** @phpstan-var class-string<DtoCollection> */
         $dtoCollectionClassName = $dtoPropertyInfo->getType();
@@ -275,7 +294,10 @@ class DtoOpenApiModelMapper
         return new $dtoCollectionClassName(...$elements);
     }
 
-    private function toDataTransferObjectArray(array $values, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo): array
+    /**
+     * @return mixed[]
+     */
+    private function toDataTransferObjectArray(array $values, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
     {
         $dtos = [];
 
@@ -286,8 +308,13 @@ class DtoOpenApiModelMapper
         return $dtos;
     }
 
-    private function toDataTransferObjectDateTime(string $value): DateTimeInterface
+    /**
+     * @param string $value
+     * @return \DateTimeInterface
+     */
+    private function toDataTransferObjectDateTime($value)
     {
+        $value = (string) $value;
         $serializer = new DateTimeSerializer();
         return $serializer->deserialize($value);
     }

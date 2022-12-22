@@ -1,39 +1,43 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
-use Axytos\ECommerce\DataMapping\DtoCollection;
-use Axytos\ECommerce\DataMapping\DtoInterface;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto1;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto2;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto3;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto4;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDtoCollection1;
+use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDtoCollection2;
 use PHPUnit\Framework\TestCase;
 
 class DtoToDtoMapperTest extends TestCase
 {
-    private DtoToDtoMapper $sut;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoToDtoMapper
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->sut = new DtoToDtoMapper();
     }
 
-    public function test_dto_mapping(): void
+    /**
+     * @return void
+     */
+    public function test_dto_mapping()
     {
-        $fromDto = new class implements DtoInterface {
-            public ?int $both;
-            public ?string $differentType;
-            public ?string $from;
-        };
+        $fromDto = new TestDto1();
         $fromDto->both = 1;
         $fromDto->differentType = "differentType";
         $fromDto->from = "fromValue";
 
-        $toDto = new class implements DtoInterface {
-            public ?int $both;
-            public ?int $differentType;
-            public ?string $to;
-        };
+        $toDto = new TestDto2();
         $toDto->both = $fromDto->both;
         $toDtoClassString = get_class($toDto);
 
@@ -42,45 +46,20 @@ class DtoToDtoMapperTest extends TestCase
         $this->assertEquals($toDto, $actual);
     }
 
-    public function test_dto_collection_mapping(): void
+    /**
+     * @return void
+     */
+    public function test_dto_collection_mapping()
     {
-        $fromDto = new class implements DtoInterface {
-            public ?string $both;
-            public ?string $from;
-        };
+        $fromDto = new TestDto3();
         $fromDto->both = "bothValue";
         $fromDto->from = "fromValue";
-        $fromDtoCollection = new class (...[$fromDto]) extends DtoCollection  {
-            /** @phpstan-var class-string<DtoInterface> */
-            public static string $classString;
-            public static function getElementClass(): string
-            {
-                return self::$classString;
-            }
-            public function __construct(DtoInterface ...$values)
-            {
-                parent::__construct($values);
-            }
-        };
+        $fromDtoCollection = new TestDtoCollection1(...[$fromDto]);
         $fromDtoCollection::$classString = get_class($fromDto);
 
-        $toDto = new class implements DtoInterface {
-            public ?string $both;
-            public ?string $to;
-        };
+        $toDto = new TestDto4();
         $toDto->both = $fromDto->both;
-        $toDtoCollection = new class (...[$toDto]) extends DtoCollection  {
-            /** @phpstan-var class-string<DtoInterface> */
-            public static string $classString;
-            public static function getElementClass(): string
-            {
-                return self::$classString;
-            }
-            public function __construct(DtoInterface ...$values)
-            {
-                parent::__construct($values);
-            }
-        };
+        $toDtoCollection = new TestDtoCollection2(...[$toDto]);
         $toDtoCollection::$classString = get_class($toDto);
         $toDtoCollectionClassString = get_class($toDtoCollection);
 

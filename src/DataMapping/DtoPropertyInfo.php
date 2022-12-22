@@ -1,55 +1,61 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
-use ReflectionNamedType;
 use ReflectionProperty;
 
 class DtoPropertyInfo
 {
-    public static function create(ReflectionProperty $property): DtoPropertyInfo
+    /**
+     * @param \ReflectionProperty $property
+     * @return \Axytos\ECommerce\DataMapping\DtoPropertyInfo
+     */
+    public static function create($property)
     {
         return new DtoPropertyInfo($property);
     }
 
-    private ReflectionProperty $property;
+    /**
+     * @var \ReflectionProperty
+     */
+    private $property;
 
     private function __construct(ReflectionProperty $property)
     {
         $this->property = $property;
     }
 
-    public function hasType(string $typeName): bool
+    /**
+     * @param string $typeName
+     * @return bool
+     */
+    public function hasType($typeName)
     {
-        $type = $this->property->getType();
-
-        return $type instanceof ReflectionNamedType
-            && is_a($type->getName(), $typeName, true);
+        $type = $this->getTypeName();
+        return is_a($type, $typeName, true);
     }
 
-    public function hasDtoCollectionType(): bool
+    /**
+     * @return bool
+     */
+    public function hasDtoCollectionType()
     {
         return $this->hasType(DtoCollection::class);
     }
 
-    public function getType(): string
+    /**
+     * @return string
+     */
+    public function getType()
     {
-        $type = $this->property->getType();
-
-        if ($type instanceof ReflectionNamedType) {
-            return $type->getName();
-        }
-
-        return 'mixed';
+        return $this->getTypeName();
     }
 
     /**
      * @param DtoInterface $dto
      * @return mixed
      */
-    public function getValue(DtoInterface $dto)
+    public function getValue($dto)
     {
         return $this->property->getValue($dto);
     }
@@ -59,8 +65,38 @@ class DtoPropertyInfo
      * @param mixed $value
      * @return void
      */
-    public function setValue(DtoInterface $dto, $value): void
+    public function setValue($dto, $value)
     {
         $this->property->setValue($dto, $value);
+    }
+
+    /**
+     * @return string
+     */
+    private function getTypeName()
+    {
+        // php 7
+        /** @var object|null */
+        $propertyType = (object) (method_exists($this->property, 'getType') ? $this->property->getType() : null);
+        if (!is_null($propertyType) && method_exists($this->property, 'getType')) {
+            if (method_exists($propertyType, 'getName')) {
+                return $propertyType->getName();
+            }
+        }
+
+        // php 5
+        $docComment = (string) $this->property->getDocComment();
+
+        $matches = [];
+        preg_match('/@var\s+(?P<type>.+)/', $docComment, $matches);
+
+        if (isset($matches['type'])) {
+            $type = $matches['type'];
+            $type = explode('|', $type)[0];
+            $type = explode('&', $type)[0];
+            return $type;
+        }
+
+        return 'mixed';
     }
 }

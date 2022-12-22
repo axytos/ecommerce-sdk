@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
 use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto;
@@ -11,13 +9,28 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 
 class PaymentControlOrderData
 {
-    public CustomerDataDto $personalData;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     */
+    public $personalData;
 
-    public InvoiceAddressDto $invoiceAddress;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     */
+    public $invoiceAddress;
 
-    public DeliveryAddressDto $deliveryAddress;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     */
+    public $deliveryAddress;
 
-    public PaymentControlBasketDto $basket;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto
+     */
+    public $basket;
 
-    public string $paymentMethodId;
+    /**
+     * @var string
+     */
+    public $paymentMethodId;
 }

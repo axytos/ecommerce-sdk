@@ -1,21 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
 use DateTimeInterface;
 use ReflectionClass;
-use ReflectionNamedType;
-use ReflectionType;
 
 class DtoArrayMapper
 {
     /**
      * @phpstan-param DtoInterface $dto
      * @phpstan-return array
+     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
+     * @return mixed[]
      */
-    public function toArray(DtoInterface $dto): array
+    public function toArray($dto)
     {
         return array_map([$this,'toArrayValue'], get_object_vars($dto));
     }
@@ -51,8 +49,11 @@ class DtoArrayMapper
      * @phpstan-param array $array
      * @phpstan-param class-string<T> $dtoClassName
      * @phpstan-return T
+     * @param mixed[] $array
+     * @param string $dtoClassName
+     * @return \Axytos\ECommerce\DataMapping\DtoInterface
      */
-    public function fromArray(array $array, string $dtoClassName): DtoInterface
+    public function fromArray($array, $dtoClassName)
     {
         $reflector = new ReflectionClass($dtoClassName);
 
@@ -62,8 +63,9 @@ class DtoArrayMapper
         foreach ($reflector->getProperties() as $property) {
             $name = $property->getName();
 
+            $dtoPropertyInfo = DtoPropertyInfo::create($property);
             if (array_key_exists($name, $array)) {
-                $value = $this->fromArrayValue($array[$name], $property->getType());
+                $value = $this->fromArrayValue($array[$name], $dtoPropertyInfo->getType());
                 $property->setValue($dto, $value);
             }
         }
@@ -72,29 +74,27 @@ class DtoArrayMapper
     }
 
     /**
-     * @phpstan-param mixed $value
-     * @phpstan-param ?ReflectionType $type
-     * @phpstan-return mixed
+     * @param mixed $value
+     * @param string $type
+     * @return mixed
      */
-    private function fromArrayValue($value, ?ReflectionType $type)
+    private function fromArrayValue($value, $type)
     {
-        if ($type instanceof ReflectionNamedType) {
-            if (is_string($value) && is_a($type->getName(), DateTimeInterface::class, true)) {
-                $serializer = new DateTimeSerializer();
-                return $serializer->deserialize($value);
-            }
+        if (is_string($value) && is_a($type, DateTimeInterface::class, true)) {
+            $serializer = new DateTimeSerializer();
+            return $serializer->deserialize($value);
+        }
 
-            if (is_array($value) && is_a($type->getName(), DtoInterface::class, true)) {
-                /** @phpstan-var class-string<DtoInterface> */
-                $dtoClassName = $type->getName();
-                return $this->fromArray($value, $dtoClassName);
-            }
+        if (is_array($value) && is_a($type, DtoInterface::class, true)) {
+            /** @phpstan-var class-string<DtoInterface> */
+            $dtoClassName = $type;
+            return $this->fromArray($value, $dtoClassName);
+        }
 
-            if (is_array($value) && is_a($type->getName(), DtoCollection::class, true)) {
-                /** @phpstan-var class-string<DtoCollection> */
-                $dtoCollectionClassName = $type->getName();
-                return $this->createDtoCollection($value, $dtoCollectionClassName);
-            }
+        if (is_array($value) && is_a($type, DtoCollection::class, true)) {
+            /** @phpstan-var class-string<DtoCollection> */
+            $dtoCollectionClassName = $type;
+            return $this->createDtoCollection($value, $dtoCollectionClassName);
         }
 
         return $value;
@@ -102,17 +102,22 @@ class DtoArrayMapper
 
     /**
      * @phpstan-template T of DtoCollection
-     * @phpstan-param array $values
+     * @phpstan-param mixed[] $values
      * @phpstan-param class-string<T> $dtoCollectionClassName
      * @phpstan-return T
+     * @param mixed[] $values
+     * @param string $dtoCollectionClassName
+     * @return \Axytos\ECommerce\DataMapping\DtoCollection
      */
-    private function createDtoCollection(array $values, string $dtoCollectionClassName): DtoCollection
+    private function createDtoCollection($values, $dtoCollectionClassName)
     {
+        $dtoCollectionClassName = (string) $dtoCollectionClassName;
+
         /** @phpstan-var class-string<DtoInterface> */
         $dtoClassName = $dtoCollectionClassName::getElementClass();
 
         $elements = array_map(function ($value) use ($dtoClassName) {
-            return $this->fromArray($value, $dtoClassName);
+            return $this->fromArray((array)$value, $dtoClassName);
         }, $values);
 
         return new $dtoCollectionClassName(...$elements);

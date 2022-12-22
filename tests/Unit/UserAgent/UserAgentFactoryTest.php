@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\UserAgent;
 
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
@@ -12,18 +10,28 @@ use PHPUnit\Framework\MockObject\MockObject;
 class UserAgentFactoryTest extends TestCase
 {
     /** @var UserAgentInfoProviderInterface|MockObject $userAgentInfoProvider */
-    private UserAgentInfoProviderInterface $userAgentInfoProvider;
+    private $userAgentInfoProvider;
 
-    private UserAgentFactory $sut;
+    /**
+     * @var \Axytos\ECommerce\UserAgent\UserAgentFactory
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->userAgentInfoProvider = $this->createMock(UserAgentInfoProviderInterface::class);
 
         $this->sut = new UserAgentFactory($this->userAgentInfoProvider);
     }
 
-    public function test_getUserAgent_returns_user_agent_with_plugin_and_shop_system_info(): void
+    /**
+     * @return void
+     */
+    public function test_getUserAgent_returns_user_agent_with_plugin_and_shop_system_info()
     {
         $pluginName = "pluginName";
         $pluginVersion = "pluginVersion";

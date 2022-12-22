@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients;
 
 use Throwable;
@@ -18,11 +16,26 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
 
 class ClientFacade implements CheckoutClientInterface, PaymentControlClientInterface, CredentialValidationClientInterface, ErrorReportingClientInterface, InvoiceClientInterface
 {
-    private CheckoutClientInterface $checkoutClient;
-    private CredentialValidationClientInterface $CredentialValidationClient;
-    private PaymentControlClientInterface $paymentControlClient;
-    private ErrorReportingClientInterface $errorReportingClient;
-    private InvoiceClientInterface $invoiceClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
+     */
+    private $checkoutClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface
+     */
+    private $CredentialValidationClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface
+     */
+    private $paymentControlClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     */
+    private $errorReportingClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     */
+    private $invoiceClient;
 
     public function __construct(Container $container)
     {
@@ -33,72 +46,137 @@ class ClientFacade implements CheckoutClientInterface, PaymentControlClientInter
         $this->invoiceClient = $container->get(InvoiceClientInterface::class);
     }
 
-    public function mustShowCreditCheckAgreement(string $selectedPaymentMethodId): bool
+    /**
+     * @param string $selectedPaymentMethodId
+     * @return bool
+     */
+    public function mustShowCreditCheckAgreement($selectedPaymentMethodId)
     {
         return $this->checkoutClient->mustShowCreditCheckAgreement($selectedPaymentMethodId);
     }
 
-    public function getCreditCheckAgreementInfo(): string
+    /**
+     * @return string
+     */
+    public function getCreditCheckAgreementInfo()
     {
         return $this->checkoutClient->getCreditCheckAgreementInfo();
     }
 
-    public function validateApiKey(): bool
+    /**
+     * @return bool
+     */
+    public function validateApiKey()
     {
         return $this->CredentialValidationClient->validateApiKey();
     }
 
-    public function check(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): string
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return string
+     */
+    public function check($data, $paymentControlCache)
     {
         return $this->paymentControlClient->check($data, $paymentControlCache);
     }
 
-    public function confirm(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): void
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return void
+     */
+    public function confirm($data, $paymentControlCache)
     {
         $this->paymentControlClient->confirm($data, $paymentControlCache);
     }
 
-    public function reportError(Throwable $throwable): void
+    /**
+     * @param \Throwable $throwable
+     * @return void
+     */
+    public function reportError($throwable)
     {
         $this->errorReportingClient->reportError($throwable);
     }
 
-    public function precheck(InvoiceOrderContextInterface $orderContext): string
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return string
+     */
+    public function precheck($orderContext)
     {
         return $this->invoiceClient->precheck($orderContext);
     }
 
-    public function confirmOrder(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function confirmOrder($orderContext)
     {
         $this->invoiceClient->confirmOrder($orderContext);
     }
 
-    public function cancelOrder(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function cancelOrder($orderContext)
     {
         $this->invoiceClient->cancelOrder($orderContext);
     }
 
-    public function createInvoice(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function createInvoice($orderContext)
     {
         $this->invoiceClient->createInvoice($orderContext);
     }
 
-    public function reportShipping(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function reportShipping($orderContext)
     {
         $this->invoiceClient->reportShipping($orderContext);
     }
 
-    public function refund(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function trackingInformation($orderContext)
+    {
+        $this->invoiceClient->trackingInformation($orderContext);
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function refund($orderContext)
     {
         $this->invoiceClient->refund($orderContext);
     }
 
-    public function return(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function returnOrder($orderContext)
     {
-        $this->invoiceClient->return($orderContext);
+        $this->invoiceClient->returnOrder($orderContext);
     }
 
-    public function getInvoiceOrderPaymentUpdate(string $paymentId): InvoiceOrderPaymentUpdate
+    /**
+     * @param string $paymentId
+     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     */
+    public function getInvoiceOrderPaymentUpdate($paymentId)
     {
         return $this->invoiceClient->getInvoiceOrderPaymentUpdate($paymentId);
     }

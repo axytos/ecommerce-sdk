@@ -1,21 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\UserAgent;
 
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
 
 class UserAgentFactory
 {
-    private UserAgentInfoProviderInterface $userAgentInfoProvider;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface
+     */
+    private $userAgentInfoProvider;
 
     public function __construct(UserAgentInfoProviderInterface $userAgentInfoProvider)
     {
         $this->userAgentInfoProvider = $userAgentInfoProvider;
     }
 
-    public function getUserAgent(): string
+    /**
+     * @return string
+     */
+    public function getUserAgent()
     {
         $pluginName = $this->userAgentInfoProvider->getPluginName();
         $pluginVersion = $this->userAgentInfoProvider->getPluginVersion();

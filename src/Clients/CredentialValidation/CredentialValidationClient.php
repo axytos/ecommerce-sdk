@@ -1,12 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\CredentialValidation;
 
 class CredentialValidationClient implements CredentialValidationClientInterface
 {
-    private CredentialValidationApiInterface $CredentialValidationApi;
+    /**
+     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface
+     */
+    private $CredentialValidationApi;
 
     public function __construct(
         CredentialValidationApiInterface $CredentialValidationApi
@@ -14,7 +15,10 @@ class CredentialValidationClient implements CredentialValidationClientInterface
         $this->CredentialValidationApi = $CredentialValidationApi;
     }
 
-    public function validateApiKey(): bool
+    /**
+     * @return bool
+     */
+    public function validateApiKey()
     {
         return $this->CredentialValidationApi->getCredentialsValidation();
     }

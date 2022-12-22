@@ -1,11 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DependencyInjection;
 
 use Axytos\ECommerce\DependencyInjection\Container;
-use Axytos\ECommerce\DependencyInjection\ContainerEntryInterface;
 use Axytos\ECommerce\DependencyInjection\NotFoundException;
 use Axytos\ECommerce\Tests\Unit\DependencyInjection\SampleTypes\RegisteredContainerEntryInterface;
 use Axytos\ECommerce\Tests\Unit\DependencyInjection\SampleTypes\NotRegisteredContainerEntryInterface;
@@ -13,14 +10,24 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
+include_once __DIR__ . '/SampleTypes/NotRegisteredContainerEntryInterface.php';
+include_once __DIR__ . '/SampleTypes/RegisteredContainerEntryInterface.php';
+
 class ContainerTest extends TestCase
 {
-    /** @var RegisteredContainerEntryInterface|MockObject $registeredContainerEntry */
-    private RegisteredContainerEntryInterface $registeredContainerEntry;
+    /** @var RegisteredContainerEntryInterface&MockObject */
+    private $registeredContainerEntry;
 
-    private Container $sut;
+    /**
+     * @var \Axytos\ECommerce\DependencyInjection\Container
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->registeredContainerEntry = $this->createMock(RegisteredContainerEntryInterface::class);
 
@@ -29,17 +36,26 @@ class ContainerTest extends TestCase
         ]);
     }
 
-    public function test_has_returns_true_if_container_entry_exists(): void
+    /**
+     * @return void
+     */
+    public function test_has_returns_true_if_container_entry_exists()
     {
         $this->assertTrue($this->sut->has(RegisteredContainerEntryInterface::class));
     }
 
-    public function test_has_returns_false_if_container_entry_does_not_exist(): void
+    /**
+     * @return void
+     */
+    public function test_has_returns_false_if_container_entry_does_not_exist()
     {
         $this->assertFalse($this->sut->has(NotRegisteredContainerEntryInterface::class));
     }
 
-    public function test_get_returns_instance_from_container_entry_if_container_entry_exists(): void
+    /**
+     * @return void
+     */
+    public function test_get_returns_instance_from_container_entry_if_container_entry_exists()
     {
         $instance = new stdClass();
 
@@ -51,7 +67,10 @@ class ContainerTest extends TestCase
         $this->assertSame($instance, $this->sut->get(RegisteredContainerEntryInterface::class));
     }
 
-    public function test_get_throws_NotFoundException_if_container_entry_does_not_exist(): void
+    /**
+     * @return void
+     */
+    public function test_get_throws_NotFoundException_if_container_entry_does_not_exist()
     {
         $this->expectException(NotFoundException::class);
 

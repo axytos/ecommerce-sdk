@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
 use ArrayAccess;
@@ -17,13 +15,15 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 {
     /**
      * @phpstan-return class-string<T>
+     * @return string
      */
-    abstract public static function getElementClass(): string;
+    abstract public static function getElementClass();
 
     /**
      * @phpstan-var T[]
+     * @var mixed[]
      */
-    private array $values;
+    private $values;
 
     /**
      * @phpstan-param T[] $values
@@ -35,24 +35,29 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-return T[]
+     * @return mixed[]
      */
-    public function getElements(): array
+    public function getElements()
     {
         return $this->values;
     }
 
     /**
      * @phpstan-return Traversable<T>
+     * @return \Traversable
      */
-    public function getIterator(): Traversable
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         return new ArrayIterator($this->values);
     }
 
     /**
      * @phpstan-param int|string $offset
+     * @return bool
      */
-    public function offsetExists($offset): bool
+    #[\ReturnTypeWillChange]
+    public function offsetExists($offset)
     {
         return array_key_exists($offset, $this->values);
     }
@@ -70,21 +75,29 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     /**
      * @phpstan-param int|string $offset
      * @phpstan-param T $value
+     * @return void
      */
-    public function offsetSet($offset, $value): void
+    #[\ReturnTypeWillChange]
+    public function offsetSet($offset, $value)
     {
         $this->values[$offset] = $value;
     }
 
     /**
      * @phpstan-param int|string $offset
+     * @return void
      */
-    public function offsetUnset($offset): void
+    #[\ReturnTypeWillChange]
+    public function offsetUnset($offset)
     {
         unset($this->values[$offset]);
     }
 
-    public function count(): int
+    /**
+     * @return int
+     */
+    #[\ReturnTypeWillChange]
+    public function count()
     {
         return count($this->values);
     }

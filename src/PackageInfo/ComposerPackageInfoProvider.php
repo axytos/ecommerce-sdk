@@ -1,19 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\PackageInfo;
 
 use Composer\InstalledVersions;
 
 class ComposerPackageInfoProvider
 {
-    public function isInstalled(string $packageName): bool
+    /**
+     * @param string $packageName
+     * @return bool
+     */
+    public function isInstalled($packageName)
     {
         return InstalledVersions::isInstalled($packageName);
     }
 
-    public function getVersion(string $packageName): ?string
+    /**
+     * @param string $packageName
+     * @return string|null
+     */
+    public function getVersion($packageName)
     {
         return InstalledVersions::getVersion($packageName);
     }

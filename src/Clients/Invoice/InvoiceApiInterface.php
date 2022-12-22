@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
@@ -13,24 +11,67 @@ use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
+use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 
 interface InvoiceApiInterface
 {
-    public function precheck(OrderPreCheckRequestDto $request): OrderPreCheckResponseDto;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto $request
+     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto
+     */
+    public function precheck($request);
 
-    public function confirm(OrderCreateRequestDto $request): void;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto $request
+     * @return void
+     */
+    public function confirm($request);
 
-    public function cancelOrder(string $orderNumber): void;
+    /**
+     * @param string $orderNumber
+     * @return void
+     */
+    public function cancelOrder($orderNumber);
 
-    public function createInvoice(CreateInvoiceRequestDto $requestDto): void;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto $requestDto
+     * @return void
+     */
+    public function createInvoice($requestDto);
 
-    public function reportShipping(ReportShippingDto $reportDto): void;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\ReportShippingDto $reportDto
+     * @return void
+     */
+    public function reportShipping($reportDto);
 
-    public function refund(RefundRequestDto $request): void;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto $trackingInformationDto
+     * @return void
+     */
+    public function trackingInformation($trackingInformationDto);
 
-    public function return(ReturnRequestModelDto $requestDto): void;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\RefundRequestDto $request
+     * @return void
+     */
+    public function refund($request);
 
-    public function payment(string $paymentId): PaymentResponseDto;
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto $requestDto
+     * @return void
+     */
+    public function returnOrder($requestDto);
 
-    public function paymentState(string $orderId): PaymentStateResponseDto;
+    /**
+     * @param string $paymentId
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentResponseDto
+     */
+    public function payment($paymentId);
+
+    /**
+     * @param string $orderId
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto
+     */
+    public function paymentState($orderId);
 }

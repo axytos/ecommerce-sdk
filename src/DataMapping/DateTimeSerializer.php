@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
 use DateTimeImmutable;
@@ -9,14 +7,22 @@ use DateTimeInterface;
 
 class DateTimeSerializer
 {
-    private const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
+    const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
 
-    public function serialize(DateTimeInterface $dateTime): string
+    /**
+     * @param \DateTimeInterface $dateTime
+     * @return string
+     */
+    public function serialize($dateTime)
     {
         return $dateTime->format(self::DATE_TIME_FORMAT);
     }
 
-    public function deserialize(string $value): DateTimeImmutable
+    /**
+     * @param string $value
+     * @return \DateTimeImmutable
+     */
+    public function deserialize($value)
     {
         $dateTime = DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $value);
 

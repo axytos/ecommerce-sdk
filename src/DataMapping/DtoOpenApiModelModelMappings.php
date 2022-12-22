@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
 use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
@@ -10,8 +8,9 @@ class DtoOpenApiModelModelMappings
 {
     /**
      * @phpstan-var array<class-string<DtoInterface>,class-string<ModelInterface>>
+     * @var mixed[]
      */
-    private array $mappings;
+    private $mappings;
 
     /**
      * @phpstan-param array<class-string<DtoInterface>,class-string<ModelInterface>> $mappings
@@ -24,8 +23,11 @@ class DtoOpenApiModelModelMappings
     /**
      * @phpstan-param class-string<DtoInterface> $dtoClassName
      * @phpstan-param class-string<ModelInterface> $oaModelName
+     * @param string $dtoClassName
+     * @param string $oaModelName
+     * @return bool
      */
-    public function hasMapping(string $dtoClassName, string $oaModelName): bool
+    public function hasMapping($dtoClassName, $oaModelName)
     {
         return array_key_exists($dtoClassName, $this->mappings)
             && $this->mappings[$dtoClassName] === $oaModelName;
@@ -33,8 +35,10 @@ class DtoOpenApiModelModelMappings
 
     /**
      * @phpstan-return class-string<ModelInterface>
+     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
+     * @return string
      */
-    public function lookupOpenApiModelName(DtoInterface $dto): string
+    public function lookupOpenApiModelName($dto)
     {
         /** @phpstan-var class-string<DtoInterface> */
         $dtoClassName = get_class($dto);
@@ -47,8 +51,10 @@ class DtoOpenApiModelModelMappings
 
     /**
      * @phpstan-return class-string<DtoInterface>
+     * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $model
+     * @return string
      */
-    public function lookupDtoClassName(ModelInterface $model): string
+    public function lookupDtoClassName($model)
     {
         /** @phpstan-var class-string<ModelInterface> */
         $oaModelName = get_class($model);

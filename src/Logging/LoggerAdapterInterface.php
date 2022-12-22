@@ -1,13 +1,27 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Logging;
 
 interface LoggerAdapterInterface
 {
-    public function error(string $message): void;
-    public function warning(string $message): void;
-    public function info(string $message): void;
-    public function debug(string $message): void;
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function error($message);
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function warning($message);
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function info($message);
+    /**
+     * @param string $message
+     * @return void
+     */
+    public function debug($message);
 }

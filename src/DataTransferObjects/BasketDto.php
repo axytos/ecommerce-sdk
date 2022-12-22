@@ -1,15 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class BasketDto implements DtoInterface
 {
-    public ?float $netTotal = null;
-    public ?float $grossTotal = null;
-    public ?string $currency = null;
-    public BasketPositionDtoCollection $positions;
+    /**
+     * @var float|null
+     */
+    public $netTotal;
+    /**
+     * @var float|null
+     */
+    public $grossTotal;
+    /**
+     * @var string|null
+     */
+    public $currency;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\BasketPositionDtoCollection
+     */
+    public $positions;
 }

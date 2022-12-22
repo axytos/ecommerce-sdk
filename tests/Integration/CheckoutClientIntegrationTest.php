@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
@@ -19,30 +17,36 @@ use PHPUnit\Framework\TestCase;
 
 class CheckoutClientIntegrationTest extends TestCase
 {
-    private CheckoutClientInterface $checkoutClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
+     */
+    private $checkoutClient;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
-        $this->checkoutClient = new AxytosECommerceClient(
-            new ApiHostProvider(),
-            new ApiKeyProvider(),
-            new PaymentMethodConfiguration(),
-            new FallbackModeConfiguration(),
-            new UserAgentInfoProvider(),
-            $this->createMock(LoggerAdapterInterface::class),
-        );
+        $this->checkoutClient = new AxytosECommerceClient(new ApiHostProvider(), new ApiKeyProvider(), new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
     }
 
-    public function test_getCreditCheckAgreementInfo(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementInfo()
     {
         $creditCheckAgreement = $this->checkoutClient->getCreditCheckAgreementInfo();
 
         $this->assertNotNull($creditCheckAgreement);
-        $this->assertIsString($creditCheckAgreement);
+        $this->assertTrue(is_string($creditCheckAgreement));
         $this->assertNotEmpty($creditCheckAgreement);
     }
 
-    public function test_getCreditCheckAgreementInfo_throws(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementInfo_throws()
     {
         $this->expectException(CreditCheckAgreementLoadFailedException::class);
 
@@ -50,14 +54,7 @@ class CheckoutClientIntegrationTest extends TestCase
         $apiKeyProvider = $this->createMock(ApiKeyProviderInterface::class);
         $apiKeyProvider->method('getApiKey')->willReturn('invalid-api-key');
 
-        $checkoutClient = new AxytosECommerceClient(
-            new ApiHostProvider(),
-            $apiKeyProvider,
-            new PaymentMethodConfiguration(),
-            new FallbackModeConfiguration(),
-            new UserAgentInfoProvider(),
-            $this->createMock(LoggerAdapterInterface::class),
-        );
+        $checkoutClient = new AxytosECommerceClient(new ApiHostProvider(), $apiKeyProvider, new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
 
         $checkoutClient->getCreditCheckAgreementInfo();
     }

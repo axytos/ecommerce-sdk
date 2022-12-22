@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\Checkout;
 
 use Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter;
+use Axytos\ECommerce\Clients\Checkout\StaticContentApiProxy;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 use Axytos\FinancialServices\GuzzleHttp\Psr7\Request;
-use Axytos\FinancialServices\OpenAPI\Client\Api\StaticContentApi;
 use Axytos\FinancialServices\Psr\Http\Message\ResponseInterface;
 use Axytos\FinancialServices\Psr\Http\Message\StreamInterface;
 use PHPUnit\Framework\TestCase;
@@ -16,17 +14,24 @@ use PHPUnit\Framework\MockObject\MockObject;
 class CheckoutApiAdapterTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
-    private ClientInterface $client;
+    private $client;
 
-    /** @var StaticContentApi&MockObject */
-    private StaticContentApi $staticContentApi;
+    /** @var StaticContentApiProxy&MockObject */
+    private $staticContentApi;
 
-    private CheckoutApiAdapter $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->client = $this->createMock(ClientInterface::class);
-        $this->staticContentApi = $this->createMock(StaticContentApi::class);
+        $this->staticContentApi = $this->createMock(StaticContentApiProxy::class);
 
         $this->sut = new CheckoutApiAdapter(
             $this->client,
@@ -34,7 +39,10 @@ class CheckoutApiAdapterTest extends TestCase
         );
     }
 
-    public function test_getCreditCheckAgreementText_returns_request_body_contents(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementText_returns_request_body_contents()
     {
         $contents = 'contents';
 

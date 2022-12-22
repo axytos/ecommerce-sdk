@@ -1,24 +1,60 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Invoice;
 
 interface InvoiceClientInterface
 {
-    public function precheck(InvoiceOrderContextInterface $orderContext): string;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return string
+     */
+    public function precheck($orderContext);
 
-    public function confirmOrder(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function confirmOrder($orderContext);
 
-    public function cancelOrder(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function cancelOrder($orderContext);
 
-    public function createInvoice(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function createInvoice($orderContext);
 
-    public function reportShipping(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function reportShipping($orderContext);
 
-    public function refund(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function trackingInformation($orderContext);
 
-    public function return(InvoiceOrderContextInterface $orderContext): void;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function refund($orderContext);
 
-    public function getInvoiceOrderPaymentUpdate(string $paymentId): InvoiceOrderPaymentUpdate;
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function returnOrder($orderContext);
+
+    /**
+     * @param string $paymentId
+     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     */
+    public function getInvoiceOrderPaymentUpdate($paymentId);
 }

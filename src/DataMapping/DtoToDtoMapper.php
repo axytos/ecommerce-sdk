@@ -1,12 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataMapping;
 
-use Error;
 use ReflectionClass;
-use ReflectionNamedType;
 use ReflectionProperty;
 
 class DtoToDtoMapper
@@ -45,17 +41,18 @@ class DtoToDtoMapper
         $toDtoProperties = $toDtoReflector->getProperties(ReflectionProperty::IS_PUBLIC);
         $fromDtoReflector = new ReflectionClass($fromDto);
         foreach ($toDtoProperties as $toDtoProperty) {
+            $toDtoProeprtyInfo = DtoPropertyInfo::create($toDtoProperty);
             $toDtoPropertyName = $toDtoProperty->getName();
-            $toDtoPropertyType = $toDtoProperty->getType();
+
             if (!$fromDtoReflector->hasProperty($toDtoPropertyName)) {
                 continue;
             }
-            $fromDtoPropertyType = $fromDtoReflector->getProperty($toDtoPropertyName)->getType();
-            if (!$toDtoPropertyType instanceof ReflectionNamedType || !$fromDtoPropertyType instanceof ReflectionNamedType) {
-                continue;
-            }
-            $toDtoPropertyTypeName = $toDtoPropertyType->getName();
-            $fromDtoPropertyTypeName = $fromDtoPropertyType->getName();
+
+            $fromDtoPropertyInfo = DtoPropertyInfo::create($fromDtoReflector->getProperty($toDtoPropertyName));
+
+            $toDtoPropertyTypeName = $toDtoProeprtyInfo->getType();
+            $fromDtoPropertyTypeName = $fromDtoPropertyInfo->getType();
+
             if ($toDtoPropertyTypeName !== $fromDtoPropertyTypeName) {
                 continue;
             }

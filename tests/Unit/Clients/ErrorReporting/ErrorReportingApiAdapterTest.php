@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
@@ -16,14 +14,21 @@ use PHPUnit\Framework\MockObject\MockObject;
 class ErrorReportingApiAdapterTest extends TestCase
 {
     /** @var ErrorApi&MockObject */
-    private ErrorApi $errorApi;
+    private $errorApi;
 
     /** @var DtoOpenApiModelMapper&MockObject */
-    private DtoOpenApiModelMapper $mapper;
+    private $mapper;
 
-    private ErrorReportingApiAdapter $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->errorApi = $this->createMock(ErrorApi::class);
         $this->mapper = $this->createMock(DtoOpenApiModelMapper::class);
@@ -34,7 +39,10 @@ class ErrorReportingApiAdapterTest extends TestCase
         );
     }
 
-    public function test_reportError(): void
+    /**
+     * @return void
+     */
+    public function test_reportError()
     {
         $errorReport = $this->createMock(ErrorRequestModelDto::class);
         $errorRequest = $this->createMock(AxytosApiModelsErrorRequestModel::class);
@@ -52,7 +60,10 @@ class ErrorReportingApiAdapterTest extends TestCase
         $this->sut->reportError($errorReport);
     }
 
-    public function test_reportError_does_not_propagate_errors(): void
+    /**
+     * @return void
+     */
+    public function test_reportError_does_not_propagate_errors()
     {
         $throwable = null;
 
@@ -73,6 +84,8 @@ class ErrorReportingApiAdapterTest extends TestCase
         try {
             $this->sut->reportError($errorReport);
         } catch (\Throwable $th) {
+            $throwable = $th;
+        } catch (\Exception $th) { // @phpstan-ignore-line / php5 compatibility
             $throwable = $th;
         }
 

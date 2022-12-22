@@ -1,27 +1,33 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Checkout;
 
 use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
-use Axytos\FinancialServices\OpenAPI\Client\Api\StaticContentApi;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 
 class CheckoutApiAdapter implements CheckoutApiInterface
 {
-    private ClientInterface $httpClient;
-    private StaticContentApi $staticContentApi;
+    /**
+     * @var \Axytos\FinancialServices\GuzzleHttp\ClientInterface
+     */
+    private $httpClient;
+    /**
+     * @var StaticContentApiProxy
+     */
+    private $staticContentApi;
 
     public function __construct(
         ClientInterface $httpClient,
-        StaticContentApi $staticContentApi
+        StaticContentApiProxy $staticContentApi
     ) {
         $this->httpClient = $httpClient;
         $this->staticContentApi = $staticContentApi;
     }
 
-    public function getCreditCheckAgreementText(): string
+    /**
+     * @return string
+     */
+    public function getCreditCheckAgreementText()
     {
         /**
          * At least on Windows, some this requires to configure curl.cainfo in the php.ini

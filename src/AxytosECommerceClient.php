@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce;
 
 use Axytos\FinancialServices\GuzzleHttp\Client;
@@ -12,13 +10,11 @@ use Axytos\FinancialServices\OpenAPI\Client\Configuration;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
-use Axytos\FinancialServices\OpenAPI\Client\Api\StaticContentApi;
 use Axytos\ECommerce\Clients\ClientFacade;
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
 use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
 use Axytos\ECommerce\UserAgent\UserAgentFactory;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
-use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
 use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
@@ -38,6 +34,7 @@ use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter;
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
+use Axytos\ECommerce\Clients\Checkout\StaticContentApiProxy;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
@@ -47,70 +44,29 @@ use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter
 use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
+use Axytos\ECommerce\Clients\PaymentControl\SHA256HashAlgorithm;
 
 final class AxytosECommerceClient extends ClientFacade
 {
-    public const CLASS_MAP = [
-
-        UserAgentFactory::class => [
-            UserAgentFactory::class
-        ],
-
-        CheckoutClient::class => [
-            CheckoutClientInterface::class
-        ],
-
-        CheckoutApiAdapter::class => [
-            CheckoutApiInterface::class
-        ],
-
-        PaymentControlClient::class => [
-            PaymentControlClientInterface::class
-        ],
-
-        PaymentControlApiAdapter::class => [
-            PaymentControlApiInterface::class
-        ],
-
-        CredentialValidationClient::class => [
-            CredentialValidationClientInterface::class
-        ],
-
-        CredentialValidationApiAdapter::class => [
-            CredentialValidationApiInterface::class
-        ],
-
-        ErrorReportingClient::class => [
-            ErrorReportingClientInterface::class
-        ],
-
-        ErrorReportingApiAdapter::class => [
-            ErrorReportingApiInterface::class
-        ],
-
-        InvoiceClient::class => [
-            InvoiceClientInterface::class
-        ],
-
-        InvoiceApiAdapter::class => [
-            InvoiceApiInterface::class
-        ],
-
-        PaymentControlOrderDataHashCalculator::class => [
-            PaymentControlOrderDataHashCalculator::class
-        ],
-    ];
-
+    /**
+     * @param \Axytos\ECommerce\Abstractions\ApiHostProviderInterface $apiHostProvider
+     * @param \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface $apiKeyProvider
+     * @param \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface $paymentMethodConfiguration
+     * @param \Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface $fallbackModeConfiguration
+     * @param \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface $userAgentInfoProvider
+     * @param \Axytos\ECommerce\Logging\LoggerAdapterInterface $logger
+     * @return \Axytos\ECommerce\DependencyInjection\Container
+     */
     public static function buildContainer(
-        ApiHostProviderInterface $apiHostProvider,
-        ApiKeyProviderInterface $apiKeyProvider,
-        PaymentMethodConfigurationInterface $paymentMethodConfiguration,
-        FallbackModeConfigurationInterface $fallbackModeConfiguration,
-        UserAgentInfoProviderInterface $userAgentInfoProvider,
-        LoggerAdapterInterface $logger
-    ): Container {
+        $apiHostProvider,
+        $apiKeyProvider,
+        $paymentMethodConfiguration,
+        $fallbackModeConfiguration,
+        $userAgentInfoProvider,
+        $logger
+    ) {
         $containerBuilder = new ContainerBuilder();
-        $containerBuilder->registerClassMap(self::CLASS_MAP);
+
         $containerBuilder->registerInstanceMap([
             ApiHostProviderInterface::class => $apiHostProvider,
             ApiKeyProviderInterface::class => $apiKeyProvider,
@@ -140,10 +96,10 @@ final class AxytosECommerceClient extends ClientFacade
             return $configuration;
         });
 
-        $containerBuilder->registerFactory(StaticContentApi::class, function ($container) {
+        $containerBuilder->registerFactory(StaticContentApiProxy::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
-            return new StaticContentApi($client, $configuration);
+            return new StaticContentApiProxy($client, $configuration);
         });
 
         $containerBuilder->registerFactory(CredentialsApi::class, function ($container) {
@@ -186,6 +142,84 @@ final class AxytosECommerceClient extends ClientFacade
 
         $containerBuilder->registerFactory(DtoToDtoMapper::class, function () {
             return new DtoToDtoMapper();
+        });
+
+        $containerBuilder->registerFactory(UserAgentFactory::class, function ($container) {
+            return new UserAgentFactory($container->get(UserAgentInfoProviderInterface::class));
+        });
+
+        $containerBuilder->registerFactory(CheckoutClientInterface::class, function ($container) {
+            return new CheckoutClient(
+                $container->get(PaymentMethodConfigurationInterface::class),
+                $container->get(CheckoutApiInterface::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(CheckoutApiInterface::class, function ($container) {
+            return new CheckoutApiAdapter(
+                $container->get(ClientInterface::class),
+                $container->get(StaticContentApiProxy::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(PaymentControlClientInterface::class, function ($container) {
+            return new PaymentControlClient(
+                $container->get(PaymentControlApiInterface::class),
+                $container->get(PaymentMethodConfigurationInterface::class),
+                $container->get(PaymentControlOrderDataHashCalculator::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(PaymentControlApiInterface::class, function ($container) {
+            return new PaymentControlApiAdapter(
+                $container->get(CheckApi::class),
+                $container->get(DtoOpenApiModelMapper::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(CredentialValidationClientInterface::class, function ($container) {
+            return new CredentialValidationClient(
+                $container->get(CredentialValidationApiInterface::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(CredentialValidationApiInterface::class, function ($container) {
+            return new CredentialValidationApiAdapter(
+                $container->get(CredentialsApi::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(ErrorReportingClientInterface::class, function ($container) {
+            return new ErrorReportingClient(
+                $container->get(ErrorReportingApiInterface::class),
+                $container->get(LoggerAdapterInterface::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(ErrorReportingApiInterface::class, function ($container) {
+            return new ErrorReportingApiAdapter(
+                $container->get(ErrorApi::class),
+                $container->get(DtoOpenApiModelMapper::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(InvoiceClientInterface::class, function ($container) {
+            return new InvoiceClient(
+                $container->get(InvoiceApiInterface::class),
+                $container->get(DtoArrayMapper::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(InvoiceApiInterface::class, function ($container) {
+            return new InvoiceApiAdapter(
+                $container->get(PaymentsApi::class),
+                $container->get(PaymentApi::class),
+                $container->get(DtoOpenApiModelMapper::class)
+            );
+        });
+
+        $containerBuilder->registerFactory(PaymentControlOrderDataHashCalculator::class, function ($container) {
+            return new PaymentControlOrderDataHashCalculator(new SHA256HashAlgorithm());
         });
 
         return $containerBuilder->build();

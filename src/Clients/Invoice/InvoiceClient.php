@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
@@ -14,12 +12,19 @@ use Axytos\ECommerce\DataTransferObjects\PaymentTypeSecurities;
 use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
+use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Exception;
 
 class InvoiceClient implements InvoiceClientInterface
 {
-    private InvoiceApiInterface $invoiceApi;
-    private DtoArrayMapper $dtoArrayMapper;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface
+     */
+    private $invoiceApi;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoArrayMapper
+     */
+    private $dtoArrayMapper;
 
     public function __construct(
         InvoiceApiInterface $invoiceApi,
@@ -29,7 +34,11 @@ class InvoiceClient implements InvoiceClientInterface
         $this->dtoArrayMapper = $dtoArrayMapper;
     }
 
-    public function precheck(InvoiceOrderContextInterface $orderContext): string
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return string
+     */
+    public function precheck($orderContext)
     {
         $requestDto = new OrderPreCheckRequestDto();
         $requestDto->requestMode = 'SingleStep';
@@ -53,7 +62,11 @@ class InvoiceClient implements InvoiceClientInterface
         return ShopActions::COMPLETE_ORDER;
     }
 
-    public function confirmOrder(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function confirmOrder($orderContext)
     {
         $requestDto = new OrderCreateRequestDto();
         $requestDto->externalOrderId = $orderContext->getOrderNumber();
@@ -70,12 +83,20 @@ class InvoiceClient implements InvoiceClientInterface
         $this->invoiceApi->confirm($requestDto);
     }
 
-    public function cancelOrder(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function cancelOrder($orderContext)
     {
         $this->invoiceApi->cancelOrder($orderContext->getOrderNumber());
     }
 
-    public function createInvoice(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function createInvoice($orderContext)
     {
         $requestDto = new CreateInvoiceRequestDto();
         $requestDto->basket = $orderContext->getCreateInvoiceBasket();
@@ -85,7 +106,11 @@ class InvoiceClient implements InvoiceClientInterface
         $this->invoiceApi->createInvoice($requestDto);
     }
 
-    public function reportShipping(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function reportShipping($orderContext)
     {
         $reportDto = new ReportShippingDto();
         $reportDto->externalOrderId = $orderContext->getOrderNumber();
@@ -94,7 +119,32 @@ class InvoiceClient implements InvoiceClientInterface
         $this->invoiceApi->reportShipping($reportDto);
     }
 
-    public function refund(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function trackingInformation($orderContext)
+    {
+        $trackingIds = $orderContext->getTrackingIds();
+
+        /** @var string $trackingId */
+        foreach ($trackingIds as $trackingId) {
+            $trackingInformationDto = new ShippingTrackingInformationRequestModelDto();
+            $trackingInformationDto->trackingId = $trackingId;
+            $trackingInformationDto->externalOrderId = $orderContext->getOrderNumber();
+            $trackingInformationDto->deliveryWeight = $orderContext->getDeliveryWeight();
+            $trackingInformationDto->logistician = $orderContext->getLogistician();
+            $trackingInformationDto->deliveryAddress = $orderContext->getDeliveryAddress();
+
+            $this->invoiceApi->trackingInformation($trackingInformationDto);
+        }
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function refund($orderContext)
     {
         $requestDto = new RefundRequestDto();
         $requestDto->externalOrderId = $orderContext->getOrderNumber();
@@ -104,15 +154,23 @@ class InvoiceClient implements InvoiceClientInterface
         $this->invoiceApi->refund($requestDto);
     }
 
-    public function return(InvoiceOrderContextInterface $orderContext): void
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function returnOrder($orderContext)
     {
         $requestDto = new ReturnRequestModelDto();
         $requestDto->externalOrderId = $orderContext->getOrderNumber();
         $requestDto->positions = $orderContext->getReturnPositions();
-        $this->invoiceApi->return($requestDto);
+        $this->invoiceApi->returnOrder($requestDto);
     }
 
-    public function getInvoiceOrderPaymentUpdate(string $paymentId): InvoiceOrderPaymentUpdate
+    /**
+     * @param string $paymentId
+     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     */
+    public function getInvoiceOrderPaymentUpdate($paymentId)
     {
         $invoiceOrderPaymentUpdate = new InvoiceOrderPaymentUpdate();
         $invoiceOrderPaymentUpdate->orderId = $this->getOrderIdFromPayment($paymentId);
@@ -120,8 +178,13 @@ class InvoiceClient implements InvoiceClientInterface
         return $invoiceOrderPaymentUpdate;
     }
 
-    private function getOrderIdFromPayment(string $paymentId): string
+    /**
+     * @param string $paymentId
+     * @return string
+     */
+    private function getOrderIdFromPayment($paymentId)
     {
+        $paymentId = (string) $paymentId;
         $paymentResponse = $this->invoiceApi->payment($paymentId);
 
         $externalOrderId = $paymentResponse->externalOrderId;
@@ -133,8 +196,13 @@ class InvoiceClient implements InvoiceClientInterface
         return $externalOrderId;
     }
 
-    private function getPaymentStateForOrderId(string $orderId): string
+    /**
+     * @param string $orderId
+     * @return string
+     */
+    private function getPaymentStateForOrderId($orderId)
     {
+        $orderId = (string) $orderId;
         $paymentState = $this->invoiceApi->paymentState($orderId)->paymentState;
 
         if (is_null($paymentState)) {

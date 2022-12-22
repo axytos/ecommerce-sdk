@@ -1,15 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class CreateInvoiceBasketDto implements DtoInterface
 {
-    public ?float $netTotal = null;
-    public ?float $grossTotal = null;
-    public CreateInvoiceBasketPositionDtoCollection $positions;
-    public CreateInvoiceTaxGroupDtoCollection $taxGroups;
+    /**
+     * @var float|null
+     */
+    public $netTotal;
+    /**
+     * @var float|null
+     */
+    public $grossTotal;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDtoCollection
+     */
+    public $positions;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDtoCollection
+     */
+    public $taxGroups;
 }

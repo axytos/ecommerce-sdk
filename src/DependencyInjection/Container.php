@@ -1,36 +1,44 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DependencyInjection;
 
 class Container
 {
     /** @var ContainerEntryInterface[] $containerEntries */
-    private array $containerEntries;
+    private $containerEntries;
 
     public function __construct(array $containerEntries)
     {
         $this->containerEntries = $containerEntries;
     }
 
-    /** @return int[]|string[] */
+    /**
+     * @return string[]
+     * @phpstan-return class-string[]
+     */
     public function keys()
     {
+        /** @phpstan-var class-string[] */
         return array_keys($this->containerEntries);
     }
 
-    public function has(string $key): bool
+    /**
+     * @param string $key
+     * @return bool
+     */
+    public function has($key)
     {
         return array_key_exists($key, $this->containerEntries);
     }
 
     /**
+     * @param string $key
+     * @return object
      * @template T
-     * @param class-string<T> $key
-     * @return T
+     * @phpstan-param class-string<T> $key
+     * @phpstan-return T
      */
-    public function get(string $key)
+    public function get($key)
     {
         if ($this->has($key)) {
             $containerEntry = $this->containerEntries[$key];

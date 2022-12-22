@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\ErrorReporting;
 
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
@@ -11,8 +9,14 @@ use Throwable;
 
 class ErrorReportingClient implements ErrorReportingClientInterface
 {
-    private ErrorReportingApiInterface $errorReportingApi;
-    private LoggerAdapterInterface $logger;
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface
+     */
+    private $errorReportingApi;
+    /**
+     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     */
+    private $logger;
 
     public function __construct(ErrorReportingApiInterface $errorReportingApi, LoggerAdapterInterface $logger)
     {
@@ -20,7 +24,11 @@ class ErrorReportingClient implements ErrorReportingClientInterface
         $this->logger = $logger;
     }
 
-    public function reportError(Throwable $throwable): void
+    /**
+     * @param \Throwable $throwable
+     * @return void
+     */
+    public function reportError($throwable)
     {
         $errorReport = new ErrorRequestModelDto();
         $errorReport->title = $this->getTitle($throwable);
@@ -30,7 +38,11 @@ class ErrorReportingClient implements ErrorReportingClientInterface
         $this->errorReportingApi->reportError($errorReport);
     }
 
-    private function getTitle(Throwable $throwable): string
+    /**
+     * @return string
+     * @param \Throwable $throwable
+     */
+    private function getTitle($throwable)
     {
         $title = $throwable->getMessage();
 
@@ -41,7 +53,11 @@ class ErrorReportingClient implements ErrorReportingClientInterface
         return $title;
     }
 
-    private function getDescription(Throwable $throwable): string
+    /**
+     * @return string
+     * @param \Throwable $throwable
+     */
+    private function getDescription($throwable)
     {
         $description = $throwable->getTraceAsString();
 

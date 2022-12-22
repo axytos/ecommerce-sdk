@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\CredentialValidation;
 
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
@@ -10,14 +8,20 @@ use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 
 class CredentialValidationApiAdapter implements CredentialValidationApiInterface
 {
-    private CredentialsApi $credentialsApi;
+    /**
+     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi
+     */
+    private $credentialsApi;
 
     public function __construct(CredentialsApi $credentialsApi)
     {
         $this->credentialsApi = $credentialsApi;
     }
 
-    public function getCredentialsValidation(): bool
+    /**
+     * @return bool
+     */
+    public function getCredentialsValidation()
     {
         try {
             $this->credentialsApi->apiV1CredentialsValidateGetWithHttpInfo();

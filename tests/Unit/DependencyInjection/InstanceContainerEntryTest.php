@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DependencyInjection;
 
 use Axytos\ECommerce\DependencyInjection\Container;
@@ -11,18 +9,31 @@ use stdClass;
 
 class InstanceContainerEntryTest extends TestCase
 {
-    private stdClass $instance;
+    /**
+     * @var \stdClass
+     */
+    private $instance;
 
-    private InstanceContainerEntry $sut;
+    /**
+     * @var \Axytos\ECommerce\DependencyInjection\InstanceContainerEntry
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->instance = new stdClass();
 
         $this->sut = new InstanceContainerEntry($this->instance);
     }
 
-    public function test_getInstance_returns_instance(): void
+    /**
+     * @return void
+     */
+    public function test_getInstance_returns_instance()
     {
         $container = $this->createMock(Container::class);
 

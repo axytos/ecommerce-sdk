@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\CredentialValidation;
 
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
@@ -13,11 +11,18 @@ use PHPUnit\Framework\MockObject\MockObject;
 class CredentialValidationApiAdapterTest extends TestCase
 {
     /** @var CredentialsApi&MockObject */
-    private CredentialsApi $credentialsApi;
+    private $credentialsApi;
 
-    private CredentialValidationApiAdapter $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->credentialsApi = $this->createMock(CredentialsApi::class);
         $this->sut = new CredentialValidationApiAdapter(
@@ -25,7 +30,10 @@ class CredentialValidationApiAdapterTest extends TestCase
         );
     }
 
-    public function test_getCredentialValidation_calls_api(): void
+    /**
+     * @return void
+     */
+    public function test_getCredentialValidation_calls_api()
     {
         $this->credentialsApi
             ->expects($this->once())
@@ -34,12 +42,18 @@ class CredentialValidationApiAdapterTest extends TestCase
         $this->sut->getCredentialsValidation();
     }
 
-    public function test_getCredentialValidation_returns_true_if_api_call_succeeds(): void
+    /**
+     * @return void
+     */
+    public function test_getCredentialValidation_returns_true_if_api_call_succeeds()
     {
         $this->assertTrue($this->sut->getCredentialsValidation());
     }
 
-    public function test_getCredentialValidation_returns_falls_if_api_call_fails(): void
+    /**
+     * @return void
+     */
+    public function test_getCredentialValidation_returns_falls_if_api_call_fails()
     {
         $this->credentialsApi->method('apiV1CredentialsValidateGetWithHttpInfo')->willThrowException(new ApiException());
 

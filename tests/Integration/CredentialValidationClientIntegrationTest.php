@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
@@ -19,22 +17,21 @@ class CredentialValidationClientIntegrationTest extends TestCase
 {
     /**
      * @dataProvider validateApiKeyDataProvider
+     * @param \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface $apiKeyProvider
+     * @param bool $isValid
+     * @return void
      */
-    public function test_validateApiKey(ApiKeyProviderInterface $apiKeyProvider, bool $isValid): void
+    public function test_validateApiKey($apiKeyProvider, $isValid)
     {
-        $client = new AxytosECommerceClient(
-            new ApiHostProvider(),
-            $apiKeyProvider,
-            new PaymentMethodConfiguration(),
-            new FallbackModeConfiguration(),
-            new UserAgentInfoProvider(),
-            $this->createMock(LoggerAdapterInterface::class),
-        );
+        $client = new AxytosECommerceClient(new ApiHostProvider(), $apiKeyProvider, new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
 
         $this->assertEquals($isValid, $client->validateApiKey());
     }
 
-    public function validateApiKeyDataProvider(): array
+    /**
+     * @return mixed[]
+     */
+    public function validateApiKeyDataProvider()
     {
         return [
             [$this->createValidApiKeyProvider(), true],
@@ -42,12 +39,18 @@ class CredentialValidationClientIntegrationTest extends TestCase
         ];
     }
 
-    private function createValidApiKeyProvider(): ApiKeyProviderInterface
+    /**
+     * @return \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     */
+    private function createValidApiKeyProvider()
     {
         return new ApiKeyProvider();
     }
 
-    private function createInvalidApiKeyProvider(): ApiKeyProviderInterface
+    /**
+     * @return \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     */
+    private function createInvalidApiKeyProvider()
     {
         /** @var ApiKeyProviderInterface&MockObject */
         $mock = $this->createMock(ApiKeyProviderInterface::class);

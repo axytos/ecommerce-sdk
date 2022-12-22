@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
@@ -12,17 +10,26 @@ require_once __DIR__ . '/DtoFactory.php';
 
 class DtoArrayMapperTest extends TestCase
 {
-    private DtoArrayMapper $sut;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoArrayMapper
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->sut = new DtoArrayMapper();
     }
 
     /**
      * @dataProvider mappingTestCases
+     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
+     * @return void
      */
-    public function test_mapping(DtoInterface $dto): void
+    public function test_mapping($dto)
     {
         /** @phpstan-var class-string<DtoInterface> */
         $dtoClass = get_class($dto);
@@ -34,7 +41,10 @@ class DtoArrayMapperTest extends TestCase
         $this->assertEquals($dto, $actual);
     }
 
-    public function mappingTestCases(): array
+    /**
+     * @return mixed[]
+     */
+    public function mappingTestCases()
     {
         return [
             [DtoFactory::createCustomerDataDto()],

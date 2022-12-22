@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
@@ -16,17 +14,69 @@ use DateTimeInterface;
 
 interface InvoiceOrderContextInterface
 {
-    public function getOrderNumber(): string;
-    public function getOrderInvoiceNumber(): string;
-    public function getOrderDateTime(): DateTimeInterface;
-    public function getPersonalData(): CustomerDataDto;
-    public function getInvoiceAddress(): InvoiceAddressDto;
-    public function getDeliveryAddress(): DeliveryAddressDto;
-    public function getBasket(): BasketDto;
-    public function getRefundBasket(): RefundBasketDto;
-    public function getCreateInvoiceBasket(): CreateInvoiceBasketDto;
-    public function getShippingBasketPositions(): ShippingBasketPositionDtoCollection;
-    public function getPreCheckResponseData(): array;
-    public function setPreCheckResponseData(array $data): void;
-    public function getReturnPositions(): ReturnPositionModelDtoCollection;
+    /**
+     * @return string
+     */
+    public function getOrderNumber();
+    /**
+     * @return string
+     */
+    public function getOrderInvoiceNumber();
+    /**
+     * @return \DateTimeInterface
+     */
+    public function getOrderDateTime();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     */
+    public function getPersonalData();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     */
+    public function getInvoiceAddress();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     */
+    public function getDeliveryAddress();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
+     */
+    public function getBasket();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    public function getRefundBasket();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     */
+    public function getCreateInvoiceBasket();
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
+     */
+    public function getShippingBasketPositions();
+    /**
+     * @return mixed[]
+     */
+    public function getPreCheckResponseData();
+    /**
+     * @param mixed[] $data
+     * @return void
+     */
+    public function setPreCheckResponseData($data);
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
+     */
+    public function getReturnPositions();
+    /**
+     * @return float
+     */
+    public function getDeliveryWeight();
+    /**
+     * @return string[]
+     */
+    public function getTrackingIds();
+    /**
+     * @return string
+     */
+    public function getLogistician();
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
 use Axytos\ECommerce\DataMapping\DateTimeSerializationException;
@@ -12,14 +10,24 @@ use PHPUnit\Framework\TestCase;
 
 class DateTimeSerializerTest extends TestCase
 {
-    private DateTimeSerializer $sut;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DateTimeSerializer
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->sut = new DateTimeSerializer();
     }
 
-    public function test_serialize(): void
+    /**
+     * @return void
+     */
+    public function test_serialize()
     {
         $year = 2022;
         $month = 11;
@@ -27,18 +35,20 @@ class DateTimeSerializerTest extends TestCase
         $hour = 15;
         $minute = 29;
         $second = 47;
-        $microsecond = 123445;
 
         $dateTime = new DateTime();
         $dateTime->setDate($year, $month, $day);
-        $dateTime->setTime($hour, $minute, $second, $microsecond);
+        $dateTime->setTime($hour, $minute, $second);
 
         $actual = $this->sut->serialize($dateTime);
 
         $this->assertEquals("{$year}-{$month}-{$day}T{$hour}:{$minute}:{$second}Z", $actual);
     }
 
-    public function test_deserialize(): void
+    /**
+     * @return void
+     */
+    public function test_deserialize()
     {
         $year = 2022;
         $month = 11;
@@ -57,7 +67,10 @@ class DateTimeSerializerTest extends TestCase
         $this->assertEquals($dateTime, $actual);
     }
 
-    public function test_deserialize_with_seven_microsecond_digits(): void
+    /**
+     * @return void
+     */
+    public function test_deserialize_with_seven_microsecond_digits()
     {
         $year = 2022;
         $month = 11;
@@ -69,14 +82,17 @@ class DateTimeSerializerTest extends TestCase
 
         $dateTime = new DateTime();
         $dateTime->setDate($year, $month, $day);
-        $dateTime->setTime($hour, $minute, $second, 0);
+        $dateTime->setTime($hour, $minute, $second);
 
         $actual = $this->sut->deserialize("{$year}-{$month}-{$day}T{$hour}:{$minute}:{$second}.{$microsecond}Z");
 
         $this->assertEquals($dateTime, $actual);
     }
 
-    public function test_deserialize_throws_DateTimeSerializationException_if_deserialization_fails(): void
+    /**
+     * @return void
+     */
+    public function test_deserialize_throws_DateTimeSerializationException_if_deserialization_fails()
     {
         $year = 2022;
         $month = 11;
@@ -91,7 +107,10 @@ class DateTimeSerializerTest extends TestCase
         $this->sut->deserialize("{$year}-{$month}-{$day} F {$hour}:{$minute}:{$second}.{$microsecond}Z");
     }
 
-    public function test_desiralize_throwsDateTimeSerializationException_with_error_data(): void
+    /**
+     * @return void
+     */
+    public function test_desiralize_throwsDateTimeSerializationException_with_error_data()
     {
         $year = 2022;
         $month = 11;

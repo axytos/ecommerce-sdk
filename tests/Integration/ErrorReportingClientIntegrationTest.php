@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\AxytosECommerceClient;
@@ -16,34 +14,42 @@ use PHPUnit\Framework\TestCase;
 
 class ErrorReportingClientIntegrationTest extends TestCase
 {
-    private ErrorReportingClientInterface $errorReportingClient;
+    /**
+     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     */
+    private $errorReportingClient;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
-        $this->errorReportingClient = new AxytosECommerceClient(
-            new ApiHostProvider(),
-            new ApiKeyProvider(),
-            new PaymentMethodConfiguration(),
-            new FallbackModeConfiguration(),
-            new UserAgentInfoProvider(),
-            $this->createMock(LoggerAdapterInterface::class),
-        );
+        $this->errorReportingClient = new AxytosECommerceClient(new ApiHostProvider(), new ApiKeyProvider(), new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
     }
 
     /**
      * @dataProvider reportErrorDataProvider
+     * @param string $message
+     * @return void
      */
-    public function test_reportError(string $message): void
+    public function test_reportError($message)
     {
         try {
             throw new \Exception($message);
         } catch (\Throwable $th) {
             $this->errorReportingClient->reportError($th);
             $this->assertTrue(true);
+        } catch (\Exception $th) {  // @phpstan-ignore-line / php5 compatibility
+            $this->errorReportingClient->reportError($th);
+            $this->assertTrue(true);
         }
     }
 
-    public function reportErrorDataProvider(): array
+    /**
+     * @return mixed[]
+     */
+    public function reportErrorDataProvider()
     {
         return [
             ['Error Message'],

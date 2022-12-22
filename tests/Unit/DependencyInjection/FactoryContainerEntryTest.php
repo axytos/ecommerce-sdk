@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DependencyInjection;
 
 use Axytos\ECommerce\DependencyInjection\Container;
@@ -16,11 +14,18 @@ class FactoryContainerEntryTest extends TestCase
     private $factory;
 
     /** @var Container|MockObject $container */
-    private Container $container;
+    private $container;
 
-    private FactoryContainerEntry $sut;
+    /**
+     * @var \Axytos\ECommerce\DependencyInjection\FactoryContainerEntry
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
 
 
@@ -33,7 +38,10 @@ class FactoryContainerEntryTest extends TestCase
         $this->sut = new FactoryContainerEntry($this->factory);
     }
 
-    public function test_getInstance_returns_instance(): void
+    /**
+     * @return void
+     */
+    public function test_getInstance_returns_instance()
     {
         $instance = new stdClass();
 

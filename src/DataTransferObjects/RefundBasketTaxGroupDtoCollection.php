@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoCollection;
@@ -13,8 +11,9 @@ class RefundBasketTaxGroupDtoCollection extends DtoCollection
 {
     /**
      * @phpstan-return class-string<RefundBasketTaxGroupDto>
+     * @return string
      */
-    public static function getElementClass(): string
+    public static function getElementClass()
     {
         return RefundBasketTaxGroupDto::class;
     }

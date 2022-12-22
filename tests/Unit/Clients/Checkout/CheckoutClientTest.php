@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\Checkout;
 
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
@@ -14,18 +12,25 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 class CheckoutClientTest extends TestCase
 {
-    private const SELECTED_PAYMENTMETHOD_ID = 'SELECTED_PAYMENTMETHOD_ID';
-    private const CREDIT_CHECK_AGREEMENT_INFO = 'CREDIT_CHECK_AGREEMENT_INFO';
+    const SELECTED_PAYMENTMETHOD_ID = 'SELECTED_PAYMENTMETHOD_ID';
+    const CREDIT_CHECK_AGREEMENT_INFO = 'CREDIT_CHECK_AGREEMENT_INFO';
 
     /** @var CheckoutApiInterface&MockObject */
-    private CheckoutApiInterface $checkoutApi;
+    private $checkoutApi;
 
     /** @var PaymentMethodConfigurationInterface&MockObject */
-    private PaymentMethodConfigurationInterface $paymentMethodConfiguration;
+    private $paymentMethodConfiguration;
 
-    private CheckoutClient $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClient
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->checkoutApi = $this->createMock(CheckoutApiInterface::class);
         $this->paymentMethodConfiguration = $this->createMock(PaymentMethodConfigurationInterface::class);
@@ -36,8 +41,17 @@ class CheckoutClientTest extends TestCase
         );
     }
 
-    private function mockPaymentMethodConfiguration(string $paymentMethodId, bool $isSafe, bool $isUnsafe): void
+    /**
+     * @return void
+     * @param string $paymentMethodId
+     * @param bool $isSafe
+     * @param bool $isUnsafe
+     */
+    private function mockPaymentMethodConfiguration($paymentMethodId, $isSafe, $isUnsafe)
     {
+        $paymentMethodId = (string) $paymentMethodId;
+        $isSafe = (bool) $isSafe;
+        $isUnsafe = (bool) $isUnsafe;
         $this->paymentMethodConfiguration
             ->method('isSafe')
             ->with($paymentMethodId)
@@ -48,7 +62,10 @@ class CheckoutClientTest extends TestCase
             ->willReturn($isUnsafe);
     }
 
-    public function test_mustShowCreditCheckAgreement_returns_true_if_payment_method_is_safe(): void
+    /**
+     * @return void
+     */
+    public function test_mustShowCreditCheckAgreement_returns_true_if_payment_method_is_safe()
     {
         $this->mockPaymentMethodConfiguration(self::SELECTED_PAYMENTMETHOD_ID, true, false);
 
@@ -57,7 +74,10 @@ class CheckoutClientTest extends TestCase
         $this->assertTrue($actual);
     }
 
-    public function test_mustShowCreditCheckAgreement_returns_true_if_payment_method_is_unsafe(): void
+    /**
+     * @return void
+     */
+    public function test_mustShowCreditCheckAgreement_returns_true_if_payment_method_is_unsafe()
     {
         $this->mockPaymentMethodConfiguration(self::SELECTED_PAYMENTMETHOD_ID, false, true);
 
@@ -66,7 +86,10 @@ class CheckoutClientTest extends TestCase
         $this->assertTrue($actual);
     }
 
-    public function test_mustShowCreditCheckAgreement_returns_false_if_payment_method_is_neither_safe_nor_unsafe(): void
+    /**
+     * @return void
+     */
+    public function test_mustShowCreditCheckAgreement_returns_false_if_payment_method_is_neither_safe_nor_unsafe()
     {
         $this->mockPaymentMethodConfiguration(self::SELECTED_PAYMENTMETHOD_ID, false, false);
 
@@ -75,7 +98,10 @@ class CheckoutClientTest extends TestCase
         $this->assertFalse($actual);
     }
 
-    public function test_getCreditCheckAgreementInfo_returns_from_checkout_api(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementInfo_returns_from_checkout_api()
     {
         $this->checkoutApi
             ->method('getCreditCheckAgreementText')
@@ -86,7 +112,10 @@ class CheckoutClientTest extends TestCase
         $this->assertSame(self::CREDIT_CHECK_AGREEMENT_INFO, $actual);
     }
 
-    public function test_getCreditCheckAgreementInfo_throws_CreditCheckAgreementLoadFailedException(): void
+    /**
+     * @return void
+     */
+    public function test_getCreditCheckAgreementInfo_throws_CreditCheckAgreementLoadFailedException()
     {
         $this->checkoutApi
             ->method('getCreditCheckAgreementText')

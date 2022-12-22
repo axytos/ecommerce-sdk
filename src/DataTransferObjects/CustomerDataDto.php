@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
@@ -9,11 +7,23 @@ use DateTimeInterface;
 
 class CustomerDataDto implements DtoInterface
 {
-    public ?string $externalCustomerId = null;
+    /**
+     * @var string|null
+     */
+    public $externalCustomerId;
 
-    public ?DateTimeInterface $dateOfBirth = null;
+    /**
+     * @var \DateTimeInterface|null
+     */
+    public $dateOfBirth;
 
-    public ?string $email = null;
+    /**
+     * @var string|null
+     */
+    public $email;
 
-    public ?CompanyDto $company = null;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\CompanyDto|null
+     */
+    public $company;
 }

@@ -1,29 +1,70 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Axytos\ECommerce\Tests\CredentialValidation;
+namespace Axytos\ECommerce\Tests;
 
 use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
+use Axytos\ECommerce\UserAgent\UserAgentFactory;
+use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
+use Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter;
+use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
+use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
+use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClient;
+use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter;
+use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiInterface;
+use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface;
+use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 use Axytos\ECommerce\AxytosECommerceClient;
-use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use PHPUnit\Framework\TestCase;
 
 class AxytosECommerceClientTest extends TestCase
 {
-    private ApiHostProviderInterface $apiHostProvider;
-    private ApiKeyProviderInterface $apiKeyProvider;
-    private PaymentMethodConfigurationInterface $paymentMethodConfiguration;
-    private FallbackModeConfigurationInterface $fallbackModeConfiguration;
-    private UserAgentInfoProviderInterface $userAgentInfoProvider;
-    private LoggerAdapterInterface $logger;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface
+     */
+    private $apiHostProvider;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     */
+    private $apiKeyProvider;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     */
+    private $paymentMethodConfiguration;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface
+     */
+    private $fallbackModeConfiguration;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface
+     */
+    private $userAgentInfoProvider;
+    /**
+     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     */
+    private $logger;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->apiHostProvider = $this->createMock(ApiHostProviderInterface::class);
         $this->apiKeyProvider = $this->createMock(ApiKeyProviderInterface::class);
@@ -33,7 +74,10 @@ class AxytosECommerceClientTest extends TestCase
         $this->logger = $this->createMock(LoggerAdapterInterface::class);
     }
 
-    private function buildContainer(): Container
+    /**
+     * @return \Axytos\ECommerce\DependencyInjection\Container
+     */
+    private function buildContainer()
     {
         return AxytosECommerceClient::buildContainer(
             $this->apiHostProvider,
@@ -50,55 +94,62 @@ class AxytosECommerceClientTest extends TestCase
     {
         $result = [];
 
-        foreach (AxytosECommerceClient::CLASS_MAP as $className => $aliasNames) {
+        foreach (self::CLASS_MAP as $className => $aliasNames) {
             $result = array_merge($result, $aliasNames);
         }
 
         return $result;
     }
 
-    public function test_AxytosECommerceClient_can_be_constructed(): void
+    /**
+     * @return void
+     */
+    public function test_AxytosECommerceClient_can_be_constructed()
     {
-        $client = new AxytosECommerceClient(
-            $this->apiHostProvider,
-            $this->apiKeyProvider,
-            $this->paymentMethodConfiguration,
-            $this->fallbackModeConfiguration,
-            $this->userAgentInfoProvider,
-            $this->logger,
-        );
+        $client = new AxytosECommerceClient($this->apiHostProvider, $this->apiKeyProvider, $this->paymentMethodConfiguration, $this->fallbackModeConfiguration, $this->userAgentInfoProvider, $this->logger);
         $this->assertNotNull($client);
     }
 
-    public function test_buildContainer_all_classes_registered(): void
+    /**
+     * @return void
+     */
+    public function test_buildContainer_all_classes_registered()
     {
         $container = $this->buildContainer();
 
         $ids = $this->getExpectedContainderIds();
 
         foreach ($ids as $id) {
-            $this->assertTrue($container->has($id));
+            $this->assertTrue($container->has($id), "Missng $id");
         }
     }
 
-    public function test_buildContainer_all_registered_classes_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_buildContainer_all_registered_classes_can_be_resolved()
     {
         $container = $this->buildContainer();
 
-        /** @var string[] $keys */
+        /**
+         * @var string[]
+         * @phpstan-var class-string[]
+         */
         $keys = $container->keys();
 
         foreach ($keys as $key) {
-            if (!class_exists($key)) {
-                return;
-            }
+            $classOrInterfaceExists = class_exists($key, true) || interface_exists($key, true);
+            $this->assertTrue($classOrInterfaceExists, "Class of Interface $key does not exist!");
 
             $instance = $container->get($key);
             $this->assertInstanceOf($key, $instance);
         }
     }
 
-    public function test_buildContainer_ApiHostProviderInterface_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_buildContainer_ApiHostProviderInterface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -108,7 +159,10 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertSame($this->apiHostProvider, $instance);
     }
 
-    public function test_ApiKeyProviderInterface_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_ApiKeyProviderInterface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -118,7 +172,10 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertSame($this->apiKeyProvider, $instance);
     }
 
-    public function test_PaymentMethodConfigurationInterface_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_PaymentMethodConfigurationInterface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -128,7 +185,10 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertSame($this->paymentMethodConfiguration, $instance);
     }
 
-    public function test_FallbackModeConfigurationInterface_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_FallbackModeConfigurationInterface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -138,7 +198,10 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertSame($this->fallbackModeConfiguration, $instance);
     }
 
-    public function test_UserAgentInfoProviderInterface_can_be_resolved(): void
+    /**
+     * @return void
+     */
+    public function test_UserAgentInfoProviderInterface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -147,4 +210,55 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertInstanceOf(UserAgentInfoProviderInterface::class, $instance);
         $this->assertSame($this->userAgentInfoProvider, $instance);
     }
+
+    const CLASS_MAP = [
+
+        UserAgentFactory::class => [
+            UserAgentFactory::class
+        ],
+
+        CheckoutClient::class => [
+            CheckoutClientInterface::class
+        ],
+
+        CheckoutApiAdapter::class => [
+            CheckoutApiInterface::class
+        ],
+
+        PaymentControlClient::class => [
+            PaymentControlClientInterface::class
+        ],
+
+        PaymentControlApiAdapter::class => [
+            PaymentControlApiInterface::class
+        ],
+
+        CredentialValidationClient::class => [
+            CredentialValidationClientInterface::class
+        ],
+
+        CredentialValidationApiAdapter::class => [
+            CredentialValidationApiInterface::class
+        ],
+
+        ErrorReportingClient::class => [
+            ErrorReportingClientInterface::class
+        ],
+
+        ErrorReportingApiAdapter::class => [
+            ErrorReportingApiInterface::class
+        ],
+
+        InvoiceClient::class => [
+            InvoiceClientInterface::class
+        ],
+
+        InvoiceApiAdapter::class => [
+            InvoiceApiInterface::class
+        ],
+
+        PaymentControlOrderDataHashCalculator::class => [
+            PaymentControlOrderDataHashCalculator::class
+        ],
+    ];
 }

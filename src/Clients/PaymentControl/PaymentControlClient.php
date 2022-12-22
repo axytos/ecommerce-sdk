@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
@@ -14,12 +12,21 @@ use Exception;
 
 class PaymentControlClient implements PaymentControlClientInterface
 {
-    private PaymentControlApiInterface $paymentControlApi;
-    private PaymentMethodConfigurationInterface $paymentMethodConfiguration;
-    private PaymentControlOrderDataHashCalculator $paymentControlOrderDataHashCalculator;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiInterface
+     */
+    private $paymentControlApi;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     */
+    private $paymentMethodConfiguration;
+    /**
+     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator
+     */
+    private $paymentControlOrderDataHashCalculator;
 
-    private const PROOF_OF_INTEREST = 'AAE';
-    private const REQUEST_MODE = 'SingleStep';
+    const PROOF_OF_INTEREST = 'AAE';
+    const REQUEST_MODE = 'SingleStep';
 
     public function __construct(
         PaymentControlApiInterface $paymentControlApi,
@@ -31,7 +38,12 @@ class PaymentControlClient implements PaymentControlClientInterface
         $this->paymentControlOrderDataHashCalculator = $paymentControlOrderDataHashCalculator;
     }
 
-    public function check(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): string
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return string
+     */
+    public function check($data, $paymentControlCache)
     {
         try {
             $paymentTypeSecurity = $this->getPaymentTypeSecurity($data->paymentMethodId);
@@ -75,10 +87,17 @@ class PaymentControlClient implements PaymentControlClientInterface
             return $this->getPaymentControlAction($paymentTypeSecurity, $response->decision);
         } catch (\Throwable $th) {
             throw new PaymentControlCheckFailedException($th);
+        } catch (\Exception $th) { // @phpstan-ignore-line / php5 compatibility
+            throw new PaymentControlCheckFailedException($th);
         }
     }
 
-    public function confirm(PaymentControlOrderData $data, PaymentControlCacheInterface $paymentControlCache): void
+    /**
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
+     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
+     * @return void
+     */
+    public function confirm($data, $paymentControlCache)
     {
         try {
             $paymentMethodId = $data->paymentMethodId;
@@ -114,11 +133,18 @@ class PaymentControlClient implements PaymentControlClientInterface
             }
         } catch (\Throwable $th) {
             throw new PaymentControlConfirmFailedException($th);
+        } catch (\Exception $th) { // @phpstan-ignore-line / php5 compatibility
+            throw new PaymentControlConfirmFailedException($th);
         }
     }
 
-    private function getPaymentTypeSecurity(string $paymentMethodId): ?string
+    /**
+     * @return string|null
+     * @param string $paymentMethodId
+     */
+    private function getPaymentTypeSecurity($paymentMethodId)
     {
+        $paymentMethodId = (string) $paymentMethodId;
         if ($this->paymentMethodConfiguration->isIgnored($paymentMethodId)) {
             return null;
         }
@@ -134,7 +160,12 @@ class PaymentControlClient implements PaymentControlClientInterface
         return null;
     }
 
-    private function getPaymentControlAction(?string $paymentTypeSecurity, ?string $decision): string
+    /**
+     * @param string|null $paymentTypeSecurity
+     * @param string|null $decision
+     * @return string
+     */
+    private function getPaymentControlAction($paymentTypeSecurity, $decision)
     {
         if ($paymentTypeSecurity === PaymentTypeSecurities::SAFE) {
             switch ($decision) {

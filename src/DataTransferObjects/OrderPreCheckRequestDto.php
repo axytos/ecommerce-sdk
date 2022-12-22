@@ -1,20 +1,45 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class OrderPreCheckRequestDto implements DtoInterface
 {
-    public string $requestMode;
-    public string $proofOfInterest;
-    public string $paymentTypeSecurity;
-    public string $selectedPaymentType;
-    public CustomerDataDto $personalData;
-    public InvoiceAddressDto $invoiceAddress;
-    public DeliveryAddressDto $deliveryAddress;
-    public BasketDto $basket;
-    public ?OrderPreCheckResponseDto $orderPrecheckResponse = null;
+    /**
+     * @var string
+     */
+    public $requestMode;
+    /**
+     * @var string
+     */
+    public $proofOfInterest;
+    /**
+     * @var string
+     */
+    public $paymentTypeSecurity;
+    /**
+     * @var string
+     */
+    public $selectedPaymentType;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     */
+    public $personalData;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     */
+    public $invoiceAddress;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     */
+    public $deliveryAddress;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\BasketDto
+     */
+    public $basket;
+    /**
+     * @var \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto|null
+     */
+    public $orderPrecheckResponse;
 }

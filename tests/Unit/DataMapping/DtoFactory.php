@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
@@ -41,6 +39,7 @@ use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
+use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
 use DateTime;
 use DateTimeImmutable;
@@ -49,7 +48,10 @@ require_once __DIR__ . '/DtoFactory.php';
 
 class DtoFactory
 {
-    public static function createErrorRequestModelDto(): ErrorRequestModelDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto
+     */
+    public static function createErrorRequestModelDto()
     {
         $errorRequest = new ErrorRequestModelDto();
         $errorRequest->title = 'title';
@@ -59,7 +61,10 @@ class DtoFactory
         return $errorRequest;
     }
 
-    public static function createOrderCreateRequestDto(): OrderCreateRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto
+     */
+    public static function createOrderCreateRequestDto()
     {
         $request = new OrderCreateRequestDto();
         $request->externalOrderId = 'externalOrderId';
@@ -73,7 +78,10 @@ class DtoFactory
         return $request;
     }
 
-    public static function createOrderPreCheckRequestDto(): OrderPreCheckRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto
+     */
+    public static function createOrderPreCheckRequestDto()
     {
         $request = new OrderPreCheckRequestDto();
         $request->requestMode = 'requestMode';
@@ -89,7 +97,10 @@ class DtoFactory
         return $request;
     }
 
-    public static function createOrderPreCheckResponseDto(): OrderPreCheckResponseDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto
+     */
+    public static function createOrderPreCheckResponseDto()
     {
         $response = new OrderPreCheckResponseDto();
         $response->approvedPaymentTypeSecurities = ['A', 'B', 'C'];
@@ -101,7 +112,10 @@ class DtoFactory
         return $response;
     }
 
-    public static function createPaymentControlCheckRequestDto(): PaymentControlCheckRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto
+     */
+    public static function createPaymentControlCheckRequestDto()
     {
         $checkRequest = new PaymentControlCheckRequestDto();
         $checkRequest->requestMode = 'requestMode';
@@ -116,7 +130,10 @@ class DtoFactory
         return $checkRequest;
     }
 
-    public static function createPaymentControlConfirmRequestDto(): PaymentControlConfirmRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto
+     */
+    public static function createPaymentControlConfirmRequestDto()
     {
         $checkRequest = new PaymentControlConfirmRequestDto();
         $checkRequest->paymentTypeSecurity = 'paymentTypeSecurity';
@@ -129,7 +146,10 @@ class DtoFactory
         return $checkRequest;
     }
 
-    public static function createPaymentControlCheckResponseDto(): PaymentControlCheckResponseDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto
+     */
+    public static function createPaymentControlCheckResponseDto()
     {
         $checkResponse = new PaymentControlCheckResponseDto();
         $checkResponse->approvedPaymentTypeSecurities = ['A', 'B', 'C'];
@@ -141,7 +161,10 @@ class DtoFactory
         return $checkResponse;
     }
 
-    public static function createTransactionMetadataDto(): TransactionMetadataDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto
+     */
+    public static function createTransactionMetadataDto()
     {
         $transactionMetadata = new TransactionMetadataDto();
         $transactionMetadata->transactionId = 'transactionId';
@@ -152,7 +175,10 @@ class DtoFactory
         return $transactionMetadata;
     }
 
-    public static function createCustomerDataDto(): CustomerDataDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     */
+    public static function createCustomerDataDto()
     {
         $customer = new CustomerDataDto();
         $customer->externalCustomerId = null;
@@ -163,7 +189,10 @@ class DtoFactory
         return $customer;
     }
 
-    public static function createCompanyDto(): CompanyDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CompanyDto
+     */
+    public static function createCompanyDto()
     {
         $company = new CompanyDto();
         $company->name = 'company';
@@ -171,7 +200,10 @@ class DtoFactory
         return $company;
     }
 
-    public static function createBasketDto(): BasketDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
+     */
+    public static function createBasketDto()
     {
         $positions = array_map([self::class, 'createBasketPositionDto'], array_fill(0, 5, 0));
 
@@ -184,7 +216,11 @@ class DtoFactory
         return $basket;
     }
 
-    public static function createBasketPositionDto(?int $id = null): BasketPositionDto
+    /**
+     * @param int|null $id
+     * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
+     */
+    public static function createBasketPositionDto($id = null)
     {
         $basketPosition = new BasketPositionDto();
         $basketPosition->productId = "productId$id";
@@ -198,7 +234,10 @@ class DtoFactory
         return $basketPosition;
     }
 
-    public static function createPaymentControlBasketDto(): PaymentControlBasketDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto
+     */
+    public static function createPaymentControlBasketDto()
     {
         $positions = array_map([self::class, 'createPaymentControlBasketPositionDto'], array_fill(0, 5, 0));
 
@@ -211,7 +250,11 @@ class DtoFactory
         return $basket;
     }
 
-    public static function createPaymentControlBasketPositionDto(?int $id = null): PaymentControlBasketPositionDto
+    /**
+     * @param int|null $id
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDto
+     */
+    public static function createPaymentControlBasketPositionDto($id = null)
     {
         $basketPosition = new PaymentControlBasketPositionDto();
         $basketPosition->productId = "productId$id";
@@ -225,7 +268,10 @@ class DtoFactory
         return $basketPosition;
     }
 
-    public static function createCreateInvoiceRequestDto(): CreateInvoiceRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto
+     */
+    public static function createCreateInvoiceRequestDto()
     {
         $request = new CreateInvoiceRequestDto();
         $request->basket = self::createCreateInvoiceBasketDto();
@@ -237,7 +283,10 @@ class DtoFactory
         return $request;
     }
 
-    public static function createCreateInvoiceBasketDto(): CreateInvoiceBasketDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     */
+    public static function createCreateInvoiceBasketDto()
     {
         $positions = array_map([self::class, 'createCreateInvoiceBasketPositionDto'], array_fill(0, 5, 0));
         $taxGroups = array_map([self::class, 'createCreateInvoiceTaxGroupDto'], array_fill(0, 5, 0));
@@ -251,7 +300,11 @@ class DtoFactory
         return $basket;
     }
 
-    public static function createCreateInvoiceBasketPositionDto(?int $id = null): CreateInvoiceBasketPositionDto
+    /**
+     * @param int|null $id
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDto
+     */
+    public static function createCreateInvoiceBasketPositionDto($id = null)
     {
         $basketPosition = new CreateInvoiceBasketPositionDto();
         $basketPosition->productId = "productId$id";
@@ -265,7 +318,10 @@ class DtoFactory
         return $basketPosition;
     }
 
-    public static function createCreateInvoiceTaxGroupDto(): CreateInvoiceTaxGroupDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto
+     */
+    public static function createCreateInvoiceTaxGroupDto()
     {
         $taxGroup = new CreateInvoiceTaxGroupDto();
         $taxGroup->taxPercent = 0.19;
@@ -275,7 +331,10 @@ class DtoFactory
         return $taxGroup;
     }
 
-    public static function createDeliveryAddressDto(): DeliveryAddressDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     */
+    public static function createDeliveryAddressDto()
     {
         $deliveryAddress = new DeliveryAddressDto();
         $deliveryAddress->company = 'company';
@@ -295,7 +354,10 @@ class DtoFactory
         return $deliveryAddress;
     }
 
-    public static function createInvoiceAddressDto(): InvoiceAddressDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     */
+    public static function createInvoiceAddressDto()
     {
         $invoiceAddress = new InvoiceAddressDto();
         $invoiceAddress->company = 'company';
@@ -315,7 +377,10 @@ class DtoFactory
         return $invoiceAddress;
     }
 
-    public static function createReturnRequestModelDto(): ReturnRequestModelDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto
+     */
+    public static function createReturnRequestModelDto()
     {
         $positions = array_map([self::class, 'createReturnPositionModelDto'], array_fill(0, 5, 0));
 
@@ -327,7 +392,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createReturnPositionModelDto(): ReturnPositionModelDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto
+     */
+    public static function createReturnPositionModelDto()
     {
         $dto = new ReturnPositionModelDto();
         $dto->quantityToReturn = 5;
@@ -335,7 +403,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createDateTime(): DateTimeImmutable
+    /**
+     * @return \DateTimeImmutable
+     */
+    public static function createDateTime()
     {
         $now = date_format(new DateTime(), DateTime::ATOM); // now with less precision, i.e. only seconds
 
@@ -345,7 +416,10 @@ class DtoFactory
         return DateTimeImmutable::createFromFormat(DateTime::ATOM, $now);
     }
 
-    public static function createPaymentResponseDto(): PaymentResponseDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentResponseDto
+     */
+    public static function createPaymentResponseDto()
     {
         $dto = new PaymentResponseDto();
         $dto->id = 'id';
@@ -357,14 +431,20 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createPaymentStateResponseDto(): PaymentStateResponseDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto
+     */
+    public static function createPaymentStateResponseDto()
     {
         $dto = new PaymentStateResponseDto();
         $dto->paymentState = 'paymentState';
         return $dto;
     }
 
-    public static function createRefundBasketDto(): RefundBasketDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    public static function createRefundBasketDto()
     {
         $positions = array_map([self::class, 'createRefundBasketPositoinDto'], array_fill(0, 5, 0));
         $taxGroups = array_map([self::class, 'createRefundBasketTaxGroupDto'], array_fill(0, 5, 0));
@@ -377,7 +457,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createRefundBasketPositoinDto(): RefundBasketPositionDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto
+     */
+    public static function createRefundBasketPositoinDto()
     {
         $dto = new RefundBasketPositionDto();
         $dto->productId = 'productId';
@@ -386,7 +469,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createRefundBasketTaxGroupDto(): RefundBasketTaxGroupDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDto
+     */
+    public static function createRefundBasketTaxGroupDto()
     {
         $dto = new RefundBasketTaxGroupDto();
         $dto->taxPercent = 29;
@@ -395,7 +481,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createRefundRequestDto(): RefundRequestDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundRequestDto
+     */
+    public static function createRefundRequestDto()
     {
         $dto = new RefundRequestDto();
         $dto->externalOrderId = 'externalOrderId';
@@ -404,7 +493,10 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createReportShippingDto(): ReportShippingDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ReportShippingDto
+     */
+    public static function createReportShippingDto()
     {
         $positions = array_map([self::class, 'createShippingBasketPositionDto'], array_fill(0, 5, 0));
 
@@ -414,11 +506,29 @@ class DtoFactory
         return $dto;
     }
 
-    public static function createShippingBasketPositionDto(): ShippingBasketPositionDto
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto
+     */
+    public static function createShippingBasketPositionDto()
     {
         $dto = new ShippingBasketPositionDto();
         $dto->productId = 'productId';
         $dto->quantity = 5;
+        return $dto;
+    }
+
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto
+     */
+    public static function createShippingTrackingInformationRequestModelDto()
+    {
+        $dto = new ShippingTrackingInformationRequestModelDto();
+        $dto->externalOrderId = 'externalOrderId';
+        $dto->deliveryWeight = 42.6;
+        $dto->trackingId = 'trackingId';
+        $dto->logistician = 'logistician';
+        $dto->deliveryInformation = 'deliveryInformation';
+        $dto->deliveryAddress = self::createDeliveryAddressDto();
         return $dto;
     }
 }

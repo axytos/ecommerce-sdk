@@ -1,15 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\Checkout;
 
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 
 class CheckoutClient implements CheckoutClientInterface
 {
-    private PaymentMethodConfigurationInterface $paymentMethodConfiguration;
-    private CheckoutApiInterface $checkoutApi;
+    /**
+     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     */
+    private $paymentMethodConfiguration;
+    /**
+     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface
+     */
+    private $checkoutApi;
 
     public function __construct(
         PaymentMethodConfigurationInterface $paymentMethodConfiguration,
@@ -19,17 +23,26 @@ class CheckoutClient implements CheckoutClientInterface
         $this->checkoutApi = $checkoutApi;
     }
 
-    public function mustShowCreditCheckAgreement(string $selectedPaymentMethodId): bool
+    /**
+     * @param string $selectedPaymentMethodId
+     * @return bool
+     */
+    public function mustShowCreditCheckAgreement($selectedPaymentMethodId)
     {
         return $this->paymentMethodConfiguration->isSafe($selectedPaymentMethodId)
             || $this->paymentMethodConfiguration->isUnsafe($selectedPaymentMethodId);
     }
 
-    public function getCreditCheckAgreementInfo(): string
+    /**
+     * @return string
+     */
+    public function getCreditCheckAgreementInfo()
     {
         try {
             return $this->checkoutApi->getCreditCheckAgreementText();
         } catch (\Throwable $th) {
+            throw new CreditCheckAgreementLoadFailedException($th);
+        } catch (\Exception $th) { // @phpstan-ignore-line / php5 compatibility
             throw new CreditCheckAgreementLoadFailedException($th);
         }
     }

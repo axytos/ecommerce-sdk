@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Clients\PaymentControl;
 
 use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
@@ -16,8 +14,14 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPay
 
 class PaymentControlApiAdapter implements PaymentControlApiInterface
 {
-    private CheckApi $checkApi;
-    private DtoOpenApiModelMapper $mapper;
+    /**
+     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\CheckApi
+     */
+    private $checkApi;
+    /**
+     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper
+     */
+    private $mapper;
 
     public function __construct(
         CheckApi $checkApi,
@@ -27,7 +31,11 @@ class PaymentControlApiAdapter implements PaymentControlApiInterface
         $this->mapper = $mapper;
     }
 
-    public function paymentControlCheck(PaymentControlCheckRequestDto $requestData): PaymentControlCheckResponseDto
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto $requestData
+     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto
+     */
+    public function paymentControlCheck($requestData)
     {
         $paymentControlRequest = $this->mapper->toOpenApiModel($requestData, AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest::class);
 
@@ -41,7 +49,11 @@ class PaymentControlApiAdapter implements PaymentControlApiInterface
         }
     }
 
-    public function paymentControlConfirm(PaymentControlConfirmRequestDto $requestData): void
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto $requestData
+     * @return void
+     */
+    public function paymentControlConfirm($requestData)
     {
         $request = $this->mapper->toOpenApiModel($requestData, AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest::class);
 

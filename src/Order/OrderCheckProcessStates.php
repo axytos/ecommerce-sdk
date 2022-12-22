@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Order;
 
 abstract class OrderCheckProcessStates
 {
-    public const UNCHECKED = 'UNCHECKED';
-    public const CHECKED = 'CHECKED';
-    public const CONFIRMED = 'CONFIRMED';
-    public const FAILED = 'FAILED';
+    const UNCHECKED = 'UNCHECKED';
+    const CHECKED = 'CHECKED';
+    const CONFIRMED = 'CONFIRMED';
+    const FAILED = 'FAILED';
 }

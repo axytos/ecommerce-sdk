@@ -1,29 +1,39 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Integration\Providers;
 
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
 
 class UserAgentInfoProvider implements UserAgentInfoProviderInterface
 {
-    public function getPluginName(): string
+    /**
+     * @return string
+     */
+    public function getPluginName()
     {
         return 'axytos-ecommerce-sdk';
     }
 
-    public function getPluginVersion(): string
+    /**
+     * @return string
+     */
+    public function getPluginVersion()
     {
         return '0.0.0';
     }
 
-    public function getShopSystemName(): string
+    /**
+     * @return string
+     */
+    public function getShopSystemName()
     {
         return 'integration-tests';
     }
 
-    public function getShopSystemVersion(): string
+    /**
+     * @return string
+     */
+    public function getShopSystemVersion()
     {
         return '0.0.0';
     }

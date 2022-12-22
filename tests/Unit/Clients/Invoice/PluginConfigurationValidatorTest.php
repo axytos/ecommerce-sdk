@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Axytos\ECommerce\Tests\Unit\Clients\Invoice;
 
 use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
@@ -14,15 +12,22 @@ use PHPUnit\Framework\MockObject\MockObject;
 class PluginConfigurationValidatorTest extends TestCase
 {
     /** @var ApiHostProviderInterface&MockObject */
-    private ApiHostProviderInterface $apiHostProvider;
+    private $apiHostProvider;
 
 
     /** @var ApiKeyProviderInterface&MockObject */
-    private ApiKeyProviderInterface $apiKeyProvider;
+    private $apiKeyProvider;
 
-    private PluginConfigurationValidator $sut;
+    /**
+     * @var \Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator
+     */
+    private $sut;
 
-    public function setUp(): void
+    /**
+     * @return void
+     * @before
+     */
+    public function beforeEach()
     {
         $this->apiHostProvider = $this->createMock(ApiHostProviderInterface::class);
         $this->apiKeyProvider = $this->createMock(ApiKeyProviderInterface::class);
@@ -35,12 +40,16 @@ class PluginConfigurationValidatorTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_isInvalid
+     * @param string $apiHost
+     * @param string $apiKey
+     * @param bool $expectedOutcome
+     * @return void
      */
     public function test_isInvalid(
-        string $apiHost,
-        string $apiKey,
-        bool $expectedOutcome
-    ): void {
+        $apiHost,
+        $apiKey,
+        $expectedOutcome
+    ) {
         $this->apiHostProvider->method('getApiHost')->willReturn($apiHost);
         $this->apiKeyProvider->method('getApiKey')->willReturn($apiKey);
 
@@ -49,7 +58,10 @@ class PluginConfigurationValidatorTest extends TestCase
         $this->assertEquals($expectedOutcome, $actual);
     }
 
-    public function dataProvider_test_isInvalid(): array
+    /**
+     * @return mixed[]
+     */
+    public function dataProvider_test_isInvalid()
     {
         return [
             ['','', true],
@@ -59,14 +71,20 @@ class PluginConfigurationValidatorTest extends TestCase
         ];
     }
 
-    public function test_isInvalid_returns_true_when_ApiHostProvider_throws(): void
+    /**
+     * @return void
+     */
+    public function test_isInvalid_returns_true_when_ApiHostProvider_throws()
     {
         $this->apiHostProvider->method('getApiHost')->willThrowException(new Exception());
 
         $this->assertTrue($this->sut->isInvalid());
     }
 
-    public function test_isInvalid_returns_true_when_ApiKeyProvider_throws(): void
+    /**
+     * @return void
+     */
+    public function test_isInvalid_returns_true_when_ApiKeyProvider_throws()
     {
         $this->apiKeyProvider->method('getApiKey')->willThrowException(new Exception());
 
