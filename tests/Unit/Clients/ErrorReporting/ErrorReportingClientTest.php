@@ -1,6 +1,6 @@
 <?php
 
-namespace Axytos\ECommerce\Tests\Unit\Clients\PaymentControl;
+namespace Axytos\ECommerce\Tests\Unit\Clients\ErrorReporting;
 
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;

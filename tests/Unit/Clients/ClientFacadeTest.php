@@ -4,15 +4,11 @@ namespace Axytos\ECommerce\Tests\Unit\Clients;
 
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Clients\ClientFacade;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlAction;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface;
 use Axytos\ECommerce\DependencyInjection\Container;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -25,9 +21,6 @@ class ClientFacadeTest extends TestCase
 
     /** @var CredentialValidationClientInterface&MockObject */
     private $CredentialValidationClient;
-
-    /** @var PaymentControlClientInterface&MockObject */
-    private $paymentControlClient;
 
     /** @var ErrorReportingClientInterface&MockObject  */
     private $errorReportingClient;
@@ -48,14 +41,12 @@ class ClientFacadeTest extends TestCase
     {
         $this->checkoutClient = $this->createMock(CheckoutClientInterface::class);
         $this->CredentialValidationClient = $this->createMock(CredentialValidationClientInterface::class);
-        $this->paymentControlClient = $this->createMock(PaymentControlClientInterface::class);
         $this->errorReportingClient = $this->createMock(ErrorReportingClientInterface::class);
         $this->invoiceClient = $this->createMock(InvoiceClientInterface::class);
 
         $container = $this->createContainerMock([
             CheckoutClientInterface::class => $this->checkoutClient,
             CredentialValidationClientInterface::class => $this->CredentialValidationClient,
-            PaymentControlClientInterface::class => $this->paymentControlClient,
             ErrorReportingClientInterface::class => $this->errorReportingClient,
             InvoiceClientInterface::class => $this->invoiceClient,
         ]);
@@ -128,41 +119,6 @@ class ClientFacadeTest extends TestCase
         $actual = $this->sut->validateApiKey();
 
         $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_check_delegates_to_payment_control_client()
-    {
-        $checkData = $this->createMock(PaymentControlOrderData::class);
-        $paymentControlCache = $this->createMock(PaymentControlCacheInterface::class);
-        $expected = PaymentControlAction::CANCEL_ORDER;
-
-        $this->paymentControlClient
-            ->method('check')
-            ->with($checkData, $paymentControlCache)
-            ->willReturn($expected);
-
-        $actual = $this->sut->check($checkData, $paymentControlCache);
-
-        $this->assertSame($expected, $actual);
-    }
-
-    /**
-     * @return void
-     */
-    public function test_confirm_delegates_to_payment_control_client()
-    {
-        $checkData = $this->createMock(PaymentControlOrderData::class);
-        $paymentControlCache = $this->createMock(PaymentControlCacheInterface::class);
-
-        $this->paymentControlClient
-            ->expects($this->once())
-            ->method('confirm')
-            ->with($checkData, $paymentControlCache);
-
-        $this->sut->confirm($checkData, $paymentControlCache);
     }
 
     /**
@@ -308,5 +264,20 @@ class ClientFacadeTest extends TestCase
         $actual = $this->sut->getInvoiceOrderPaymentUpdate($paymentId);
 
         $this->assertSame($paymentUpdate, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_updateOrder_delegates_to_invoice_client()
+    {
+        $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
+
+        $this->invoiceClient
+            ->expects($this->once())
+            ->method('updateOrder')
+            ->with($orderContext);
+
+        $this->sut->updateOrder($orderContext);
     }
 }

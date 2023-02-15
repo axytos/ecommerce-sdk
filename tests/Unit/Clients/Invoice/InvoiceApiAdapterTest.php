@@ -17,12 +17,14 @@ use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
+use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
@@ -258,5 +260,26 @@ class InvoiceApiAdapterTest extends TestCase
         $actual = $this->sut->paymentState($orderId);
 
         $this->assertSame($responseDto, $actual);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_updateOrder_sends_order_update_request()
+    {
+        $requestDto = $this->createMock(UpdateOrderModelDto::class);
+        $requestModel = $this->createMock(AxytosApiModelsUpdateOrderModel::class);
+
+        $this->mapper
+            ->method('toOpenApiModel')
+            ->with($requestDto, AxytosApiModelsUpdateOrderModel::class)
+            ->willReturn($requestModel);
+
+        $this->paymentsApi
+            ->expects($this->once())
+            ->method('apiV1PaymentsInvoiceOrderUpdatePost')
+            ->with($requestModel);
+
+        $this->sut->updateOrder($requestDto);
     }
 }

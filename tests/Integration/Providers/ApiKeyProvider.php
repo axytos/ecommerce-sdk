@@ -11,6 +11,12 @@ class ApiKeyProvider implements ApiKeyProviderInterface
      */
     public function getApiKey()
     {
-        return strval(file_get_contents(__DIR__ . '/../config/apiKey'));
+        $configFilePath = __DIR__ . '/../config/apiKey';
+
+        if (!file_exists($configFilePath)) {
+            throw new \Exception('API Key is not configured for integration tests!');
+        }
+
+        return strval(file_get_contents($configFilePath));
     }
 }

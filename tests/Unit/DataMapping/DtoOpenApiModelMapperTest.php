@@ -11,8 +11,6 @@ use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
 use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
@@ -20,9 +18,6 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
@@ -35,6 +30,7 @@ use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
+use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
@@ -43,6 +39,7 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestMo
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsShippingTrackingInformationRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasket;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasketTaxGroup;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundPositionModel;
@@ -60,11 +57,6 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrd
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderShippingBasketPosition;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasket;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasketPosition;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPITransactionTransactionMetadata;
 use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
 use PHPUnit\Framework\TestCase;
@@ -123,15 +115,10 @@ class DtoOpenApiModelMapperTest extends TestCase
             [OrderCreateRequestDto::class, AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class, DtoFactory::createOrderCreateRequestDto()],
             [OrderPreCheckRequestDto::class, AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest::class, DtoFactory::createOrderPreCheckRequestDto()],
             [OrderPreCheckResponseDto::class, AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse::class, DtoFactory::createOrderPreCheckResponseDto()],
-            [PaymentControlBasketDto::class, AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasket::class, DtoFactory::createPaymentControlBasketDto()],
-            [PaymentControlBasketPositionDto::class, AxytosCommonPublicAPIModelsPaymentControlPaymentControlBasketPosition::class, DtoFactory::createPaymentControlBasketPositionDto()],
             [CreateInvoiceRequestDto::class, AxytosApiModelsInvoiceCreationModel::class, DtoFactory::createCreateInvoiceRequestDto()],
             [CreateInvoiceBasketDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasket::class, DtoFactory::createCreateInvoiceBasketDto()],
             [CreateInvoiceBasketPositionDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasketPosition::class, DtoFactory::createCreateInvoiceBasketPositionDto()],
             [CreateInvoiceTaxGroupDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasketTaxGroup::class, DtoFactory::createCreateInvoiceTaxGroupDto()],
-            [PaymentControlCheckRequestDto::class, AxytosCommonPublicAPIModelsPaymentControlPaymentControlRequest::class, DtoFactory::createPaymentControlCheckRequestDto()],
-            [PaymentControlCheckResponseDto::class, AxytosCommonPublicAPIModelsPaymentControlPaymentControlResponse::class, DtoFactory::createPaymentControlCheckResponseDto()],
-            [PaymentControlConfirmRequestDto::class, AxytosCommonPublicAPIModelsPaymentControlPaymentControlConfirmRequest::class, DtoFactory::createPaymentControlConfirmRequestDto()],
             [TransactionMetadataDto::class, AxytosCommonPublicAPITransactionTransactionMetadata::class, DtoFactory::createTransactionMetadataDto()],
             [ReturnRequestModelDto::class, AxytosApiModelsReturnRequestModel::class, DtoFactory::createReturnRequestModelDto()],
             [ReturnPositionModelDto::class, AxytosCommonModelsOrderReturnPositionModel::class, DtoFactory::createReturnPositionModelDto()],
@@ -144,6 +131,7 @@ class DtoOpenApiModelMapperTest extends TestCase
             [ReportShippingDto::class, AxytosApiModelsReportShippingModel::class, DtoFactory::createReportShippingDto()],
             [ShippingBasketPositionDto::class, AxytosCommonPublicAPIModelsOrderShippingBasketPosition::class, DtoFactory::createShippingBasketPositionDto()],
             [ShippingTrackingInformationRequestModelDto::class, AxytosApiModelsShippingTrackingInformationRequestModel::class, DtoFactory::createShippingTrackingInformationRequestModelDto()],
+            [UpdateOrderModelDto::class, AxytosApiModelsUpdateOrderModel::class, DtoFactory::createUpdateOrderModelDto()],
         ];
     }
 

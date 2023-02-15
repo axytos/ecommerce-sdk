@@ -57,11 +57,6 @@ class DtoArrayMapperTest extends TestCase
             [DtoFactory::createOrderCreateRequestDto()],
             [DtoFactory::createOrderPreCheckRequestDto()],
             [DtoFactory::createOrderPreCheckResponseDto()],
-            [DtoFactory::createPaymentControlBasketDto()],
-            [DtoFactory::createPaymentControlBasketPositionDto()],
-            [DtoFactory::createPaymentControlCheckRequestDto()],
-            [DtoFactory::createPaymentControlCheckResponseDto()],
-            [DtoFactory::createPaymentControlConfirmRequestDto()],
             [DtoFactory::createTransactionMetadataDto()],
         ];
     }

@@ -27,6 +27,11 @@ class InvoiceClientIntegrationTest extends TestCase
     private $orderContext;
 
     /**
+     * @var InvoiceOrderContextFakeFactory
+     */
+    private $invoiceOrderContextFactory;
+
+    /**
      * @return void
      * @before
      */
@@ -34,8 +39,8 @@ class InvoiceClientIntegrationTest extends TestCase
     {
         $this->invoiceClient = new AxytosECommerceClient(new ApiHostProvider(), new ApiKeyProvider(), new PaymentMethodConfiguration(), new FallbackModeConfiguration(), new UserAgentInfoProvider(), $this->createMock(LoggerAdapterInterface::class));
 
-        $invoiceOrderContextFactory = new InvoiceOrderContextFakeFactory();
-        $this->orderContext = $invoiceOrderContextFactory->createInvoiceOrderContext();
+        $this->invoiceOrderContextFactory = new InvoiceOrderContextFakeFactory();
+        $this->orderContext = $this->invoiceOrderContextFactory->createInvoiceOrderContext();
     }
 
     /**
@@ -84,6 +89,24 @@ class InvoiceClientIntegrationTest extends TestCase
         $this->invoiceClient->confirmOrder($this->orderContext);
 
         $this->invoiceClient->cancelOrder($this->orderContext);
+
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_precheck_confirm_update()
+    {
+        $this->invoiceClient->precheck($this->orderContext);
+
+        $this->invoiceClient->confirmOrder($this->orderContext);
+
+        $this->invoiceClient->updateOrder($this->orderContext);
+
+        $this->orderContext->setBasket($this->invoiceOrderContextFactory->createBasket());
+
+        $this->invoiceClient->updateOrder($this->orderContext);
 
         $this->assertTrue(true);
     }

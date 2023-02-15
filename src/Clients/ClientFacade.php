@@ -6,15 +6,10 @@ use Throwable;
 use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
 
-class ClientFacade implements CheckoutClientInterface, PaymentControlClientInterface, CredentialValidationClientInterface, ErrorReportingClientInterface, InvoiceClientInterface
+class ClientFacade implements CheckoutClientInterface, CredentialValidationClientInterface, ErrorReportingClientInterface, InvoiceClientInterface
 {
     /**
      * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
@@ -24,10 +19,6 @@ class ClientFacade implements CheckoutClientInterface, PaymentControlClientInter
      * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface
      */
     private $CredentialValidationClient;
-    /**
-     * @var \Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface
-     */
-    private $paymentControlClient;
     /**
      * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
      */
@@ -41,7 +32,6 @@ class ClientFacade implements CheckoutClientInterface, PaymentControlClientInter
     {
         $this->checkoutClient = $container->get(CheckoutClientInterface::class);
         $this->CredentialValidationClient = $container->get(CredentialValidationClientInterface::class);
-        $this->paymentControlClient = $container->get(PaymentControlClientInterface::class);
         $this->errorReportingClient = $container->get(ErrorReportingClientInterface::class);
         $this->invoiceClient = $container->get(InvoiceClientInterface::class);
     }
@@ -69,26 +59,6 @@ class ClientFacade implements CheckoutClientInterface, PaymentControlClientInter
     public function validateApiKey()
     {
         return $this->CredentialValidationClient->validateApiKey();
-    }
-
-    /**
-     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
-     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
-     * @return string
-     */
-    public function check($data, $paymentControlCache)
-    {
-        return $this->paymentControlClient->check($data, $paymentControlCache);
-    }
-
-    /**
-     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderData $data
-     * @param \Axytos\ECommerce\Clients\PaymentControl\PaymentControlCacheInterface $paymentControlCache
-     * @return void
-     */
-    public function confirm($data, $paymentControlCache)
-    {
-        $this->paymentControlClient->confirm($data, $paymentControlCache);
     }
 
     /**
@@ -179,5 +149,14 @@ class ClientFacade implements CheckoutClientInterface, PaymentControlClientInter
     public function getInvoiceOrderPaymentUpdate($paymentId)
     {
         return $this->invoiceClient->getInvoiceOrderPaymentUpdate($paymentId);
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function updateOrder($orderContext)
+    {
+        $this->invoiceClient->updateOrder($orderContext);
     }
 }

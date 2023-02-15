@@ -25,6 +25,7 @@ use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
+use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -550,5 +551,24 @@ class InvoiceClientTest extends TestCase
         $this->expectExceptionMessage('PaymentState not found');
 
         $this->sut->getInvoiceOrderPaymentUpdate($paymentId);
+    }
+
+    //==================================================================================================================
+    // Update Order
+    /**
+     * @return void
+     */
+    public function test_updateOrder_calls_API()
+    {
+        $requestDto = new UpdateOrderModelDto();
+        $requestDto->externalOrderId = $this->invoiceOrderContext->getOrderNumber();
+        $requestDto->basket = $this->invoiceOrderContext->getBasket();
+
+        $this->invoiceApi
+            ->expects($this->once())
+            ->method('updateOrder')
+            ->with($this->equalTo($requestDto));
+
+        $this->sut->updateOrder($this->invoiceOrderContext);
     }
 }

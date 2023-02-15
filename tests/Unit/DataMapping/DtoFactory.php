@@ -12,8 +12,6 @@ use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDtoCollectio
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDtoCollection;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
 use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
@@ -21,10 +19,6 @@ use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDtoCollection;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
@@ -41,6 +35,7 @@ use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
+use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use DateTime;
 use DateTimeImmutable;
 
@@ -113,55 +108,6 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckRequestDto
-     */
-    public static function createPaymentControlCheckRequestDto()
-    {
-        $checkRequest = new PaymentControlCheckRequestDto();
-        $checkRequest->requestMode = 'requestMode';
-        $checkRequest->proofOfInterest = 'proofOfInterest';
-        $checkRequest->paymentTypeSecurity = 'paymentTypeSecurity';
-        $checkRequest->personalData = self::createCustomerDataDto();
-        $checkRequest->invoiceAddress = self::createInvoiceAddressDto();
-        $checkRequest->deliveryAddress = self::createDeliveryAddressDto();
-        $checkRequest->basket = self::createPaymentControlBasketDto();
-        $checkRequest->paymentControlResponse = self::createPaymentControlCheckResponseDto();
-
-        return $checkRequest;
-    }
-
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlConfirmRequestDto
-     */
-    public static function createPaymentControlConfirmRequestDto()
-    {
-        $checkRequest = new PaymentControlConfirmRequestDto();
-        $checkRequest->paymentTypeSecurity = 'paymentTypeSecurity';
-        $checkRequest->personalData = self::createCustomerDataDto();
-        $checkRequest->invoiceAddress = self::createInvoiceAddressDto();
-        $checkRequest->deliveryAddress = self::createDeliveryAddressDto();
-        $checkRequest->basket = self::createPaymentControlBasketDto();
-        $checkRequest->paymentControlResponse = self::createPaymentControlCheckResponseDto();
-
-        return $checkRequest;
-    }
-
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlCheckResponseDto
-     */
-    public static function createPaymentControlCheckResponseDto()
-    {
-        $checkResponse = new PaymentControlCheckResponseDto();
-        $checkResponse->approvedPaymentTypeSecurities = ['A', 'B', 'C'];
-        $checkResponse->processId = 'processId';
-        $checkResponse->decision = 'decision';
-        $checkResponse->step = 'step';
-        $checkResponse->transactionMetadata = self::createTransactionMetadataDto();
-
-        return $checkResponse;
-    }
-
-    /**
      * @return \Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto
      */
     public static function createTransactionMetadataDto()
@@ -223,40 +169,6 @@ class DtoFactory
     public static function createBasketPositionDto($id = null)
     {
         $basketPosition = new BasketPositionDto();
-        $basketPosition->productId = "productId$id";
-        $basketPosition->productName = "productName$id";
-        $basketPosition->productCategory = "productCategory$id";
-        $basketPosition->quantity = 5;
-        $basketPosition->taxPercent = 0.19;
-        $basketPosition->netPositionTotal = 12.35;
-        $basketPosition->grossPositionTotal = 55.66;
-
-        return $basketPosition;
-    }
-
-    /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlBasketDto
-     */
-    public static function createPaymentControlBasketDto()
-    {
-        $positions = array_map([self::class, 'createPaymentControlBasketPositionDto'], array_fill(0, 5, 0));
-
-        $basket = new PaymentControlBasketDto();
-        $basket->netTotal = 12.3;
-        $basket->grossTotal = 44.5;
-        $basket->currency = 'currency';
-        $basket->positions = new PaymentControlBasketPositionDtoCollection(...$positions);
-
-        return $basket;
-    }
-
-    /**
-     * @param int|null $id
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentControlBasketPositionDto
-     */
-    public static function createPaymentControlBasketPositionDto($id = null)
-    {
-        $basketPosition = new PaymentControlBasketPositionDto();
         $basketPosition->productId = "productId$id";
         $basketPosition->productName = "productName$id";
         $basketPosition->productCategory = "productCategory$id";
@@ -529,6 +441,17 @@ class DtoFactory
         $dto->logistician = 'logistician';
         $dto->deliveryInformation = 'deliveryInformation';
         $dto->deliveryAddress = self::createDeliveryAddressDto();
+        return $dto;
+    }
+
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto
+     */
+    public static function createUpdateOrderModelDto()
+    {
+        $dto = new UpdateOrderModelDto();
+        $dto->externalOrderId = 'externalOrderId';
+        $dto->basket = self::createBasketDto();
         return $dto;
     }
 }

@@ -11,6 +11,12 @@ class ApiHostProvider implements ApiHostProviderInterface
      */
     public function getApiHost()
     {
-        return strval(file_get_contents(__DIR__ . '/../config/apiHost'));
+        $configFilePath = __DIR__ . '/../config/apiHost';
+
+        if (!file_exists($configFilePath)) {
+            throw new \Exception('API Host is not configured for integration tests!');
+        }
+
+        return strval(file_get_contents($configFilePath));
     }
 }

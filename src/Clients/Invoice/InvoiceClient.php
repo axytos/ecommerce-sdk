@@ -13,6 +13,7 @@ use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
+use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use Exception;
 
 class InvoiceClient implements InvoiceClientInterface
@@ -176,6 +177,19 @@ class InvoiceClient implements InvoiceClientInterface
         $invoiceOrderPaymentUpdate->orderId = $this->getOrderIdFromPayment($paymentId);
         $invoiceOrderPaymentUpdate->paymentStatus = $this->getPaymentStateForOrderId($invoiceOrderPaymentUpdate->orderId);
         return $invoiceOrderPaymentUpdate;
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function updateOrder($orderContext)
+    {
+        $updateOrderModel = new UpdateOrderModelDto();
+        $updateOrderModel->externalOrderId = $orderContext->getOrderNumber();
+        $updateOrderModel->basket = $orderContext->getBasket();
+
+        $this->invoiceApi->updateOrder($updateOrderModel);
     }
 
     /**

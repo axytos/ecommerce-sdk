@@ -29,22 +29,16 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClient;
 use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter;
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 use Axytos\ECommerce\Clients\Checkout\StaticContentApiProxy;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\SHA256HashAlgorithm;
 
 final class AxytosECommerceClient extends ClientFacade
 {
@@ -162,21 +156,6 @@ final class AxytosECommerceClient extends ClientFacade
             );
         });
 
-        $containerBuilder->registerFactory(PaymentControlClientInterface::class, function ($container) {
-            return new PaymentControlClient(
-                $container->get(PaymentControlApiInterface::class),
-                $container->get(PaymentMethodConfigurationInterface::class),
-                $container->get(PaymentControlOrderDataHashCalculator::class)
-            );
-        });
-
-        $containerBuilder->registerFactory(PaymentControlApiInterface::class, function ($container) {
-            return new PaymentControlApiAdapter(
-                $container->get(CheckApi::class),
-                $container->get(DtoOpenApiModelMapper::class)
-            );
-        });
-
         $containerBuilder->registerFactory(CredentialValidationClientInterface::class, function ($container) {
             return new CredentialValidationClient(
                 $container->get(CredentialValidationApiInterface::class)
@@ -216,10 +195,6 @@ final class AxytosECommerceClient extends ClientFacade
                 $container->get(PaymentApi::class),
                 $container->get(DtoOpenApiModelMapper::class)
             );
-        });
-
-        $containerBuilder->registerFactory(PaymentControlOrderDataHashCalculator::class, function ($container) {
-            return new PaymentControlOrderDataHashCalculator(new SHA256HashAlgorithm());
         });
 
         return $containerBuilder->build();

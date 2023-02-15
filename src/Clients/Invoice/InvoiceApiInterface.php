@@ -74,4 +74,10 @@ interface InvoiceApiInterface
      * @return \Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto
      */
     public function paymentState($orderId);
+
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto $updateOrderModelDto
+     * @return void
+     */
+    public function updateOrder($updateOrderModelDto);
 }

@@ -57,4 +57,10 @@ interface InvoiceClientInterface
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
      */
     public function getInvoiceOrderPaymentUpdate($paymentId);
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function updateOrder($orderContext);
 }

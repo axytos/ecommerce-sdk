@@ -3,16 +3,9 @@
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
-use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
-use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
-use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
-use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
-use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
-use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
-use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
@@ -20,6 +13,7 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestMo
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsShippingTrackingInformationRequestModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 
@@ -150,5 +144,15 @@ class InvoiceApiAdapter implements InvoiceApiInterface
     {
         $response = $this->paymentsApi->apiV1PaymentsInvoiceOrderPaymentstateExternalOrderIdGet($orderId);
         return $this->mapper->toDataTransferObject($response, PaymentStateResponseDto::class);
+    }
+
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto $updateOrderModelDto
+     * @return void
+     */
+    public function updateOrder($updateOrderModelDto)
+    {
+        $request = $this->mapper->toOpenApiModel($updateOrderModelDto, AxytosApiModelsUpdateOrderModel::class);
+        $this->paymentsApi->apiV1PaymentsInvoiceOrderUpdatePost($request);
     }
 }

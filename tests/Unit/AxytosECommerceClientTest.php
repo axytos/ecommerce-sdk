@@ -16,11 +16,6 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
 use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
 use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClient;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiAdapter;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlApiInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlClientInterface;
-use Axytos\ECommerce\Clients\PaymentControl\PaymentControlOrderDataHashCalculator;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
@@ -31,6 +26,8 @@ use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterfa
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
 use Axytos\ECommerce\AxytosECommerceClient;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
+use Axytos\FinancialServices\GuzzleHttp\Client;
+use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\TestCase;
 
 class AxytosECommerceClientTest extends TestCase
@@ -211,6 +208,25 @@ class AxytosECommerceClientTest extends TestCase
         $this->assertSame($this->userAgentInfoProvider, $instance);
     }
 
+    /**
+     * @return void
+     */
+    public function test_buildContainer_does_not_disable_certificate_validation()
+    {
+        $container = $this->buildContainer();
+
+        /** @var Client */
+        $client = $container->get(ClientInterface::class);
+
+        $reflectedConfig = new \ReflectionProperty(Client::class, 'config');
+        $reflectedConfig->setAccessible(true);
+        /** @var array */
+        $config = $reflectedConfig->getValue($client);
+
+        $this->assertArrayHasKey('verify', $config);
+        $this->assertTrue($config['verify']);
+    }
+
     const CLASS_MAP = [
 
         UserAgentFactory::class => [
@@ -223,14 +239,6 @@ class AxytosECommerceClientTest extends TestCase
 
         CheckoutApiAdapter::class => [
             CheckoutApiInterface::class
-        ],
-
-        PaymentControlClient::class => [
-            PaymentControlClientInterface::class
-        ],
-
-        PaymentControlApiAdapter::class => [
-            PaymentControlApiInterface::class
         ],
 
         CredentialValidationClient::class => [
@@ -255,10 +263,6 @@ class AxytosECommerceClientTest extends TestCase
 
         InvoiceApiAdapter::class => [
             InvoiceApiInterface::class
-        ],
-
-        PaymentControlOrderDataHashCalculator::class => [
-            PaymentControlOrderDataHashCalculator::class
         ],
     ];
 }

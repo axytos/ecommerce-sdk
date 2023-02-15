@@ -1,6 +1,6 @@
 <?php
 
-namespace Axytos\ECommerce\Clients\PaymentControl;
+namespace Axytos\ECommerce\OrderSync;
 
 interface HashAlgorithmInterface
 {
