@@ -43,7 +43,7 @@ class InvoiceOrderContextFakeFactory
         $orderContext->setCreateInvoiceBasket($this->createCreateInvoiceBasket($basket));
         $orderContext->setShippingBasketPositions($this->createShippingBasketPositions($basket));
         $orderContext->setReturnPositions($this->createReturnPositions($basket));
-        $orderContext->setRefundBasket($this->createRefundBasket($basket));#
+        $orderContext->setRefundBasket($this->createRefundBasket($basket)); #
 
         $orderContext->setDeliveryWeight(42.6);
         $orderContext->setTrackingIds(['trackingId']);
@@ -101,6 +101,7 @@ class InvoiceOrderContextFakeFactory
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
+        $dto->addressLine2 = '14-16';
         return $dto;
     }
 
@@ -117,6 +118,7 @@ class InvoiceOrderContextFakeFactory
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
+        $dto->addressLine2 = '14-16';
         return $dto;
     }
 
