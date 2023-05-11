@@ -105,16 +105,18 @@ class DtoOpenApiModelMapper
     }
 
     /**
-     * @phpstan-template T of ModelInterface
-     * @phpstan-param DtoInterface $dataTransferObject
-     * @phpstan-param class-string<T> $openApiModelName
-     * @phpstan-return T
+     * @phpstan-template TDto of DtoInterface
+     * @phpstan-template TModel of ModelInterface
+     * @phpstan-param TDto $dataTransferObject
+     * @phpstan-param class-string<TModel> $openApiModelName
+     * @phpstan-return TModel
      * @param \Axytos\ECommerce\DataMapping\DtoInterface $dataTransferObject
      * @param string $openApiModelName
      * @return \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
      */
     public function toOpenApiModel($dataTransferObject, $openApiModelName)
     {
+        /** @phpstan-var class-string<TDto> */
         $dtoClassName = get_class($dataTransferObject);
 
         if (!is_subclass_of($openApiModelName, ModelInterface::class)) {
@@ -127,9 +129,10 @@ class DtoOpenApiModelMapper
 
         $dtoReflector = new ReflectionClass($dataTransferObject);
 
-        /** @phpstan-var T */
+        /** @phpstan-var TModel */
         $openApiModel = new $openApiModelName();
 
+        /** @phpstan-var OpenApiModelAttributeInfo<TModel>[] */
         $attributeInfos = OpenApiModelAttributeInfo::getAttributeInfos($openApiModel);
 
         foreach ($attributeInfos as $attributeInfo) {
@@ -148,16 +151,18 @@ class DtoOpenApiModelMapper
     }
 
     /**
-     * @phpstan-template T of DtoInterface
-     * @phpstan-param ModelInterface $openApiModel
-     * @phpstan-param class-string<T> $dataTransferObjectName
-     * @phpstan-return T
+     * @phpstan-template TDto of DtoInterface
+     * @phpstan-template TModel of ModelInterface
+     * @phpstan-param TModel $openApiModel
+     * @phpstan-param class-string<TDto> $dataTransferObjectName
+     * @phpstan-return TDto
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $openApiModel
      * @param string $dataTransferObjectName
      * @return \Axytos\ECommerce\DataMapping\DtoInterface
      */
     public function toDataTransferObject($openApiModel, $dataTransferObjectName)
     {
+        /** @phpstan-var class-string<TModel> */
         $openApiModelName = get_class($openApiModel);
 
         if (!is_subclass_of($dataTransferObjectName, DtoInterface::class)) {
@@ -170,9 +175,10 @@ class DtoOpenApiModelMapper
 
         $reflector = new ReflectionClass($dataTransferObjectName);
 
-        /** @phpstan-var T */
+        /** @phpstan-var TDto */
         $dataTransferObject = $reflector->newInstanceWithoutConstructor();
 
+        /** @phpstan-var OpenApiModelAttributeInfo<TModel>[] */
         $attributeInfos = OpenApiModelAttributeInfo::getAttributeInfos($openApiModel);
 
         foreach ($attributeInfos as $attributeInfo) {
@@ -192,7 +198,7 @@ class DtoOpenApiModelMapper
 
     /**
      * @param mixed $value
-     * @return mixed
+     * @return ModelInterface|\DateTimeInterface|string|int|float|bool|mixed
      */
     private function toOpenApiValue($value)
     {
@@ -217,7 +223,8 @@ class DtoOpenApiModelMapper
     }
 
     /**
-     * @return mixed[]
+     * @param array<mixed> $values
+     * @return array<mixed>
      */
     private function toOpenApiArray(array $values)
     {
@@ -240,8 +247,10 @@ class DtoOpenApiModelMapper
     }
 
     /**
+     * @phpstan-template TModel of ModelInterface
+     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
      * @param mixed $value
-     * @return mixed
+     * @return DtoCollection|DtoInterface|\DateTimeInterface|array<mixed>|mixed
      */
     private function toDataTransferObjectValue($value, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
     {
@@ -265,11 +274,14 @@ class DtoOpenApiModelMapper
     }
 
     /**
+     * @phpstan-return \Axytos\ECommerce\DataMapping\DtoCollection<DtoInterface>
+     * @param ModelInterface[] $values
+     * @param DtoPropertyInfo $dtoPropertyInfo
      * @return \Axytos\ECommerce\DataMapping\DtoCollection
      */
     private function toDtoCollection(array $values, DtoPropertyInfo $dtoPropertyInfo)
     {
-        /** @phpstan-var class-string<DtoCollection> */
+        /** @phpstan-var class-string<DtoCollection<DtoInterface>> */
         $dtoCollectionClassName = $dtoPropertyInfo->getType();
 
         /** @phpstan-var class-string<DtoInterface> */
@@ -283,7 +295,12 @@ class DtoOpenApiModelMapper
     }
 
     /**
-     * @return mixed[]
+     * @phpstan-template TModel of ModelInterface
+     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
+     * @param array<mixed> $values
+     * @param OpenApiModelAttributeInfo $attributeInfo
+     * @param DtoPropertyInfo $dtoPropertyInfo
+     * @return array<mixed>
      */
     private function toDataTransferObjectArray(array $values, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
     {

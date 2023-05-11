@@ -5,7 +5,7 @@ namespace Axytos\ECommerce\DependencyInjection;
 class ContainerBuilder
 {
     /**
-     * @var mixed[]
+     * @var ContainerEntryInterface[]
      */
     private $containerEntries = [];
 

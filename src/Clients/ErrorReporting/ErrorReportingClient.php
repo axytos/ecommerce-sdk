@@ -46,7 +46,7 @@ class ErrorReportingClient implements ErrorReportingClientInterface
     {
         $title = $throwable->getMessage();
 
-        if (empty($title)) {
+        if ($title === '') {
             return get_class($throwable);
         }
 
@@ -61,7 +61,7 @@ class ErrorReportingClient implements ErrorReportingClientInterface
     {
         $description = $throwable->getTraceAsString();
 
-        if (empty($description)) {
+        if ($description === '') {
             return "No Description Available";
         }
 

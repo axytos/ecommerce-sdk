@@ -9,6 +9,7 @@ use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsOrderCancellationReversalRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
@@ -73,6 +74,17 @@ class InvoiceApiAdapter implements InvoiceApiInterface
     public function cancelOrder($orderNumber)
     {
         $this->paymentsApi->apiV1PaymentsInvoiceOrderCancelExternalOrderIdPost($orderNumber);
+    }
+
+    /**
+     * @param string $orderNumber
+     * @return void
+     */
+    public function uncancelOrder($orderNumber)
+    {
+        $this->paymentsApi->apiV1PaymentsInvoiceOrderReverseCancellationPost(new AxytosApiModelsOrderCancellationReversalRequestModel([
+            'external_order_id' => $orderNumber,
+        ]));
     }
 
     /**

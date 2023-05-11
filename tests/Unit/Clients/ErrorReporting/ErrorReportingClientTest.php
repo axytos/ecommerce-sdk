@@ -86,7 +86,7 @@ class ErrorReportingClientTest extends TestCase
         $exception = new Exception();
 
         $matcher = $this->callback(function (ErrorRequestModelDto $errorReport) {
-            return !empty($errorReport->description);
+            return $errorReport->description !== '';
         });
 
         $this->errorReportingApi

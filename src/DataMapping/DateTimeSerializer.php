@@ -27,7 +27,7 @@ class DateTimeSerializer
         $dateTime = DateTimeImmutable::createFromFormat(self::DATE_TIME_FORMAT, $value);
 
         if ($dateTime === false) {
-            if (preg_match('/(\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d)/', $value, $matches)) {
+            if (preg_match('/(\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d)/', $value, $matches) === 1) {
 
                 /**
                  * @phpstan-ignore-next-line

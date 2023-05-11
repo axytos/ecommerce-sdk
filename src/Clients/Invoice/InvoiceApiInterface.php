@@ -34,6 +34,12 @@ interface InvoiceApiInterface
     public function cancelOrder($orderNumber);
 
     /**
+     * @param string $orderNumber
+     * @return void
+     */
+    public function uncancelOrder($orderNumber);
+
+    /**
      * @param \Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto $requestDto
      * @return void
      */

@@ -46,7 +46,7 @@ class InvoiceClientTest extends TestCase
     /** @var OrderPreCheckResponseDto&MockObject */
     private $response;
 
-    /** @var array */
+    /** @var array<mixed> */
     private $responseData;
 
     /** @var InvoiceOrderContextInterface&MockObject */
@@ -149,7 +149,9 @@ class InvoiceClientTest extends TestCase
     {
         $propertyName = (string) $propertyName;
         $matcher = $this->callback(function (OrderPreCheckRequestDto $requestDto) use ($propertyName, $value) {
-            return $requestDto->$propertyName === $value;
+            /** @phpstan-ignore-next-line */
+            $propertyValue = $requestDto->$propertyName;
+            return $propertyValue === $value;
         });
 
         $this->invoiceApi
@@ -167,7 +169,9 @@ class InvoiceClientTest extends TestCase
     {
         $propertyName = (string) $propertyName;
         $matcher = $this->callback(function (OrderCreateRequestDto $requestDto) use ($propertyName, $value) {
-            return $requestDto->$propertyName === $value;
+            /** @phpstan-ignore-next-line */
+            $propertyValue = $requestDto->$propertyName;
+            return $propertyValue === $value;
         });
 
         $this->invoiceApi

@@ -44,7 +44,7 @@ class PluginConfigurationValidator
      */
     private function apiHostIsNotConfigured()
     {
-        return empty($this->apiHostProvider->getApiHost());
+        return strval($this->apiHostProvider->getApiHost()) === '';
     }
 
     /**
@@ -52,6 +52,6 @@ class PluginConfigurationValidator
      */
     private function apiKeyIsNotConfigured()
     {
-        return empty($this->apiKeyProvider->getApiKey());
+        return strval($this->apiKeyProvider->getApiKey()) === '';
     }
 }

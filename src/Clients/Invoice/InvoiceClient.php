@@ -56,7 +56,7 @@ class InvoiceClient implements InvoiceClientInterface
         $preCheckResponseData = $this->dtoArrayMapper->toArray($responseDto);
         $orderContext->setPreCheckResponseData($preCheckResponseData);
 
-        if (in_array($responseDto->decision, [CheckDecisions::SAFE, CheckDecisions::REJECT])) {
+        if (in_array($responseDto->decision, [CheckDecisions::SAFE, CheckDecisions::REJECT], true)) {
             return ShopActions::CHANGE_PAYMENT_METHOD;
         }
 
@@ -91,6 +91,15 @@ class InvoiceClient implements InvoiceClientInterface
     public function cancelOrder($orderContext)
     {
         $this->invoiceApi->cancelOrder($orderContext->getOrderNumber());
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function uncancelOrder($orderContext)
+    {
+        $this->invoiceApi->uncancelOrder($orderContext->getOrderNumber());
     }
 
     /**
@@ -224,5 +233,18 @@ class InvoiceClient implements InvoiceClientInterface
         }
 
         return $paymentState;
+    }
+
+    /**
+     *
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return bool
+     */
+    public function hasBeenPaid($orderContext)
+    {
+        $paymentStatus = $this->getPaymentStateForOrderId($orderContext->getOrderNumber());
+
+        return $paymentStatus === PaymentStatus::PAID
+            || $paymentStatus === PaymentStatus::OVERPAID;
     }
 }

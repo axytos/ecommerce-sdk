@@ -9,9 +9,9 @@ class DtoArrayMapper
 {
     /**
      * @phpstan-param DtoInterface $dto
-     * @phpstan-return array
+     * @phpstan-return array<mixed>
      * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function toArray($dto)
     {
@@ -19,8 +19,10 @@ class DtoArrayMapper
     }
 
     /**
-     * @phpstan-param mixed $value
+     * @phpstan-param DateTimeInterface|DtoInterface|DtoCollection<DtoInterface>|array<mixed> $value
      * @phpstan-return mixed
+     * @param DateTimeInterface|DtoInterface|DtoCollection<DtoInterface>|array<mixed> $value
+     * @return string|array<mixed>
      */
     private function toArrayValue($value)
     {
@@ -46,10 +48,10 @@ class DtoArrayMapper
 
     /**
      * @phpstan-template T of DtoInterface
-     * @phpstan-param array $array
+     * @phpstan-param array<mixed> $array
      * @phpstan-param class-string<T> $dtoClassName
      * @phpstan-return T
-     * @param mixed[] $array
+     * @param array<mixed> $array
      * @param string $dtoClassName
      * @return \Axytos\ECommerce\DataMapping\DtoInterface
      */
@@ -74,6 +76,8 @@ class DtoArrayMapper
     }
 
     /**
+     * @phpstan-param mixed $value
+     * @phpstan-param class-string<DateTimeInterface>|class-string<DtoInterface>|class-string<DtoCollection<DtoInterface>>|string $type
      * @param mixed $value
      * @param string $type
      * @return mixed
@@ -92,7 +96,7 @@ class DtoArrayMapper
         }
 
         if (is_array($value) && is_a($type, DtoCollection::class, true)) {
-            /** @phpstan-var class-string<DtoCollection> */
+            /** @phpstan-var class-string<DtoCollection<DtoInterface>> */
             $dtoCollectionClassName = $type;
             return $this->createDtoCollection($value, $dtoCollectionClassName);
         }

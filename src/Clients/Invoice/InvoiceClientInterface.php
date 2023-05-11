@@ -26,6 +26,12 @@ interface InvoiceClientInterface
      * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
      * @return void
      */
+    public function uncancelOrder($orderContext);
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
     public function createInvoice($orderContext);
 
     /**
@@ -63,4 +69,11 @@ interface InvoiceClientInterface
      * @return void
      */
     public function updateOrder($orderContext);
+
+    /**
+     *
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return bool
+     */
+    public function hasBeenPaid($orderContext);
 }

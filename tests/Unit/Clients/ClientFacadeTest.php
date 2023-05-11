@@ -55,6 +55,7 @@ class ClientFacadeTest extends TestCase
     }
 
     /**
+     * @param array<string,mixed> $containerConfig
      * @return \Axytos\ECommerce\DependencyInjection\Container
      */
     private function createContainerMock(array $containerConfig)

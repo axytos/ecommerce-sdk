@@ -96,12 +96,11 @@ class InvoiceOrderContextFakeFactory
         $dto = new InvoiceAddressDto();
         $dto->firstname = 'firstname';
         $dto->lastname = 'lastname';
-        $dto->zipCode = 'zipCode';
+        $dto->zipCode = '11111'; // required for risk suit mocking
         $dto->city = 'city';
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
-        $dto->addressLine2 = '14-16';
         return $dto;
     }
 
@@ -113,12 +112,11 @@ class InvoiceOrderContextFakeFactory
         $dto = new DeliveryAddressDto();
         $dto->firstname = 'firstname';
         $dto->lastname = 'lastname';
-        $dto->zipCode = 'zipCode';
+        $dto->zipCode = '11111'; // required for risk suit mocking
         $dto->city = 'city';
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
-        $dto->addressLine2 = '14-16';
         return $dto;
     }
 

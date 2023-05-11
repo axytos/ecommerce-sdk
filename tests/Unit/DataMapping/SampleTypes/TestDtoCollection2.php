@@ -5,6 +5,9 @@ namespace Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes;
 use Axytos\ECommerce\DataMapping\DtoCollection;
 use Axytos\ECommerce\DataMapping\DtoInterface;
 
+/**
+ * @phpstan-extends DtoCollection<DtoInterface>
+ */
 class TestDtoCollection2 extends DtoCollection
 {
     /**
@@ -13,6 +16,7 @@ class TestDtoCollection2 extends DtoCollection
      */
     public static $classString;
     /**
+     * @phpstan-return class-string<DtoInterface>
      * @return string
      */
     public static function getElementClass()

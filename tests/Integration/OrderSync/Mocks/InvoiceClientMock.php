@@ -17,6 +17,7 @@ class InvoiceClientMock implements InvoiceClientInterface
     {
         $this->callRecords = [
             'cancelOrder' => [],
+            'uncancelOrder' => [],
             'createInvoice' => [],
             'refund' => [],
             'reportShipping' => [],
@@ -57,6 +58,15 @@ class InvoiceClientMock implements InvoiceClientInterface
     public function cancelOrder($orderContext)
     {
         $this->callRecords['cancelOrder'][] = $orderContext;
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
+    public function uncancelOrder($orderContext)
+    {
+        $this->callRecords['uncancelOrder'][] = $orderContext;
     }
 
     /**
@@ -119,5 +129,15 @@ class InvoiceClientMock implements InvoiceClientInterface
     public function updateOrder($orderContext)
     {
         $this->callRecords['updateOrder'][] = $orderContext;
+    }
+
+    /**
+     *
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return bool
+     */
+    public function hasBeenPaid($orderContext)
+    {
+        return false;
     }
 }

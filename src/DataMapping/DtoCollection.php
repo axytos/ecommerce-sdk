@@ -9,24 +9,26 @@ use IteratorAggregate;
 use Traversable;
 
 /**
- * @phpstan-template T of DtoInterface
+ * @phpstan-template TDtoInterface of DtoInterface
+ * @phpstan-implements ArrayAccess<int|string,TDtoInterface>
+ * @phpstan-implements IteratorAggregate<int|string,TDtoInterface>
  */
 abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
-     * @phpstan-return class-string<T>
+     * @phpstan-return class-string<TDtoInterface>
      * @return string
      */
     abstract public static function getElementClass();
 
     /**
-     * @phpstan-var T[]
+     * @phpstan-var TDtoInterface[]
      * @var mixed[]
      */
     private $values;
 
     /**
-     * @phpstan-param T[] $values
+     * @phpstan-param TDtoInterface[] $values
      */
     protected function __construct(array $values = [])
     {
@@ -34,7 +36,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     }
 
     /**
-     * @phpstan-return T[]
+     * @phpstan-return TDtoInterface[]
      * @return mixed[]
      */
     public function getElements()
@@ -43,7 +45,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     }
 
     /**
-     * @phpstan-return Traversable<T>
+     * @phpstan-return Traversable<TDtoInterface>
      * @return \Traversable
      */
     #[\ReturnTypeWillChange]
@@ -64,7 +66,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-param int|string $offset
-     * @phpstan-return T
+     * @phpstan-return TDtoInterface
      */
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -73,8 +75,8 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     }
 
     /**
-     * @phpstan-param int|string $offset
-     * @phpstan-param T $value
+     * @phpstan-param int|string|null $offset
+     * @phpstan-param TDtoInterface $value
      * @return void
      */
     #[\ReturnTypeWillChange]

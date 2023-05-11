@@ -101,6 +101,15 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
      * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
      * @return void
      */
+    public function uncancelOrder($orderContext)
+    {
+        $this->invoiceClient->uncancelOrder($orderContext);
+    }
+
+    /**
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return void
+     */
     public function createInvoice($orderContext)
     {
         $this->invoiceClient->createInvoice($orderContext);
@@ -158,5 +167,15 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     public function updateOrder($orderContext)
     {
         $this->invoiceClient->updateOrder($orderContext);
+    }
+
+    /**
+     *
+     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @return bool
+     */
+    public function hasBeenPaid($orderContext)
+    {
+        return $this->invoiceClient->hasBeenPaid($orderContext);
     }
 }

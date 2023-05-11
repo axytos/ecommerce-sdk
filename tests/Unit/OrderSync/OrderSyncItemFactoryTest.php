@@ -61,8 +61,8 @@ class OrderSyncItemFactoryTest extends TestCase
 
         $this->assertCount(4, $orderSyncItems);
 
-        foreach ($orderSyncItems as $orderSyncItems) {
-            $this->assertInstanceOf(OrderSyncItem::class, $orderSyncItems);
+        foreach ($orderSyncItems as $orderSyncItem) {
+            $this->assertInstanceOf(OrderSyncItem::class, $orderSyncItem);
         }
     }
 }

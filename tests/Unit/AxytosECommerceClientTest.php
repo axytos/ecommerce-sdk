@@ -86,7 +86,9 @@ class AxytosECommerceClientTest extends TestCase
         );
     }
 
-    /** @return array */
+    /**
+     * @return array<string>
+     */
     private function getExpectedContainderIds()
     {
         $result = [];
@@ -220,7 +222,7 @@ class AxytosECommerceClientTest extends TestCase
 
         $reflectedConfig = new \ReflectionProperty(Client::class, 'config');
         $reflectedConfig->setAccessible(true);
-        /** @var array */
+        /** @var array<string,mixed> */
         $config = $reflectedConfig->getValue($client);
 
         $this->assertArrayHasKey('verify', $config);

@@ -11,12 +11,13 @@ class DateTimeSerializationException extends Exception
      */
     private $serializedDateTime;
     /**
-     * @var mixed[]
+     * @var array<mixed>
      */
     private $lastDateTimeErrors;
 
     /**
      * @param string $serializedDateTime
+     * @param array<mixed> $lastDateTimeErrors
      */
     public function __construct($serializedDateTime, array $lastDateTimeErrors)
     {

@@ -5,17 +5,20 @@ namespace Axytos\ECommerce\DataMapping;
 use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
 
 /**
- * @phpstan-template T of ModelInterface
+ * @phpstan-template TModelInterface of \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
  */
 class OpenApiModelAttributeInfo
 {
     /**
-     * @return OpenApiModelAttributeInfo[]
+     * @phpstan-template TModel of \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
+     * @phpstan-param TModel $oaModel
+     * @phpstan-return OpenApiModelAttributeInfo<TModel>[]
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $oaModel
+     * @return OpenApiModelAttributeInfo[]
      */
     public static function getAttributeInfos($oaModel)
     {
-        /** @phpstan-var class-string<ModelInterface> */
+        /** @phpstan-var class-string<TModel> */
         $oaModelName = get_class($oaModel);
 
         /** @phpstan-var array<string,string> */
@@ -33,6 +36,7 @@ class OpenApiModelAttributeInfo
         $keys = array_keys($names);
 
         return array_map(function ($key) use ($oaModelName, $names, $types, $formats, $getters, $setters) {
+            /** @phpstan-var OpenApiModelAttributeInfo<TModel> */
             return new OpenApiModelAttributeInfo(
                 $oaModelName,
                 $names[$key],
@@ -44,7 +48,7 @@ class OpenApiModelAttributeInfo
         }, $keys);
     }
 
-    /** @phpstan-var class-string<T>
+    /** @phpstan-var class-string<TModelInterface>
      * @var string */
     private $modelName;
 
@@ -70,7 +74,7 @@ class OpenApiModelAttributeInfo
     private $setterName;
 
     /**
-     * @phpstan-param class-string<T> $modelName
+     * @phpstan-param class-string<TModelInterface> $modelName
      * @phpstan-param string $name
      * @phpstan-param string $typeName
      * @phpstan-param ?string $format
@@ -105,7 +109,7 @@ class OpenApiModelAttributeInfo
     }
 
     /**
-     * @phpstan-return class-string<T>
+     * @phpstan-return class-string<TModelInterface>
      * @return string
      */
     public function getModelName()

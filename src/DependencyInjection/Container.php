@@ -7,6 +7,9 @@ class Container
     /** @var ContainerEntryInterface[] $containerEntries */
     private $containerEntries;
 
+    /**
+     * @param ContainerEntryInterface[] $containerEntries
+     */
     public function __construct(array $containerEntries)
     {
         $this->containerEntries = $containerEntries;
@@ -42,7 +45,6 @@ class Container
     {
         if ($this->has($key)) {
             $containerEntry = $this->containerEntries[$key];
-            /** @phpstan-ignore-next-line */
             return $containerEntry->getInstance($this);
         }
 
