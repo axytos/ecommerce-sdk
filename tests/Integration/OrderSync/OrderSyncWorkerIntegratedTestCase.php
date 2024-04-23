@@ -11,6 +11,7 @@ use Axytos\ECommerce\OrderSync\ShopSystemOrderRepositoryInterface;
 use Axytos\ECommerce\Tests\Integration\OrderSync\Mocks\InvoiceClientMock;
 use Axytos\ECommerce\Tests\Integration\OrderSync\Mocks\InvoiceOrderContextMock;
 use Axytos\ECommerce\Tests\Integration\OrderSync\Mocks\ShopSystemOrderMock;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,6 +40,7 @@ class OrderSyncWorkerIntegratedTestCase extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->invoiceClient = new InvoiceClientMock();

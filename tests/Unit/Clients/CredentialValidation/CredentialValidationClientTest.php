@@ -4,6 +4,7 @@ namespace Axytos\ECommerce\Tests\Unit\Clients\CredentialValidation;
 
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -21,6 +22,7 @@ class CredentialValidationClientTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->credentialValidationApi = $this->createMock(CredentialValidationApiInterface::class);

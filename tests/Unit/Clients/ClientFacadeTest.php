@@ -11,6 +11,7 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
 use Axytos\ECommerce\DependencyInjection\Container;
 use Exception;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -37,6 +38,7 @@ class ClientFacadeTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->checkoutClient = $this->createMock(CheckoutClientInterface::class);

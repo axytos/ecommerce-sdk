@@ -4,6 +4,7 @@ namespace Axytos\ECommerce\Tests\Unit\DependencyInjection;
 
 use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\DependencyInjection\InstanceContainerEntry;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
@@ -23,6 +24,7 @@ class InstanceContainerEntryTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->instance = new stdClass();

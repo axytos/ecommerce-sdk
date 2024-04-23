@@ -7,6 +7,7 @@ use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
 use Axytos\ECommerce\Clients\Checkout\CreditCheckAgreementLoadFailedException;
 use Exception;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -30,6 +31,7 @@ class CheckoutClientTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->checkoutApi = $this->createMock(CheckoutApiInterface::class);

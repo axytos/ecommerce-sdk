@@ -8,6 +8,7 @@ use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\OrderSync\OrderSyncItem;
 use Axytos\ECommerce\OrderSync\OrderSyncItemFactory;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +23,7 @@ class OrderSyncItemFactoryTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new OrderSyncItemFactory(

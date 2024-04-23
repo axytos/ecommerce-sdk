@@ -6,6 +6,8 @@ use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 use Axytos\ECommerce\Clients\Invoice\PluginConfigurationValidator;
 use Exception;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -27,6 +29,7 @@ class PluginConfigurationValidatorTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->apiHostProvider = $this->createMock(ApiHostProviderInterface::class);
@@ -45,6 +48,7 @@ class PluginConfigurationValidatorTest extends TestCase
      * @param bool $expectedOutcome
      * @return void
      */
+    #[DataProvider('dataProvider_test_isInvalid')]
     public function test_isInvalid(
         $apiHost,
         $apiKey,
@@ -61,7 +65,7 @@ class PluginConfigurationValidatorTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function dataProvider_test_isInvalid()
+    public static function dataProvider_test_isInvalid()
     {
         return [
             ['','', true],

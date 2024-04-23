@@ -9,6 +9,8 @@ use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\OrderSync\Commands\ReportRefund;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderInterface;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,7 @@ class ReportRefundTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->invoiceClient = $this->createMock(InvoiceClientInterface::class);
@@ -44,10 +47,11 @@ class ReportRefundTest extends TestCase
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportRefundInvocations
+     * @param int $reportRefundInvocationCount
      * @return void
      */
-    public function test_execute_reports_refund($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_reports_refund($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -59,7 +63,7 @@ class ReportRefundTest extends TestCase
         $reportData = $this->createMock(InvoiceOrderContextInterface::class);
         $shopSystemOrder->method('getRefundReportData')->willReturn($reportData);
 
-        $this->invoiceClient->expects($reportRefundInvocations)->method('refund')->with($reportData);
+        $this->invoiceClient->expects($this->exactly($reportRefundInvocationCount))->method('refund')->with($reportData);
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -69,10 +73,11 @@ class ReportRefundTest extends TestCase
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportRefundInvocations
+     * @param int $reportRefundInvocationCount
      * @return void
      */
-    public function test_execute_saves_refund_reported($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_saves_refund_reported($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -81,7 +86,7 @@ class ReportRefundTest extends TestCase
         $shopSystemOrder->method('hasRefundReported')->willReturn($hasRefundReported);
         $shopSystemOrder->method('hasBeenRefunded')->willReturn($hasBeenRefunded);
 
-        $shopSystemOrder->expects($reportRefundInvocations)->method('saveHasRefundReported');
+        $shopSystemOrder->expects($this->exactly($reportRefundInvocationCount))->method('saveHasRefundReported');
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -91,10 +96,11 @@ class ReportRefundTest extends TestCase
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportRefundInvocations
+     * @param int $reportRefundInvocationCount
      * @return void
      */
-    public function test_execute_saves_refund_reported_on_client_error($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_saves_refund_reported_on_client_error($hasCreateInvoiceReported, $hasRefundReported, $hasBeenRefunded, $reportRefundInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -104,7 +110,7 @@ class ReportRefundTest extends TestCase
         $shopSystemOrder->method('hasBeenRefunded')->willReturn($hasBeenRefunded);
         $this->invoiceClient->method('refund')->willThrowException(new ApiException("", 400));
 
-        $shopSystemOrder->expects($reportRefundInvocations)->method('saveHasRefundReported');
+        $shopSystemOrder->expects($this->exactly($reportRefundInvocationCount))->method('saveHasRefundReported');
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -131,17 +137,17 @@ class ReportRefundTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function execute_cases()
+    public static function execute_cases()
     {
         return [
-            'invoice reported: already reported and refunded        -> will report' => [true, true, true, $this->never()],
-            'invoice reported: already reported and not refunded    -> will report' => [true, true, false, $this->never()],
-            'invoice reported: not yet reported and refunded        -> will report' => [true, false, true, $this->once()],
-            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, $this->never()],
-            'no invoice reported: already reported and refunded     -> will report' => [false, true, true, $this->never()],
-            'no invoice reported: already reported and not refunded -> will report' => [false, true, false, $this->never()],
-            'no invoice reported: not yet reported and refunded     -> will report' => [false, false, true, $this->never()],
-            'no invoice reported: not yet reported and not refunded -> will report' => [false, false, false, $this->never()],
+            'invoice reported: already reported and refunded        -> will report' => [true, true, true, 0],
+            'invoice reported: already reported and not refunded    -> will report' => [true, true, false, 0],
+            'invoice reported: not yet reported and refunded        -> will report' => [true, false, true, 1],
+            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, 0],
+            'no invoice reported: already reported and refunded     -> will report' => [false, true, true, 0],
+            'no invoice reported: already reported and not refunded -> will report' => [false, true, false, 0],
+            'no invoice reported: not yet reported and refunded     -> will report' => [false, false, true, 0],
+            'no invoice reported: not yet reported and not refunded -> will report' => [false, false, false, 0],
         ];
     }
 }

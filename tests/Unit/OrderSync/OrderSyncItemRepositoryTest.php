@@ -7,6 +7,7 @@ use Axytos\ECommerce\OrderSync\OrderSyncItemInterface;
 use Axytos\ECommerce\OrderSync\OrderSyncItemRepository;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderInterface;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderRepositoryInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +32,7 @@ class OrderSyncItemRepositoryTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->shopSystemOrderRepository = $this->createMock(ShopSystemOrderRepositoryInterface::class);

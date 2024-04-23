@@ -59,6 +59,8 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrd
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPITransactionTransactionMetadata;
 use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DtoOpenApiModelMapperTest extends TestCase
@@ -72,6 +74,7 @@ class DtoOpenApiModelMapperTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new DtoOpenApiModelMapper();
@@ -87,6 +90,7 @@ class DtoOpenApiModelMapperTest extends TestCase
      * @param \Axytos\ECommerce\DataMapping\DtoInterface $expectedDto
      * @return void
      */
+    #[DataProvider('mappingTestCases')]
     public function test_mapping($dtoClassName, $modelClassName, $expectedDto)
     {
         /** @var ModelInterface */
@@ -102,7 +106,7 @@ class DtoOpenApiModelMapperTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function mappingTestCases()
+    public static function mappingTestCases()
     {
         return [
             [CustomerDataDto::class, AxytosCommonPublicAPIModelsCommonCustomerDataRequestModel::class, DtoFactory::createCustomerDataDto()],
@@ -140,11 +144,12 @@ class DtoOpenApiModelMapperTest extends TestCase
      * @param string $dtoClass
      * @return void
      */
+    #[DataProvider('dataProvider_test_all_mappings_tested')]
     public function test_all_mappings_tested($dtoClass)
     {
         $dtoClasses = array_map(function ($mappingTestCase) {
             return is_array($mappingTestCase) ? $mappingTestCase[0] : null;
-        }, $this->mappingTestCases());
+        }, self::mappingTestCases());
 
         $this->assertContains($dtoClass, $dtoClasses, "Missing test case for DTO mapping of '$dtoClass'!");
     }
@@ -152,19 +157,19 @@ class DtoOpenApiModelMapperTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function dataProvider_test_all_mappings_tested()
+    public static function dataProvider_test_all_mappings_tested()
     {
         return array_map(function ($dtoClass) {
             return [$dtoClass];
-        }, $this->getDeclaredDataTransferObjectClasses());
+        }, self::getDeclaredDataTransferObjectClasses());
     }
 
     /**
      * @return mixed[]
      */
-    private function getDeclaredDataTransferObjectClasses()
+    private static function getDeclaredDataTransferObjectClasses()
     {
-        $this->loadDataTransferObjects();
+        self::loadDataTransferObjects();
 
         return array_filter(get_declared_classes(), function ($class) {
             return is_subclass_of($class, DtoInterface::class, true);
@@ -174,7 +179,7 @@ class DtoOpenApiModelMapperTest extends TestCase
     /**
      * @return void
      */
-    private function loadDataTransferObjects()
+    private static function loadDataTransferObjects()
     {
         $globPattern = __DIR__ . '/../../../src/DataTransferObjects/*.php';
         $namespacePrefix = 'Axytos\\ECommerce\\DataTransferObjects\\';

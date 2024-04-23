@@ -4,6 +4,7 @@ namespace Axytos\ECommerce\Tests\Unit\PackageInfo;
 
 use Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider;
 use OutOfBoundsException;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 class ComposerPackageInfoProviderTest extends TestCase
@@ -17,6 +18,7 @@ class ComposerPackageInfoProviderTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new ComposerPackageInfoProvider();

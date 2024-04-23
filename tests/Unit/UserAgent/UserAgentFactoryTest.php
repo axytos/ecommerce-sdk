@@ -4,6 +4,7 @@ namespace Axytos\ECommerce\Tests\Unit\UserAgent;
 
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
 use Axytos\ECommerce\UserAgent\UserAgentFactory;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -21,6 +22,7 @@ class UserAgentFactoryTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->userAgentInfoProvider = $this->createMock(UserAgentInfoProviderInterface::class);

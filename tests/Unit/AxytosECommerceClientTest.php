@@ -28,6 +28,7 @@ use Axytos\ECommerce\AxytosECommerceClient;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\FinancialServices\GuzzleHttp\Client;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 class AxytosECommerceClientTest extends TestCase
@@ -61,6 +62,7 @@ class AxytosECommerceClientTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->apiHostProvider = $this->createMock(ApiHostProviderInterface::class);

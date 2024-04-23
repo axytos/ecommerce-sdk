@@ -4,6 +4,8 @@ namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
 use Axytos\ECommerce\DataMapping\DtoInterface;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/DtoFactory.php';
@@ -19,6 +21,7 @@ class DtoArrayMapperTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new DtoArrayMapper();
@@ -29,6 +32,7 @@ class DtoArrayMapperTest extends TestCase
      * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
      * @return void
      */
+     #[DataProvider('mappingTestCases')]
     public function test_mapping($dto)
     {
         /** @phpstan-var class-string<DtoInterface> */
@@ -44,7 +48,7 @@ class DtoArrayMapperTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function mappingTestCases()
+    public static function mappingTestCases()
     {
         return [
             [DtoFactory::createCustomerDataDto()],

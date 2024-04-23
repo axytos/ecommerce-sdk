@@ -6,6 +6,7 @@ use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\DependencyInjection\NotFoundException;
 use Axytos\ECommerce\Tests\Unit\DependencyInjection\SampleTypes\RegisteredContainerEntryInterface;
 use Axytos\ECommerce\Tests\Unit\DependencyInjection\SampleTypes\NotRegisteredContainerEntryInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -27,6 +28,7 @@ class ContainerTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->registeredContainerEntry = $this->createMock(RegisteredContainerEntryInterface::class);

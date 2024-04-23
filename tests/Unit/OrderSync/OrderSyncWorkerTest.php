@@ -6,6 +6,7 @@ use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\OrderSync\OrderSyncItemInterface;
 use Axytos\ECommerce\OrderSync\OrderSyncItemRepository;
 use Axytos\ECommerce\OrderSync\OrderSyncWorker;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,7 @@ class OrderSyncWorkerTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->orderSyncItemRepository = $this->createMock(OrderSyncItemRepository::class);

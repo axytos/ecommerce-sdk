@@ -6,6 +6,7 @@ use Axytos\ECommerce\DataMapping\DateTimeSerializationException;
 use Axytos\ECommerce\DataMapping\DateTimeSerializer;
 use DateTime;
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 class DateTimeSerializerTest extends TestCase
@@ -19,6 +20,7 @@ class DateTimeSerializerTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new DateTimeSerializer();

@@ -2,11 +2,14 @@
 
 namespace Axytos\ECommerce\Tests\Integration\OrderSync;
 
+use PHPUnit\Framework\Attributes\Group;
+
 include_once __DIR__ . '/OrderSyncWorkerIntegratedTestCase.php';
 
 /**
  * @group OrderSync
  */
+#[Group('OrderSync')]
 class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
 {
     /**

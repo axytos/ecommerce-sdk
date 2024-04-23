@@ -5,6 +5,7 @@ namespace Axytos\ECommerce\Tests\Unit\Clients\CredentialValidation;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
 use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -22,6 +23,7 @@ class CredentialValidationApiAdapterTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->credentialsApi = $this->createMock(CredentialsApi::class);

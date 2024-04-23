@@ -8,6 +8,7 @@ use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -28,6 +29,7 @@ class ErrorReportingApiAdapterTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->errorApi = $this->createMock(ErrorApi::class);

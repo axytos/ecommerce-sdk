@@ -9,6 +9,7 @@ use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto3;
 use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDto4;
 use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDtoCollection1;
 use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDtoCollection2;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
 class DtoToDtoMapperTest extends TestCase
@@ -22,6 +23,7 @@ class DtoToDtoMapperTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->sut = new DtoToDtoMapper();

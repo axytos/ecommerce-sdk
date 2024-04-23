@@ -8,6 +8,7 @@ use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 use Axytos\FinancialServices\GuzzleHttp\Psr7\Request;
 use Axytos\FinancialServices\Psr\Http\Message\ResponseInterface;
 use Axytos\FinancialServices\Psr\Http\Message\StreamInterface;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -28,6 +29,7 @@ class CheckoutApiAdapterTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->client = $this->createMock(ClientInterface::class);

@@ -8,6 +8,7 @@ use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use DateTime;
 use Exception;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Throwable;
@@ -29,6 +30,7 @@ class ErrorReportingClientTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->errorReportingApi = $this->createMock(ErrorReportingApiInterface::class);

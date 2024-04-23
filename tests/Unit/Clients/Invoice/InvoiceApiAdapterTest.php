@@ -28,6 +28,7 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderMode
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
+use PHPUnit\Framework\Attributes\Before;
 
 class InvoiceApiAdapterTest extends TestCase
 {
@@ -49,6 +50,7 @@ class InvoiceApiAdapterTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->paymentsApi = $this->createMock(PaymentsApi::class);

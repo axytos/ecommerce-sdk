@@ -4,6 +4,7 @@ namespace Axytos\ECommerce\Tests\Unit\DependencyInjection;
 
 use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\DependencyInjection\FactoryContainerEntry;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
@@ -25,6 +26,7 @@ class FactoryContainerEntryTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
 

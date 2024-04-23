@@ -9,6 +9,8 @@ use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\OrderSync\Commands\ReportTrackingInformation;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderInterface;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,7 @@ class ReportTrackingInformationTest extends TestCase
      * @before
      * @return void
      */
+    #[Before]
     public function beforeEach()
     {
         $this->invoiceClient = $this->createMock(InvoiceClientInterface::class);
@@ -42,10 +45,11 @@ class ReportTrackingInformationTest extends TestCase
     /**
      * @dataProvider execute_cases
      * @param bool $hasNewTrackingInformation
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportNewTrackingInformationInvocations
+     * @param int $reportNewTrackingInformationInvocationCount
      * @return void
      */
-    public function test_execute_reports_new_tracking_information($hasNewTrackingInformation, $reportNewTrackingInformationInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_reports_new_tracking_information($hasNewTrackingInformation, $reportNewTrackingInformationInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -55,7 +59,7 @@ class ReportTrackingInformationTest extends TestCase
         $trackingInformation = $this->createTrackingInformation();
         $shopSystemOrder->method('getNewTrackingInformationReportData')->willReturn($trackingInformation);
 
-        $this->invoiceClient->expects($reportNewTrackingInformationInvocations)->method('trackingInformation')->with($trackingInformation);
+        $this->invoiceClient->expects($this->exactly($reportNewTrackingInformationInvocationCount))->method('trackingInformation')->with($trackingInformation);
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -63,10 +67,11 @@ class ReportTrackingInformationTest extends TestCase
     /**
      * @dataProvider execute_cases
      * @param bool $hasNewTrackingInformation
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportNewTrackingInformationInvocations
+     * @param int $reportNewTrackingInformationInvocationCount
      * @return void
      */
-    public function test_execute_saves_reported_new_tracking_information($hasNewTrackingInformation, $reportNewTrackingInformationInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_saves_reported_new_tracking_information($hasNewTrackingInformation, $reportNewTrackingInformationInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -74,7 +79,7 @@ class ReportTrackingInformationTest extends TestCase
         $shopSystemOrder->method('hasNewTrackingInformation')->willReturn($hasNewTrackingInformation);
         $shopSystemOrder->method('getNewTrackingInformationReportData')->willReturn($this->createTrackingInformation());
 
-        $shopSystemOrder->expects($reportNewTrackingInformationInvocations)->method('saveNewTrackingInformation');
+        $shopSystemOrder->expects($this->exactly($reportNewTrackingInformationInvocationCount))->method('saveNewTrackingInformation');
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -82,10 +87,11 @@ class ReportTrackingInformationTest extends TestCase
     /**
      * @dataProvider execute_cases
      * @param bool $hasNewTrackingInformation
-     * @param \PHPUnit\Framework\MockObject\Rule\InvokedCount $reportNewTrackingInformationInvocations
+     * @param int $reportNewTrackingInformationInvocationCount
      * @return void
      */
-    public function test_execute_saves_reported_new_tracking_information_on_client_error($hasNewTrackingInformation, $reportNewTrackingInformationInvocations)
+    #[DataProvider('execute_cases')]
+    public function test_execute_saves_reported_new_tracking_information_on_client_error($hasNewTrackingInformation, $reportNewTrackingInformationInvocationCount)
     {
         /** @var ShopSystemOrderInterface&MockObject */
         $shopSystemOrder = $this->createMock(ShopSystemOrderInterface::class);
@@ -94,7 +100,7 @@ class ReportTrackingInformationTest extends TestCase
         $shopSystemOrder->method('getNewTrackingInformationReportData')->willReturn($this->createTrackingInformation());
         $this->invoiceClient->method('trackingInformation')->willThrowException(new ApiException("", 400));
 
-        $shopSystemOrder->expects($reportNewTrackingInformationInvocations)->method('saveNewTrackingInformation');
+        $shopSystemOrder->expects($this->exactly($reportNewTrackingInformationInvocationCount))->method('saveNewTrackingInformation');
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -120,11 +126,11 @@ class ReportTrackingInformationTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function execute_cases()
+    public static function execute_cases()
     {
         return [
-            'new tracking information -> will report' => [true, $this->once()],
-            'not new tracking information -> will not report' => [false, $this->never()],
+            'new tracking information -> will report' => [true, 1],
+            'not new tracking information -> will not report' => [false, 0],
         ];
     }
 

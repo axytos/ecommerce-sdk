@@ -9,6 +9,7 @@ use Axytos\ECommerce\DataTransferObjects\BasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\BasketPositionDtoCollection;
 use Axytos\ECommerce\OrderSync\HashAlgorithmInterface;
 use Axytos\ECommerce\OrderSync\OrderHashCalculator;
+use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +39,7 @@ class OrderHashCalculatorTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->hashAlgorithm = $this->createMock(HashAlgorithmInterface::class);

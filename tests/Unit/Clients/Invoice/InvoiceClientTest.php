@@ -27,6 +27,8 @@ use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use DateTime;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -56,6 +58,7 @@ class InvoiceClientTest extends TestCase
      * @return void
      * @before
      */
+    #[Before]
     public function beforeEach()
     {
         $this->invoiceApi = $this->createMock(InvoiceApiInterface::class);
@@ -266,6 +269,7 @@ class InvoiceClientTest extends TestCase
      * @param string $expectedAction
      * @return void
      */
+    #[DataProvider('dataProvider_test_precheck_returns_expected_action')]
     public function test_precheck_returns_expected_action($decision, $expectedAction)
     {
         $this->setUpDecision($decision);
@@ -278,7 +282,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return mixed[]
      */
-    public function dataProvider_test_precheck_returns_expected_action()
+    public static function dataProvider_test_precheck_returns_expected_action()
     {
         return [
             [CheckDecisions::SAFE, ShopActions::CHANGE_PAYMENT_METHOD],
