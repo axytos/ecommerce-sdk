@@ -80,13 +80,21 @@ final class AxytosECommerceClient extends ClientFacade
         });
 
         $containerBuilder->registerFactory(Configuration::class, function ($container) {
+            /** @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface */
             $apiHostProvider = $container->get(ApiHostProviderInterface::class);
+            /** @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface */
             $apiKeyProvider = $container->get(ApiKeyProviderInterface::class);
+            /** @var \Axytos\ECommerce\UserAgent\UserAgentFactory */
             $userAgentFactory = $container->get(UserAgentFactory::class);
+
+            $apiHost = trim(strval($apiHostProvider->getApiHost()));
+            $apiKey = trim(strval($apiKeyProvider->getApiKey()));
+            $userAgent = $userAgentFactory->getUserAgent();
+
             $configuration = new Configuration();
-            $configuration->setHost($apiHostProvider->getApiHost());
-            $configuration->setUserAgent($userAgentFactory->getUserAgent());
-            $configuration->setApiKey('X-API-KEY', $apiKeyProvider->getApiKey());
+            $configuration->setHost($apiHost);
+            $configuration->setUserAgent($userAgent);
+            $configuration->setApiKey('X-API-KEY', $apiKey);
             return $configuration;
         });
 
