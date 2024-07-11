@@ -12,7 +12,7 @@
     "type": "library",
     "require": {
         "php": ">=5.6.0",
-        "axytos/financial-services-api-sdk": "1.6.17-rc"
+        "axytos/financial-services-api-sdk": "1.6.18-rc"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.7 || ^9.5 || ^10.5 || ^11.1"
