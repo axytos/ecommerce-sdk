@@ -2,54 +2,55 @@
 
 namespace Axytos\ECommerce;
 
+use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
+use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
+use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
+use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
+use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
+use Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter;
+use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
+use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
+use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
+use Axytos\ECommerce\Clients\Checkout\StaticContentApiProxy;
+use Axytos\ECommerce\Clients\ClientFacade;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
+use Axytos\ECommerce\DataMapping\DtoArrayMapper;
+use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
+use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
+use Axytos\ECommerce\DependencyInjection\ContainerBuilder;
+use Axytos\ECommerce\Logging\LoggerAdapterInterface;
+use Axytos\ECommerce\UserAgent\UserAgentFactory;
 use Axytos\FinancialServices\GuzzleHttp\Client;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 use Axytos\FinancialServices\OpenAPI\Client\Api\CheckApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
-use Axytos\FinancialServices\OpenAPI\Client\Configuration;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
-use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
-use Axytos\ECommerce\Clients\ClientFacade;
-use Axytos\ECommerce\DataMapping\DtoArrayMapper;
-use Axytos\ECommerce\DataMapping\DtoToDtoMapper;
-use Axytos\ECommerce\UserAgent\UserAgentFactory;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
-use Axytos\ECommerce\Logging\LoggerAdapterInterface;
-use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
-use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
-use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
-use Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter;
-use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
-use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
-use Axytos\ECommerce\DependencyInjection\ContainerBuilder;
-use Axytos\ECommerce\Abstractions\ApiHostProviderInterface;
-use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
-use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
-use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
-use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
-use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
-use Axytos\ECommerce\Clients\Checkout\StaticContentApiProxy;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
+use Axytos\FinancialServices\OpenAPI\Client\Configuration;
 
 final class AxytosECommerceClient extends ClientFacade
 {
     /**
-     * @param \Axytos\ECommerce\Abstractions\ApiHostProviderInterface $apiHostProvider
-     * @param \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface $apiKeyProvider
-     * @param \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface $paymentMethodConfiguration
-     * @param \Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface $fallbackModeConfiguration
-     * @param \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface $userAgentInfoProvider
-     * @param \Axytos\ECommerce\Logging\LoggerAdapterInterface $logger
-     * @return \Axytos\ECommerce\DependencyInjection\Container
+     * @param ApiHostProviderInterface            $apiHostProvider
+     * @param ApiKeyProviderInterface             $apiKeyProvider
+     * @param PaymentMethodConfigurationInterface $paymentMethodConfiguration
+     * @param FallbackModeConfigurationInterface  $fallbackModeConfiguration
+     * @param UserAgentInfoProviderInterface      $userAgentInfoProvider
+     * @param LoggerAdapterInterface              $logger
+     *
+     * @return DependencyInjection\Container
      */
     public static function buildContainer(
         $apiHostProvider,
@@ -72,19 +73,20 @@ final class AxytosECommerceClient extends ClientFacade
 
         $containerBuilder->registerFactory(ClientInterface::class, function ($container) {
             $clientAddr = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+
             return new Client([
                 'headers' => [
-                    'X-ClientAddr' => $clientAddr
-                ]
+                    'X-ClientAddr' => $clientAddr,
+                ],
             ]);
         });
 
         $containerBuilder->registerFactory(Configuration::class, function ($container) {
-            /** @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface */
+            /** @var ApiHostProviderInterface */
             $apiHostProvider = $container->get(ApiHostProviderInterface::class);
-            /** @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface */
+            /** @var ApiKeyProviderInterface */
             $apiKeyProvider = $container->get(ApiKeyProviderInterface::class);
-            /** @var \Axytos\ECommerce\UserAgent\UserAgentFactory */
+            /** @var UserAgentFactory */
             $userAgentFactory = $container->get(UserAgentFactory::class);
 
             $apiHost = trim(strval($apiHostProvider->getApiHost()));
@@ -92,45 +94,57 @@ final class AxytosECommerceClient extends ClientFacade
             $userAgent = $userAgentFactory->getUserAgent();
 
             $configuration = new Configuration();
-            $configuration->setHost($apiHost);
             $configuration->setUserAgent($userAgent);
             $configuration->setApiKey('X-API-KEY', $apiKey);
+
+            if (ApiHostProviderInterface::LIVE === $apiHost) {
+                $configuration->setHost(AxytosApiHostUrl::LIVE);
+            } else {
+                $configuration->setHost(AxytosApiHostUrl::SANDBOX);
+            }
+
             return $configuration;
         });
 
         $containerBuilder->registerFactory(StaticContentApiProxy::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new StaticContentApiProxy($client, $configuration);
         });
 
         $containerBuilder->registerFactory(CredentialsApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new CredentialsApi($client, $configuration);
         });
 
         $containerBuilder->registerFactory(CheckApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new CheckApi($client, $configuration);
         });
 
         $containerBuilder->registerFactory(ErrorApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new ErrorApi($client, $configuration);
         });
 
         $containerBuilder->registerFactory(PaymentsApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new PaymentsApi($client, $configuration);
         });
 
         $containerBuilder->registerFactory(PaymentApi::class, function ($container) {
             $client = $container->get(ClientInterface::class);
             $configuration = $container->get(Configuration::class);
+
             return new PaymentApi($client, $configuration);
         });
 

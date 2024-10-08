@@ -9,9 +9,12 @@ use Axytos\FinancialServices\GuzzleHttp\Psr7\Request;
 use Axytos\FinancialServices\Psr\Http\Message\ResponseInterface;
 use Axytos\FinancialServices\Psr\Http\Message\StreamInterface;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CheckoutApiAdapterTest extends TestCase
 {
     /** @var ClientInterface&MockObject */
@@ -21,12 +24,13 @@ class CheckoutApiAdapterTest extends TestCase
     private $staticContentApi;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter
+     * @var CheckoutApiAdapter
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -44,7 +48,7 @@ class CheckoutApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_getCreditCheckAgreementText_returns_request_body_contents()
+    public function test_get_credit_check_agreement_text_returns_request_body_contents()
     {
         $contents = 'contents';
 
@@ -61,12 +65,14 @@ class CheckoutApiAdapterTest extends TestCase
 
         $this->staticContentApi
             ->method('apiV1StaticContentCreditcheckagreementGetRequest')
-            ->willReturn($request);
+            ->willReturn($request)
+        ;
 
         $this->client
             ->method('send')
             ->with($request)
-            ->willReturn($response);
+            ->willReturn($response)
+        ;
 
         $actual = $this->sut->getCreditCheckAgreementText();
 

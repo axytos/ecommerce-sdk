@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\Tests\Integration\OrderSync\Mocks;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
-use DateTime;
 
 class InvoiceOrderContextMock implements InvoiceOrderContextInterface
 {
@@ -35,6 +34,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return '';
     }
+
     /**
      * @return string
      */
@@ -42,13 +42,15 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return '';
     }
+
     /**
      * @return \DateTimeInterface
      */
     public function getOrderDateTime()
     {
-        return new DateTime();
+        return new \DateTime();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
      */
@@ -56,6 +58,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\CustomerDataDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
      */
@@ -63,6 +66,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
      */
@@ -70,6 +74,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
      */
@@ -77,6 +82,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\BasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
      */
@@ -84,6 +90,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\RefundBasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
      */
@@ -91,6 +98,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto();
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
      */
@@ -98,6 +106,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection();
     }
+
     /**
      * @return mixed[]
      */
@@ -105,13 +114,16 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return [];
     }
+
     /**
      * @param mixed[] $data
+     *
      * @return void
      */
     public function setPreCheckResponseData($data)
     {
     }
+
     /**
      * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
      */
@@ -119,6 +131,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return new \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection();
     }
+
     /**
      * @return float
      */
@@ -126,6 +139,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return 0;
     }
+
     /**
      * @return string[]
      */
@@ -133,6 +147,7 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     {
         return [];
     }
+
     /**
      * @return string
      */

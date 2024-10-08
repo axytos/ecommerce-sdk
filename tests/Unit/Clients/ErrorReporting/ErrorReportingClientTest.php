@@ -6,13 +6,13 @@ use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
 use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
-use DateTime;
-use Exception;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Throwable;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ErrorReportingClientTest extends TestCase
 {
     /** @var ErrorReportingApiInterface&MockObject */
@@ -22,12 +22,13 @@ class ErrorReportingClientTest extends TestCase
     private $logger;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient
+     * @var ErrorReportingClient
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -45,18 +46,19 @@ class ErrorReportingClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_uses_message_as_title()
+    public function test_report_error_uses_message_as_title()
     {
-        $exception = new Exception('message');
+        $exception = new \Exception('message');
 
         $matcher = $this->callback(function (ErrorRequestModelDto $errorReport) {
-            return $errorReport->title === 'message';
+            return 'message' === $errorReport->title;
         });
 
         $this->errorReportingApi
             ->expects($this->once())
             ->method('reportError')
-            ->with($matcher);
+            ->with($matcher)
+        ;
 
         $this->sut->reportError($exception);
     }
@@ -64,18 +66,19 @@ class ErrorReportingClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_uses_class_name_as_title_if_message_is_empty()
+    public function test_report_error_uses_class_name_as_title_if_message_is_empty()
     {
-        $exception = new Exception();
+        $exception = new \Exception();
 
         $matcher = $this->callback(function (ErrorRequestModelDto $errorReport) {
-            return $errorReport->title === Exception::class;
+            return \Exception::class === $errorReport->title;
         });
 
         $this->errorReportingApi
             ->expects($this->once())
             ->method('reportError')
-            ->with($matcher);
+            ->with($matcher)
+        ;
 
         $this->sut->reportError($exception);
     }
@@ -83,18 +86,19 @@ class ErrorReportingClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_sets_description()
+    public function test_report_error_sets_description()
     {
-        $exception = new Exception();
+        $exception = new \Exception();
 
         $matcher = $this->callback(function (ErrorRequestModelDto $errorReport) {
-            return $errorReport->description !== '';
+            return '' !== $errorReport->description;
         });
 
         $this->errorReportingApi
             ->expects($this->once())
             ->method('reportError')
-            ->with($matcher);
+            ->with($matcher)
+        ;
 
         $this->sut->reportError($exception);
     }
@@ -102,18 +106,19 @@ class ErrorReportingClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_sets_timeStamp()
+    public function test_report_error_sets_time_stamp()
     {
-        $exception = new Exception();
+        $exception = new \Exception();
 
         $matcher = $this->callback(function (ErrorRequestModelDto $errorReport) {
-            return $errorReport->timeStamp instanceof DateTime;
+            return $errorReport->timeStamp instanceof \DateTime;
         });
 
         $this->errorReportingApi
             ->expects($this->once())
             ->method('reportError')
-            ->with($matcher);
+            ->with($matcher)
+        ;
 
         $this->sut->reportError($exception);
     }

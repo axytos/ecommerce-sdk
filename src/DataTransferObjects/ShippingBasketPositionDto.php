@@ -11,7 +11,7 @@ class ShippingBasketPositionDto implements DtoInterface
      */
     public $productId;
     /**
-     * @var int|null
+     * @var float|null
      */
     public $quantity;
 }

@@ -6,6 +6,7 @@ interface CheckoutClientInterface
 {
     /**
      * @param string $selectedPaymentMethodId
+     *
      * @return bool
      */
     public function mustShowCreditCheckAgreement($selectedPaymentMethodId);

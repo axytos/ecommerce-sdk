@@ -2,22 +2,20 @@
 
 namespace Axytos\ECommerce\Tests\Unit\Clients\Invoice;
 
-use PHPUnit\Framework\TestCase;
-use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
-use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
-use PHPUnit\Framework\MockObject\MockObject;
 use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
 use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
-use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
-use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
-use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
-use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
+use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
+use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
 use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
+use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
@@ -29,7 +27,12 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrd
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
 use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class InvoiceApiAdapterTest extends TestCase
 {
     /** @var PaymentsApi&MockObject */
@@ -42,12 +45,13 @@ class InvoiceApiAdapterTest extends TestCase
     private $mapper;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter
+     * @var InvoiceApiAdapter
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -77,17 +81,20 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->mapper
             ->method('toDataTransferObject')
             ->with($responseModel, OrderPreCheckResponseDto::class)
-            ->willReturn($responseDto);
+            ->willReturn($responseDto)
+        ;
 
         $this->paymentsApi
             ->method('apiV1PaymentsInvoiceOrderPrecheckPost')
             ->with($requestModel)
-            ->willReturn($responseModel);
+            ->willReturn($responseModel)
+        ;
 
         $actual = $this->sut->precheck($requestDto);
 
@@ -105,12 +112,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderConfirmPost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->confirm($requestDto);
     }
@@ -118,14 +127,15 @@ class InvoiceApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_cancelOrder_sends_cancel_order_request()
+    public function test_cancel_order_sends_cancel_order_request()
     {
         $orderNumber = 'orderNumber';
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderCancelExternalOrderIdPost')
-            ->with($orderNumber);
+            ->with($orderNumber)
+        ;
 
         $this->sut->cancelOrder($orderNumber);
     }
@@ -141,12 +151,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosApiModelsRefundRequestModel::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderRefundPost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->refund($requestDto);
     }
@@ -154,7 +166,7 @@ class InvoiceApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_createInvoice_sends_refund_request()
+    public function test_create_invoice_sends_refund_request()
     {
         $requestDto = $this->createMock(CreateInvoiceRequestDto::class);
         $requestModel = $this->createMock(AxytosApiModelsInvoiceCreationModel::class);
@@ -162,12 +174,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosApiModelsInvoiceCreationModel::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderCreateInvoicePost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->createInvoice($requestDto);
     }
@@ -175,7 +189,7 @@ class InvoiceApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportShipping_sends_refund_request()
+    public function test_report_shipping_sends_refund_request()
     {
         $requestDto = $this->createMock(ReportShippingDto::class);
         $requestModel = $this->createMock(AxytosApiModelsReportShippingModel::class);
@@ -183,12 +197,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosApiModelsReportShippingModel::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderReportshippingPost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->reportShipping($requestDto);
     }
@@ -204,12 +220,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosApiModelsReturnRequestModel::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderReturnPost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->returnOrder($requestDto);
     }
@@ -226,13 +244,15 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toDataTransferObject')
             ->with($responseModel, PaymentResponseDto::class)
-            ->willReturn($responseDto);
+            ->willReturn($responseDto)
+        ;
 
         $this->paymentApi
             ->expects($this->once())
             ->method('apiV1PaymentIdGet')
             ->with($paymentId)
-            ->willReturn($responseModel);
+            ->willReturn($responseModel)
+        ;
 
         $actual = $this->sut->payment($paymentId);
 
@@ -242,7 +262,7 @@ class InvoiceApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_paymentState_returns_response_data_transfer_object()
+    public function test_payment_state_returns_response_data_transfer_object()
     {
         $orderId = 'orderId';
         $responseDto = $this->createMock(PaymentStateResponseDto::class);
@@ -251,13 +271,15 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toDataTransferObject')
             ->with($responseModel, PaymentStateResponseDto::class)
-            ->willReturn($responseDto);
+            ->willReturn($responseDto)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderPaymentstateExternalOrderIdGet')
             ->with($orderId)
-            ->willReturn($responseModel);
+            ->willReturn($responseModel)
+        ;
 
         $actual = $this->sut->paymentState($orderId);
 
@@ -267,7 +289,7 @@ class InvoiceApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_updateOrder_sends_order_update_request()
+    public function test_update_order_sends_order_update_request()
     {
         $requestDto = $this->createMock(UpdateOrderModelDto::class);
         $requestModel = $this->createMock(AxytosApiModelsUpdateOrderModel::class);
@@ -275,12 +297,14 @@ class InvoiceApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($requestDto, AxytosApiModelsUpdateOrderModel::class)
-            ->willReturn($requestModel);
+            ->willReturn($requestModel)
+        ;
 
         $this->paymentsApi
             ->expects($this->once())
             ->method('apiV1PaymentsInvoiceOrderUpdatePost')
-            ->with($requestModel);
+            ->with($requestModel)
+        ;
 
         $this->sut->updateOrder($requestDto);
     }

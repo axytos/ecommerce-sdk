@@ -4,7 +4,10 @@ namespace Axytos\ECommerce\DependencyInjection;
 
 interface ContainerEntryInterface
 {
-    /** @return mixed
-     * @param \Axytos\ECommerce\DependencyInjection\Container $container */
+    /**
+     * @param Container $container
+     *
+     * @return mixed
+     */
     public function getInstance($container);
 }

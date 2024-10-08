@@ -3,17 +3,16 @@
 namespace Axytos\ECommerce\OrderSync;
 
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
-use Axytos\ECommerce\OrderSync\OrderSyncItemRepository;
 
 class OrderSyncWorker
 {
     /**
-     * @var \Axytos\ECommerce\OrderSync\OrderSyncItemRepository
+     * @var OrderSyncItemRepository
      */
     private $orderSyncItemRepository;
 
     /**
-     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 

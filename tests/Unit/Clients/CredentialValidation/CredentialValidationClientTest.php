@@ -5,21 +5,25 @@ namespace Axytos\ECommerce\Tests\Unit\Clients\CredentialValidation;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CredentialValidationClientTest extends TestCase
 {
     /** @var CredentialValidationApiInterface&MockObject */
     private $credentialValidationApi;
 
     /**
-     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient
+     * @var CredentialValidationClient
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -34,11 +38,12 @@ class CredentialValidationClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_validateApiKey_returns_true()
+    public function test_validate_api_key_returns_true()
     {
         $this->credentialValidationApi
             ->method('getCredentialsValidation')
-            ->willReturn(true);
+            ->willReturn(true)
+        ;
 
         $result = $this->sut->validateApiKey();
 
@@ -48,11 +53,12 @@ class CredentialValidationClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_validateApiKey_returns_false()
+    public function test_validate_api_key_returns_false()
     {
         $this->credentialValidationApi
             ->method('getCredentialsValidation')
-            ->willReturn(false);
+            ->willReturn(false)
+        ;
 
         $result = $this->sut->validateApiKey();
 

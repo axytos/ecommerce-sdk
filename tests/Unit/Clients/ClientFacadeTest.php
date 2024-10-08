@@ -10,11 +10,13 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate;
 use Axytos\ECommerce\DependencyInjection\Container;
-use Exception;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ClientFacadeTest extends TestCase
 {
     /** @var CheckoutClientInterface&MockObject */
@@ -23,19 +25,20 @@ class ClientFacadeTest extends TestCase
     /** @var CredentialValidationClientInterface&MockObject */
     private $CredentialValidationClient;
 
-    /** @var ErrorReportingClientInterface&MockObject  */
+    /** @var ErrorReportingClientInterface&MockObject */
     private $errorReportingClient;
 
-    /** @var InvoiceClientInterface&MockObject  */
+    /** @var InvoiceClientInterface&MockObject */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ClientFacade
+     * @var ClientFacade
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -58,7 +61,8 @@ class ClientFacadeTest extends TestCase
 
     /**
      * @param array<string,mixed> $containerConfig
-     * @return \Axytos\ECommerce\DependencyInjection\Container
+     *
+     * @return Container
      */
     private function createContainerMock(array $containerConfig)
     {
@@ -77,7 +81,7 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_mustShowCreditCheckAgreement_delegates_to_checkout_client()
+    public function test_must_show_credit_check_agreement_delegates_to_checkout_client()
     {
         $paymentMethodId = 'paymentMethodId';
         $expected = true;
@@ -85,7 +89,8 @@ class ClientFacadeTest extends TestCase
         $this->checkoutClient
             ->method('mustShowCreditCheckAgreement')
             ->with($paymentMethodId)
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->mustShowCreditCheckAgreement($paymentMethodId);
 
@@ -95,13 +100,14 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_getCreditCheckAgreementInfo_delegates_to_checkout_client()
+    public function test_get_credit_check_agreement_info_delegates_to_checkout_client()
     {
         $expected = 'credit check agreement';
 
         $this->checkoutClient
             ->method('getCreditCheckAgreementInfo')
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->getCreditCheckAgreementInfo();
 
@@ -111,13 +117,14 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_validateApiKey_delegates_to_service_availibility_client()
+    public function test_validate_api_key_delegates_to_service_availibility_client()
     {
         $expected = true;
 
         $this->CredentialValidationClient
             ->method('validateApiKey')
-            ->willReturn($expected);
+            ->willReturn($expected)
+        ;
 
         $actual = $this->sut->validateApiKey();
 
@@ -127,14 +134,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_delegates_to_error_reporting_client()
+    public function test_report_error_delegates_to_error_reporting_client()
     {
-        $throwable = new Exception();
+        $throwable = new \Exception();
 
         $this->errorReportingClient
             ->expects($this->once())
             ->method('reportError')
-            ->with($throwable);
+            ->with($throwable)
+        ;
 
         $this->sut->reportError($throwable);
     }
@@ -152,7 +160,8 @@ class ClientFacadeTest extends TestCase
             ->expects($this->once())
             ->method('precheck')
             ->with($orderContext)
-            ->willReturn($shopAction);
+            ->willReturn($shopAction)
+        ;
 
         $actual = $this->sut->precheck($orderContext);
 
@@ -162,14 +171,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_delegates_to_invoice_client()
+    public function test_confirm_order_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
             ->method('confirmOrder')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->confirmOrder($orderContext);
     }
@@ -177,14 +187,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_cancelOrder_delegates_to_invoice_client()
+    public function test_cancel_order_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
             ->method('cancelOrder')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->cancelOrder($orderContext);
     }
@@ -192,14 +203,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_createInvoice_delegates_to_invoice_client()
+    public function test_create_invoice_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
             ->method('createInvoice')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->createInvoice($orderContext);
     }
@@ -207,14 +219,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportShipping_delegates_to_invoice_client()
+    public function test_report_shipping_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
             ->method('reportShipping')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->reportShipping($orderContext);
     }
@@ -229,7 +242,8 @@ class ClientFacadeTest extends TestCase
         $this->invoiceClient
             ->expects($this->once())
             ->method('returnOrder')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->returnOrder($orderContext);
     }
@@ -244,7 +258,8 @@ class ClientFacadeTest extends TestCase
         $this->invoiceClient
             ->expects($this->once())
             ->method('refund')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->refund($orderContext);
     }
@@ -252,7 +267,7 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_getInvoiceOrderPaymentUpdate_delegates_to_invoice_client()
+    public function test_get_invoice_order_payment_update_delegates_to_invoice_client()
     {
         $paymentId = 'paymentId';
 
@@ -262,7 +277,8 @@ class ClientFacadeTest extends TestCase
             ->expects($this->once())
             ->method('getInvoiceOrderPaymentUpdate')
             ->with($paymentId)
-            ->willReturn($paymentUpdate);
+            ->willReturn($paymentUpdate)
+        ;
 
         $actual = $this->sut->getInvoiceOrderPaymentUpdate($paymentId);
 
@@ -272,14 +288,15 @@ class ClientFacadeTest extends TestCase
     /**
      * @return void
      */
-    public function test_updateOrder_delegates_to_invoice_client()
+    public function test_update_order_delegates_to_invoice_client()
     {
         $orderContext = $this->createMock(InvoiceOrderContextInterface::class);
 
         $this->invoiceClient
             ->expects($this->once())
             ->method('updateOrder')
-            ->with($orderContext);
+            ->with($orderContext)
+        ;
 
         $this->sut->updateOrder($orderContext);
     }

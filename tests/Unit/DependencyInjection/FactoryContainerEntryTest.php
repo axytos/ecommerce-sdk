@@ -7,30 +7,31 @@ use Axytos\ECommerce\DependencyInjection\FactoryContainerEntry;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
+/**
+ * @internal
+ */
 class FactoryContainerEntryTest extends TestCase
 {
     /** @var mixed */
     private $factory;
 
-    /** @var Container|MockObject $container */
+    /** @var Container|MockObject */
     private $container;
 
     /**
-     * @var \Axytos\ECommerce\DependencyInjection\FactoryContainerEntry
+     * @var FactoryContainerEntry
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
     public function beforeEach()
     {
-
-
         $this->container = $this->createMock(Container::class);
 
         $this->factory = function (Container $container) {
@@ -43,14 +44,15 @@ class FactoryContainerEntryTest extends TestCase
     /**
      * @return void
      */
-    public function test_getInstance_returns_instance()
+    public function test_get_instance_returns_instance()
     {
-        $instance = new stdClass();
+        $instance = new \stdClass();
 
         $this->container
-            ->method("get")
+            ->method('get')
             ->with(FactoryContainerEntry::class)
-            ->willReturn($instance);
+            ->willReturn($instance)
+        ;
 
         $actual = $this->sut->getInstance($this->container);
 

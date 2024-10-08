@@ -2,9 +2,7 @@
 
 namespace Axytos\ECommerce\DataMapping;
 
-use Exception;
-
-class DateTimeSerializationException extends Exception
+class DateTimeSerializationException extends \Exception
 {
     /**
      * @var string
@@ -16,7 +14,7 @@ class DateTimeSerializationException extends Exception
     private $lastDateTimeErrors;
 
     /**
-     * @param string $serializedDateTime
+     * @param string       $serializedDateTime
      * @param array<mixed> $lastDateTimeErrors
      */
     public function __construct($serializedDateTime, array $lastDateTimeErrors)
@@ -25,7 +23,7 @@ class DateTimeSerializationException extends Exception
         $this->serializedDateTime = $serializedDateTime;
         $this->lastDateTimeErrors = $lastDateTimeErrors;
 
-        parent::__construct("Cannot convert '$serializedDateTime' to DateTime object!");
+        parent::__construct("Cannot convert '{$serializedDateTime}' to DateTime object!");
     }
 
     /**

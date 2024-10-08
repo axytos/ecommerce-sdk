@@ -23,7 +23,7 @@ class OrderPreCheckResponseDto implements DtoInterface
      */
     public $step;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto|null
+     * @var TransactionMetadataDto|null
      */
     public $transactionMetadata;
     /**

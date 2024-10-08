@@ -2,8 +2,8 @@
 
 namespace Axytos\ECommerce\Tests\Unit\DataMapping;
 
-use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
 use Axytos\ECommerce\DataMapping\DtoInterface;
+use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
 use Axytos\ECommerce\DataTransferObjects\BasketPositionDto;
 use Axytos\ECommerce\DataTransferObjects\CompanyDto;
@@ -63,15 +63,19 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class DtoOpenApiModelMapperTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper
+     * @var DtoOpenApiModelMapper
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -82,12 +86,15 @@ class DtoOpenApiModelMapperTest extends TestCase
 
     /**
      * @dataProvider mappingTestCases
+     *
      * @phpstan-param class-string<DtoInterface> $dtoClassName
      * @phpstan-param class-string<Modelinterface> $modelClassName
      * @phpstan-param DtoInterface $expectedDto
-     * @param string $dtoClassName
-     * @param string $modelClassName
-     * @param \Axytos\ECommerce\DataMapping\DtoInterface $expectedDto
+     *
+     * @param string       $dtoClassName
+     * @param string       $modelClassName
+     * @param DtoInterface $expectedDto
+     *
      * @return void
      */
     #[DataProvider('mappingTestCases')]
@@ -141,7 +148,9 @@ class DtoOpenApiModelMapperTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_all_mappings_tested
+     *
      * @param string $dtoClass
+     *
      * @return void
      */
     #[DataProvider('dataProvider_test_all_mappings_tested')]
@@ -151,7 +160,7 @@ class DtoOpenApiModelMapperTest extends TestCase
             return is_array($mappingTestCase) ? $mappingTestCase[0] : null;
         }, self::mappingTestCases());
 
-        $this->assertContains($dtoClass, $dtoClasses, "Missing test case for DTO mapping of '$dtoClass'!");
+        $this->assertContains($dtoClass, $dtoClasses, "Missing test case for DTO mapping of '{$dtoClass}'!");
     }
 
     /**
@@ -182,7 +191,7 @@ class DtoOpenApiModelMapperTest extends TestCase
     private static function loadDataTransferObjects()
     {
         $globPattern = __DIR__ . '/../../../src/DataTransferObjects/*.php';
-        $namespacePrefix = 'Axytos\\ECommerce\\DataTransferObjects\\';
+        $namespacePrefix = 'Axytos\ECommerce\DataTransferObjects\\';
 
         /** @var array<string> */
         $filepaths = glob($globPattern);

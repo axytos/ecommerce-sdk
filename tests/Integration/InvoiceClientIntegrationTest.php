@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\AxytosECommerceClient;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFakeFactory;
@@ -15,6 +14,9 @@ use Axytos\ECommerce\Tests\Integration\Providers\UserAgentInfoProvider;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class InvoiceClientIntegrationTest extends TestCase
 {
     /**
@@ -23,7 +25,7 @@ class InvoiceClientIntegrationTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFake
+     * @var Fakes\InvoiceOrderContextFake
      */
     private $orderContext;
 
@@ -34,6 +36,7 @@ class InvoiceClientIntegrationTest extends TestCase
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -61,7 +64,7 @@ class InvoiceClientIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function test_precheck_confirm_createInvoice_shipping_return_refund()
+    public function test_precheck_confirm_create_invoice_shipping_return_refund()
     {
         $this->invoiceClient->precheck($this->orderContext);
 
@@ -85,7 +88,6 @@ class InvoiceClientIntegrationTest extends TestCase
      */
     public function test_precheck_confirm_cancel()
     {
-
         $this->invoiceClient->precheck($this->orderContext);
 
         $this->invoiceClient->confirmOrder($this->orderContext);

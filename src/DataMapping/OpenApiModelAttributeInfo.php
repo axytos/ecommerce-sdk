@@ -2,8 +2,6 @@
 
 namespace Axytos\ECommerce\DataMapping;
 
-use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
-
 /**
  * @phpstan-template TModelInterface of \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
  */
@@ -11,9 +9,13 @@ class OpenApiModelAttributeInfo
 {
     /**
      * @phpstan-template TModel of \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
+     *
      * @phpstan-param TModel $oaModel
+     *
      * @phpstan-return OpenApiModelAttributeInfo<TModel>[]
+     *
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $oaModel
+     *
      * @return OpenApiModelAttributeInfo[]
      */
     public static function getAttributeInfos($oaModel)
@@ -22,15 +24,15 @@ class OpenApiModelAttributeInfo
         $oaModelName = get_class($oaModel);
 
         /** @phpstan-var array<string,string> */
-        $names = call_user_func([$oaModelName, "attributeMap"]);
+        $names = call_user_func([$oaModelName, 'attributeMap']);
         /** @phpstan-var array<string,string> */
-        $types = call_user_func([$oaModelName, "openAPITypes"]);
+        $types = call_user_func([$oaModelName, 'openAPITypes']);
         /** @phpstan-var array<string,string> */
-        $formats = call_user_func([$oaModelName, "openAPIFormats"]);
+        $formats = call_user_func([$oaModelName, 'openAPIFormats']);
         /** @phpstan-var array<string,string> */
-        $setters = call_user_func([$oaModelName, "setters"]);
+        $setters = call_user_func([$oaModelName, 'setters']);
         /** @phpstan-var array<string,string> */
-        $getters = call_user_func([$oaModelName, "getters"]);
+        $getters = call_user_func([$oaModelName, 'getters']);
 
         /** @var string[] */
         $keys = array_keys($names);
@@ -80,12 +82,13 @@ class OpenApiModelAttributeInfo
      * @phpstan-param ?string $format
      * @phpstan-param string $getterName
      * @phpstan-param string $setterName
+     *
      * @param string|null $format
-     * @param string $modelName
-     * @param string $name
-     * @param string $typeName
-     * @param string $getterName
-     * @param string $setterName
+     * @param string      $modelName
+     * @param string      $name
+     * @param string      $typeName
+     * @param string      $getterName
+     * @param string      $setterName
      */
     private function __construct(
         $modelName,
@@ -110,6 +113,7 @@ class OpenApiModelAttributeInfo
 
     /**
      * @phpstan-return class-string<TModelInterface>
+     *
      * @return string
      */
     public function getModelName()
@@ -143,18 +147,21 @@ class OpenApiModelAttributeInfo
 
     /**
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $oaModel
+     *
      * @return mixed
      */
     public function getValue($oaModel)
     {
         /** @var callable */
         $getter = [$oaModel, $this->getterName];
+
         return call_user_func($getter);
     }
 
     /**
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $oaModel
-     * @param mixed $value
+     * @param mixed                                                         $value
+     *
      * @return void
      */
     public function setValue($oaModel, $value)

@@ -11,17 +11,17 @@ use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 class ReportUpdate implements OrderSyncCommandInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
@@ -37,6 +37,7 @@ class ReportUpdate implements OrderSyncCommandInterface
 
     /**
      * @param \Axytos\ECommerce\OrderSync\ShopSystemOrderInterface $shopSystemOrder
+     *
      * @return void
      */
     public function execute($shopSystemOrder)

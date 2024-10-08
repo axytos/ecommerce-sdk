@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
-use DateTimeImmutable;
 
 class PaymentResponseDto implements DtoInterface
 {

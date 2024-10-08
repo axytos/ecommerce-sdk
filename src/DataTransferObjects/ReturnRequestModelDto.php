@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
-use DateTimeInterface;
 
 class ReturnRequestModelDto implements DtoInterface
 {
@@ -20,7 +19,7 @@ class ReturnRequestModelDto implements DtoInterface
      */
     public $returnDate;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection|null
+     * @var ReturnPositionModelDtoCollection|null
      */
     public $positions;
 }

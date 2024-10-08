@@ -8,6 +8,7 @@ class ComposerPackageInfoProvider
 {
     /**
      * @param string $packageName
+     *
      * @return bool
      */
     public function isInstalled($packageName)
@@ -17,6 +18,7 @@ class ComposerPackageInfoProvider
 
     /**
      * @param string $packageName
+     *
      * @return string|null
      */
     public function getVersion($packageName)

@@ -36,15 +36,13 @@ use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
-use DateTime;
-use DateTimeImmutable;
 
 require_once __DIR__ . '/DtoFactory.php';
 
 class DtoFactory
 {
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto
+     * @return ErrorRequestModelDto
      */
     public static function createErrorRequestModelDto()
     {
@@ -57,7 +55,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto
+     * @return OrderCreateRequestDto
      */
     public static function createOrderCreateRequestDto()
     {
@@ -74,7 +72,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto
+     * @return OrderPreCheckRequestDto
      */
     public static function createOrderPreCheckRequestDto()
     {
@@ -93,7 +91,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto
+     * @return OrderPreCheckResponseDto
      */
     public static function createOrderPreCheckResponseDto()
     {
@@ -108,7 +106,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto
+     * @return TransactionMetadataDto
      */
     public static function createTransactionMetadataDto()
     {
@@ -122,7 +120,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     * @return CustomerDataDto
      */
     public static function createCustomerDataDto()
     {
@@ -136,7 +134,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CompanyDto
+     * @return CompanyDto
      */
     public static function createCompanyDto()
     {
@@ -147,7 +145,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
+     * @return BasketDto
      */
     public static function createBasketDto()
     {
@@ -164,15 +162,16 @@ class DtoFactory
 
     /**
      * @param int|null $id
-     * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
+     *
+     * @return BasketPositionDto
      */
     public static function createBasketPositionDto($id = null)
     {
         $basketPosition = new BasketPositionDto();
-        $basketPosition->productId = "productId$id";
-        $basketPosition->productName = "productName$id";
-        $basketPosition->productCategory = "productCategory$id";
-        $basketPosition->quantity = 5;
+        $basketPosition->productId = "productId{$id}";
+        $basketPosition->productName = "productName{$id}";
+        $basketPosition->productCategory = "productCategory{$id}";
+        $basketPosition->quantity = 5.5;
         $basketPosition->taxPercent = 0.19;
         $basketPosition->netPositionTotal = 12.35;
         $basketPosition->grossPositionTotal = 55.66;
@@ -181,7 +180,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto
+     * @return CreateInvoiceRequestDto
      */
     public static function createCreateInvoiceRequestDto()
     {
@@ -196,7 +195,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     * @return CreateInvoiceBasketDto
      */
     public static function createCreateInvoiceBasketDto()
     {
@@ -214,12 +213,13 @@ class DtoFactory
 
     /**
      * @param int|null $id
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDto
+     *
+     * @return CreateInvoiceBasketPositionDto
      */
     public static function createCreateInvoiceBasketPositionDto($id = null)
     {
         $basketPosition = new CreateInvoiceBasketPositionDto();
-        $basketPosition->productId = "productId$id";
+        $basketPosition->productId = "productId{$id}";
         $basketPosition->quantity = 5;
         $basketPosition->taxPercent = 0.19;
         $basketPosition->netPricePerUnit = 2.47;
@@ -231,7 +231,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDto
+     * @return CreateInvoiceTaxGroupDto
      */
     public static function createCreateInvoiceTaxGroupDto()
     {
@@ -244,7 +244,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     * @return DeliveryAddressDto
      */
     public static function createDeliveryAddressDto()
     {
@@ -267,7 +267,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     * @return InvoiceAddressDto
      */
     public static function createInvoiceAddressDto()
     {
@@ -290,7 +290,7 @@ class DtoFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto
+     * @return ReturnRequestModelDto
      */
     public static function createReturnRequestModelDto()
     {
@@ -301,17 +301,19 @@ class DtoFactory
         $dto->externalSubOrderId = 'externalSubOrderId';
         $dto->returnDate = self::createDateTime();
         $dto->positions = new ReturnPositionModelDtoCollection(...$positions);
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto
+     * @return ReturnPositionModelDto
      */
     public static function createReturnPositionModelDto()
     {
         $dto = new ReturnPositionModelDto();
         $dto->quantityToReturn = 5;
         $dto->productId = 'productId';
+
         return $dto;
     }
 
@@ -320,16 +322,16 @@ class DtoFactory
      */
     public static function createDateTime()
     {
-        $now = date_format(new DateTime(), DateTime::ATOM); // now with less precision, i.e. only seconds
+        $now = date_format(new \DateTime(), \DateTime::ATOM); // now with less precision, i.e. only seconds
 
         /**
          * @phpstan-ignore-next-line
          */
-        return DateTimeImmutable::createFromFormat(DateTime::ATOM, $now);
+        return \DateTimeImmutable::createFromFormat(\DateTime::ATOM, $now);
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentResponseDto
+     * @return PaymentResponseDto
      */
     public static function createPaymentResponseDto()
     {
@@ -340,21 +342,23 @@ class DtoFactory
         $dto->externalOrderId = 'externalOrderId';
         $dto->amount = 42;
         $dto->currency = 'currency';
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto
+     * @return PaymentStateResponseDto
      */
     public static function createPaymentStateResponseDto()
     {
         $dto = new PaymentStateResponseDto();
         $dto->paymentState = 'paymentState';
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     * @return RefundBasketDto
      */
     public static function createRefundBasketDto()
     {
@@ -366,11 +370,12 @@ class DtoFactory
         $dto->grossTotal = 42;
         $dto->positions = new RefundBasketPositionDtoCollection(...$positions);
         $dto->taxGroups = new RefundBasketTaxGroupDtoCollection(...$taxGroups);
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDto
+     * @return RefundBasketPositionDto
      */
     public static function createRefundBasketPositoinDto()
     {
@@ -378,11 +383,12 @@ class DtoFactory
         $dto->productId = 'productId';
         $dto->netRefundTotal = 42;
         $dto->grossRefundTotal = 42;
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDto
+     * @return RefundBasketTaxGroupDto
      */
     public static function createRefundBasketTaxGroupDto()
     {
@@ -390,11 +396,12 @@ class DtoFactory
         $dto->taxPercent = 29;
         $dto->valueToTax = 42;
         $dto->total = 42;
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundRequestDto
+     * @return RefundRequestDto
      */
     public static function createRefundRequestDto()
     {
@@ -402,11 +409,12 @@ class DtoFactory
         $dto->externalOrderId = 'externalOrderId';
         $dto->originalInvoiceNumber = 'originalInvoiceNumber';
         $dto->basket = self::createRefundBasketDto();
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ReportShippingDto
+     * @return ReportShippingDto
      */
     public static function createReportShippingDto()
     {
@@ -415,22 +423,24 @@ class DtoFactory
         $dto = new ReportShippingDto();
         $dto->externalOrderId = 'externalOrderId';
         $dto->basketPositions = new ShippingBasketPositionDtoCollection(...$positions);
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDto
+     * @return ShippingBasketPositionDto
      */
     public static function createShippingBasketPositionDto()
     {
         $dto = new ShippingBasketPositionDto();
         $dto->productId = 'productId';
         $dto->quantity = 5;
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto
+     * @return ShippingTrackingInformationRequestModelDto
      */
     public static function createShippingTrackingInformationRequestModelDto()
     {
@@ -441,17 +451,19 @@ class DtoFactory
         $dto->logistician = 'logistician';
         $dto->deliveryInformation = 'deliveryInformation';
         $dto->deliveryAddress = self::createDeliveryAddressDto();
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto
+     * @return UpdateOrderModelDto
      */
     public static function createUpdateOrderModelDto()
     {
         $dto = new UpdateOrderModelDto();
         $dto->externalOrderId = 'externalOrderId';
         $dto->basket = self::createBasketDto();
+
         return $dto;
     }
 }

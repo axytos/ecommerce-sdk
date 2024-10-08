@@ -6,8 +6,8 @@ use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
-use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
+use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsOrderCancellationReversalRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
@@ -21,15 +21,15 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrd
 class InvoiceApiAdapter implements InvoiceApiInterface
 {
     /**
-     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi
+     * @var PaymentsApi
      */
     private $paymentsApi;
     /**
-     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi
+     * @var PaymentApi
      */
     private $paymentApi;
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper
+     * @var DtoOpenApiModelMapper
      */
     private $mapper;
 
@@ -45,7 +45,8 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto $requestDto
-     * @return \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto
+     *
+     * @return OrderPreCheckResponseDto
      */
     public function precheck($requestDto)
     {
@@ -58,6 +59,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto $requestDto
+     *
      * @return void
      */
     public function confirm($requestDto)
@@ -69,6 +71,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param string $orderNumber
+     *
      * @return void
      */
     public function cancelOrder($orderNumber)
@@ -78,6 +81,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param string $orderNumber
+     *
      * @return void
      */
     public function uncancelOrder($orderNumber)
@@ -89,6 +93,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto $requestDto
+     *
      * @return void
      */
     public function createInvoice($requestDto)
@@ -100,6 +105,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ReportShippingDto $reportDto
+     *
      * @return void
      */
     public function reportShipping($reportDto)
@@ -110,6 +116,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto $trackingInformationDto
+     *
      * @return void
      */
     public function trackingInformation($trackingInformationDto)
@@ -120,6 +127,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\RefundRequestDto $requestDto
+     *
      * @return void
      */
     public function refund($requestDto)
@@ -130,6 +138,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto $requestDto
+     *
      * @return void
      */
     public function returnOrder($requestDto)
@@ -140,26 +149,31 @@ class InvoiceApiAdapter implements InvoiceApiInterface
 
     /**
      * @param string $paymentId
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentResponseDto
+     *
+     * @return PaymentResponseDto
      */
     public function payment($paymentId)
     {
         $response = $this->paymentApi->apiV1PaymentIdGet($paymentId);
+
         return $this->mapper->toDataTransferObject($response, PaymentResponseDto::class);
     }
 
     /**
      * @param string $orderId
-     * @return \Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto
+     *
+     * @return PaymentStateResponseDto
      */
     public function paymentState($orderId)
     {
         $response = $this->paymentsApi->apiV1PaymentsInvoiceOrderPaymentstateExternalOrderIdGet($orderId);
+
         return $this->mapper->toDataTransferObject($response, PaymentStateResponseDto::class);
     }
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto $updateOrderModelDto
+     *
      * @return void
      */
     public function updateOrder($updateOrderModelDto)

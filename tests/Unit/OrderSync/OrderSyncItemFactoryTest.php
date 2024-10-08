@@ -12,15 +12,19 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class OrderSyncItemFactoryTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\OrderSync\OrderSyncItemFactory
+     * @var OrderSyncItemFactory
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -49,7 +53,7 @@ class OrderSyncItemFactoryTest extends TestCase
     /**
      * @return void
      */
-    public function test_createMany()
+    public function test_create_many()
     {
         /** @var ShopSystemOrderInterface[]&MockObject[] */
         $shopSystemOrders = [

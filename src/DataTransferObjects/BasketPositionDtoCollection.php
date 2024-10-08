@@ -11,13 +11,13 @@ class BasketPositionDtoCollection extends DtoCollection
 {
     /**
      * @phpstan-return class-string<BasketPositionDto>
+     *
      * @return string
      */
     public static function getElementClass()
     {
         return BasketPositionDto::class;
     }
-
 
     /**
      * @phpstan-param BasketPositionDto ...$values

@@ -6,8 +6,10 @@ use Axytos\ECommerce\DependencyInjection\Container;
 use Axytos\ECommerce\DependencyInjection\InstanceContainerEntry;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
+/**
+ * @internal
+ */
 class InstanceContainerEntryTest extends TestCase
 {
     /**
@@ -16,18 +18,19 @@ class InstanceContainerEntryTest extends TestCase
     private $instance;
 
     /**
-     * @var \Axytos\ECommerce\DependencyInjection\InstanceContainerEntry
+     * @var InstanceContainerEntry
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
     public function beforeEach()
     {
-        $this->instance = new stdClass();
+        $this->instance = new \stdClass();
 
         $this->sut = new InstanceContainerEntry($this->instance);
     }
@@ -35,7 +38,7 @@ class InstanceContainerEntryTest extends TestCase
     /**
      * @return void
      */
-    public function test_getInstance_returns_instance()
+    public function test_get_instance_returns_instance()
     {
         $container = $this->createMock(Container::class);
 

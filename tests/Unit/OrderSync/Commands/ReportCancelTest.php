@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportCancelTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportCancelTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportCancel
+     * @var ReportCancel
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,9 +48,11 @@ class ReportCancelTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCancelReported
      * @param bool $hasBeenCanceled
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -68,9 +74,11 @@ class ReportCancelTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCancelReported
      * @param bool $hasBeenCanceled
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -89,9 +97,11 @@ class ReportCancelTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCancelReported
      * @param bool $hasBeenCanceled
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -102,7 +112,7 @@ class ReportCancelTest extends TestCase
 
         $shopSystemOrder->method('hasCancelReported')->willReturn($hasCancelReported);
         $shopSystemOrder->method('hasBeenCanceled')->willReturn($hasBeenCanceled);
-        $this->invoiceClient->method('cancelOrder')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('cancelOrder')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder->expects($this->exactly($reportRefundInvocationCount))->method('saveHasCancelReported');
 
@@ -119,7 +129,7 @@ class ReportCancelTest extends TestCase
 
         $shopSystemOrder->method('hasCancelReported')->willReturn(false);
         $shopSystemOrder->method('hasBeenCanceled')->willReturn(true);
-        $this->invoiceClient->method('cancelOrder')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('cancelOrder')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveHasCancelReported');

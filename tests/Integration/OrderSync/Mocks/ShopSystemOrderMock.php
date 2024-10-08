@@ -17,7 +17,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     private $config;
 
     /**
-     * @param string|int|null $orderNumber
+     * @param string|int|null                  $orderNumber
      * @param array<string,array<string,bool>> $config
      */
     public function __construct($orderNumber, $config)
@@ -50,9 +50,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return $this->orderNumber;
     }
 
-    //==================================================================================
+    // ==================================================================================
     // Transaction
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return void
@@ -75,9 +75,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
     }
 
-    //==================================================================================
+    // ==================================================================================
     // CreateInvoice
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -86,6 +86,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasCreateInvoiceReported'];
     }
+
     /**
      * @return void
      */
@@ -93,6 +94,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         $this->config['actual']['saveHasCreateInvoiceReported'] = true;
     }
+
     /**
      * @return bool
      */
@@ -100,6 +102,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasBeenInvoiced'];
     }
+
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
@@ -108,10 +111,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return new InvoiceOrderContextMock($this);
     }
 
-
-    //==================================================================================
+    // ==================================================================================
     // Cancel
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -120,6 +122,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasCancelReported'];
     }
+
     /**
      * @return void
      */
@@ -127,6 +130,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         $this->config['actual']['saveHasCancelReported'] = true;
     }
+
     /**
      * @return bool
      */
@@ -134,6 +138,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasBeenCanceled'];
     }
+
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
@@ -142,9 +147,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return new InvoiceOrderContextMock($this);
     }
 
-    //==================================================================================
+    // ==================================================================================
     // Refund
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -153,6 +158,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasRefundReported'];
     }
+
     /**
      * @return void
      */
@@ -160,6 +166,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         $this->config['actual']['saveHasRefundReported'] = true;
     }
+
     /**
      * @return bool
      */
@@ -167,6 +174,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasBeenRefunded'];
     }
+
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
@@ -175,9 +183,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return new InvoiceOrderContextMock($this);
     }
 
-    //==================================================================================
+    // ==================================================================================
     // Shipping
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -186,6 +194,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasShippingReported'];
     }
+
     /**
      * @return void
      */
@@ -193,6 +202,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         $this->config['actual']['saveHasShippingReported'] = true;
     }
+
     /**
      * @return bool
      */
@@ -200,6 +210,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasBeenShipped'];
     }
+
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
@@ -208,9 +219,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return new InvoiceOrderContextMock($this);
     }
 
-    //==================================================================================
+    // ==================================================================================
     // Tracking Information
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -219,6 +230,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasNewTrackingInformation'];
     }
+
     /**
      * @return void
      */
@@ -226,6 +238,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         $this->config['actual']['saveNewTrackingInformation'] = true;
     }
+
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
@@ -234,9 +247,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
         return new InvoiceOrderContextMock($this);
     }
 
-    //==================================================================================
+    // ==================================================================================
     // Order Basket Updates
-    //==================================================================================
+    // ==================================================================================
 
     /**
      * @return bool
@@ -245,6 +258,7 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     {
         return $this->config['order']['hasBasketUpdates'];
     }
+
     /**
      * @return void
      */
