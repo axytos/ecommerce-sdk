@@ -2,29 +2,28 @@
 
 namespace Axytos\ECommerce\Clients;
 
-use Throwable;
-use Axytos\ECommerce\DependencyInjection\Container;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
+use Axytos\ECommerce\DependencyInjection\Container;
 
 class ClientFacade implements CheckoutClientInterface, CredentialValidationClientInterface, ErrorReportingClientInterface, InvoiceClientInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface
+     * @var CheckoutClientInterface
      */
     private $checkoutClient;
     /**
-     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface
+     * @var CredentialValidationClientInterface
      */
     private $CredentialValidationClient;
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
@@ -38,6 +37,7 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
 
     /**
      * @param string $selectedPaymentMethodId
+     *
      * @return bool
      */
     public function mustShowCreditCheckAgreement($selectedPaymentMethodId)
@@ -63,6 +63,7 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
 
     /**
      * @param \Throwable $throwable
+     *
      * @return void
      */
     public function reportError($throwable)
@@ -71,7 +72,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return string
      */
     public function precheck($orderContext)
@@ -80,7 +82,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function confirmOrder($orderContext)
@@ -89,7 +92,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function cancelOrder($orderContext)
@@ -98,7 +102,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function uncancelOrder($orderContext)
@@ -107,7 +112,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function createInvoice($orderContext)
@@ -116,7 +122,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function reportShipping($orderContext)
@@ -125,7 +132,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function trackingInformation($orderContext)
@@ -134,7 +142,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function refund($orderContext)
@@ -143,7 +152,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function returnOrder($orderContext)
@@ -153,7 +163,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
 
     /**
      * @param string $paymentId
-     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     *
+     * @return Invoice\InvoiceOrderPaymentUpdate
      */
     public function getInvoiceOrderPaymentUpdate($paymentId)
     {
@@ -161,7 +172,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function updateOrder($orderContext)
@@ -170,8 +182,8 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
     }
 
     /**
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
      *
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
      * @return bool
      */
     public function hasBeenPaid($orderContext)

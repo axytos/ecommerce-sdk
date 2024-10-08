@@ -15,7 +15,7 @@ class RefundRequestDto implements DtoInterface
      */
     public $originalInvoiceNumber;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketDto|null
+     * @var RefundBasketDto|null
      */
     public $basket;
 }

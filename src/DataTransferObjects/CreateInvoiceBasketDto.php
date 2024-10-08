@@ -15,11 +15,11 @@ class CreateInvoiceBasketDto implements DtoInterface
      */
     public $grossTotal;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketPositionDtoCollection
+     * @var CreateInvoiceBasketPositionDtoCollection
      */
     public $positions;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceTaxGroupDtoCollection
+     * @var CreateInvoiceTaxGroupDtoCollection
      */
     public $taxGroups;
 }

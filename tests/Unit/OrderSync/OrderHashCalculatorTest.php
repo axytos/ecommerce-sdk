@@ -13,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class OrderHashCalculatorTest extends TestCase
 {
     /**
@@ -37,6 +40,7 @@ class OrderHashCalculatorTest extends TestCase
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -54,7 +58,7 @@ class OrderHashCalculatorTest extends TestCase
         $basketPosition1->productId = '234432323';
         $basketPosition1->productName = 'Funny Toy';
         $basketPosition1->productCategory = 'Toys';
-        $basketPosition1->quantity = 3;
+        $basketPosition1->quantity = 3.3;
         $basketPosition1->taxPercent = 0.19;
         $basketPosition1->netPricePerUnit = 10.0;
         $basketPosition1->grossPricePerUnit = 11.9;
@@ -65,7 +69,7 @@ class OrderHashCalculatorTest extends TestCase
         $basketPosition2->productId = '34452321';
         $basketPosition2->productName = 'Unfunny Toy';
         $basketPosition2->productCategory = 'Toys';
-        $basketPosition2->quantity = 1;
+        $basketPosition2->quantity = 1.1;
         $basketPosition2->taxPercent = 0.19;
         $basketPosition2->netPricePerUnit = 100.0;
         $basketPosition2->grossPricePerUnit = 119.0;
@@ -85,7 +89,7 @@ class OrderHashCalculatorTest extends TestCase
     /**
      * @return void
      */
-    public function test_computeBasketHash_computes_hash_correctly()
+    public function test_compute_basket_hash_computes_hash_correctly()
     {
         $serializedData = [
             'prop1' => 1,
@@ -101,15 +105,18 @@ class OrderHashCalculatorTest extends TestCase
 
         $order
             ->expects($this->once())
-            ->method('getBasket');
+            ->method('getBasket')
+        ;
         $this->dtoArrayMapper
             ->expects($this->once())
             ->method('toArray')
-            ->with($this->testBasket);
+            ->with($this->testBasket)
+        ;
         $this->hashAlgorithm
             ->expects($this->once())
             ->method('compute')
-            ->with('a:2:{s:5:"prop1";i:1;s:5:"prop2";s:4:"data";}');
+            ->with('a:2:{s:5:"prop1";i:1;s:5:"prop2";s:4:"data";}')
+        ;
 
         $actual = $this->sut->computeBasketHash($order);
         $this->assertEquals($hashedData, $actual);

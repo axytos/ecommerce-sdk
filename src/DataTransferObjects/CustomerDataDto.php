@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
-use DateTimeInterface;
 
 class CustomerDataDto implements DtoInterface
 {
@@ -23,7 +22,7 @@ class CustomerDataDto implements DtoInterface
     public $email;
 
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CompanyDto|null
+     * @var CompanyDto|null
      */
     public $company;
 }

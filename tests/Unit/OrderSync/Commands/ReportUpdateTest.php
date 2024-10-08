@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportUpdateTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportUpdateTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportUpdate
+     * @var ReportUpdate
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,9 +48,11 @@ class ReportUpdateTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasBasketUpdates
      * @param bool $hasBeenCanceled
-     * @param int $updateOrderInvocationCount
+     * @param int  $updateOrderInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -64,16 +70,19 @@ class ReportUpdateTest extends TestCase
         $this->invoiceClient
             ->expects($this->exactly($updateOrderInvocationCount))
             ->method('updateOrder')
-            ->with($reportData);
+            ->with($reportData)
+        ;
 
         $this->sut->execute($shopSystemOrder);
     }
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasBasketUpdates
      * @param bool $hasBeenCanceled
-     * @param int $saveBasketUpdatesReportedInvocationCount
+     * @param int  $saveBasketUpdatesReportedInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -87,16 +96,19 @@ class ReportUpdateTest extends TestCase
 
         $shopSystemOrder
             ->expects($this->exactly($saveBasketUpdatesReportedInvocationCount))
-            ->method('saveBasketUpdatesReported');
+            ->method('saveBasketUpdatesReported')
+        ;
 
         $this->sut->execute($shopSystemOrder);
     }
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasBasketUpdates
      * @param bool $hasBeenCanceled
-     * @param int $saveBasketUpdatesReportedInvocationCount
+     * @param int  $saveBasketUpdatesReportedInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -107,11 +119,12 @@ class ReportUpdateTest extends TestCase
 
         $shopSystemOrder->method('hasBasketUpdates')->willReturn($hasBasketUpdates);
         $shopSystemOrder->method('hasBeenCanceled')->willReturn($hasBeenCanceled);
-        $this->invoiceClient->method('updateOrder')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('updateOrder')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder
             ->expects($this->exactly($saveBasketUpdatesReportedInvocationCount))
-            ->method('saveBasketUpdatesReported');
+            ->method('saveBasketUpdatesReported')
+        ;
 
         $this->sut->execute($shopSystemOrder);
     }
@@ -126,7 +139,7 @@ class ReportUpdateTest extends TestCase
 
         $shopSystemOrder->method('hasBasketUpdates')->willReturn(true);
         $shopSystemOrder->method('hasBeenCanceled')->willReturn(false);
-        $this->invoiceClient->method('updateOrder')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('updateOrder')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveBasketUpdatesReported');

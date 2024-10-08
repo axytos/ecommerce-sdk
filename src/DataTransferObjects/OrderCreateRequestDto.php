@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
-use DateTimeInterface;
 
 class OrderCreateRequestDto implements DtoInterface
 {
@@ -16,23 +15,23 @@ class OrderCreateRequestDto implements DtoInterface
      */
     public $date;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     * @var CustomerDataDto
      */
     public $personalData;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     * @var InvoiceAddressDto
      */
     public $invoiceAddress;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     * @var DeliveryAddressDto
      */
     public $deliveryAddress;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\BasketDto
+     * @var BasketDto
      */
     public $basket;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto
+     * @var OrderPreCheckResponseDto
      */
     public $orderPrecheckResponse;
 }

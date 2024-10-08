@@ -11,6 +11,7 @@ class RefundBasketPositionDtoCollection extends DtoCollection
 {
     /**
      * @phpstan-return class-string<RefundBasketPositionDto>
+     *
      * @return string
      */
     public static function getElementClass()

@@ -3,15 +3,6 @@
 namespace Axytos\ECommerce\Tests\Integration\Fakes;
 
 use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
-use Axytos\ECommerce\DataTransferObjects\BasketDto;
-use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto;
-use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
-use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
-use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
-use Axytos\ECommerce\DataTransferObjects\RefundBasketDto;
-use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
-use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
-use DateTimeInterface;
 
 class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 {
@@ -91,6 +82,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param string $orderNumber
+     *
      * @return void
      */
     public function setOrderNumber($orderNumber)
@@ -108,6 +100,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param string $invoiceNumber
+     *
      * @return void
      */
     public function setOrderInvoiceNumber($invoiceNumber)
@@ -125,6 +118,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \DateTimeInterface $orderDateTime
+     *
      * @return void
      */
     public function setOrderDateTime($orderDateTime)
@@ -142,6 +136,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\CustomerDataDto $personalData
+     *
      * @return void
      */
     public function setPersonalData($personalData)
@@ -159,6 +154,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto $invoiceAddress
+     *
      * @return void
      */
     public function setInvoiceAddress($invoiceAddress)
@@ -176,6 +172,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto $deliveryAddress
+     *
      * @return void
      */
     public function setDeliveryAddress($deliveryAddress)
@@ -193,6 +190,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
+     *
      * @return void
      */
     public function setBasket($basket)
@@ -210,6 +208,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\RefundBasketDto $refundBasket
+     *
      * @return void
      */
     public function setRefundBasket($refundBasket)
@@ -227,6 +226,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto $createInvoiceBasket
+     *
      * @return void
      */
     public function setCreateInvoiceBasket($createInvoiceBasket)
@@ -244,6 +244,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection $shippingBasketPositions
+     *
      * @return void
      */
     public function setShippingBasketPositions($shippingBasketPositions)
@@ -261,6 +262,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param mixed[] $data
+     *
      * @return void
      */
     public function setPreCheckResponseData($data)
@@ -278,6 +280,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection $returnPositions
+     *
      * @return void
      */
     public function setReturnPositions($returnPositions)
@@ -295,6 +298,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param float $deliveryWeight
+     *
      * @return void
      */
     public function setDeliveryWeight($deliveryWeight)
@@ -312,6 +316,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param string[] $trackingIds
+     *
      * @return void
      */
     public function setTrackingIds($trackingIds)
@@ -329,6 +334,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param string $logistician
+     *
      * @return void
      */
     public function setLogistician($logistician)
@@ -346,6 +352,7 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
 
     /**
      * @param string $deliveryInformation
+     *
      * @return void
      */
     public function setDeliveryInformation($deliveryInformation)

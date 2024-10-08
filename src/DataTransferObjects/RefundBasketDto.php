@@ -15,11 +15,11 @@ class RefundBasketDto implements DtoInterface
      */
     public $netTotal;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketPositionDtoCollection|null
+     * @var RefundBasketPositionDtoCollection|null
      */
     public $positions;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDtoCollection|null
+     * @var RefundBasketTaxGroupDtoCollection|null
      */
     public $taxGroups;
 }

@@ -2,14 +2,13 @@
 
 namespace Axytos\ECommerce\Clients\CredentialValidation;
 
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
 use Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 
 class CredentialValidationApiAdapter implements CredentialValidationApiInterface
 {
     /**
-     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\CredentialsApi
+     * @var CredentialsApi
      */
     private $credentialsApi;
 
@@ -25,6 +24,7 @@ class CredentialValidationApiAdapter implements CredentialValidationApiInterface
     {
         try {
             $this->credentialsApi->apiV1CredentialsValidateGetWithHttpInfo();
+
             return true;
         } catch (ApiException $e) {
             return false;

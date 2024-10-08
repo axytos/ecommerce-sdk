@@ -11,7 +11,8 @@ class ContainerBuilder
 
     /**
      * @param mixed $instance
-     * @param string ...$aliasNames
+     * @param mixed ...$aliasNames
+     *
      * @return void
      */
     public function registerInstance($instance, ...$aliasNames)
@@ -23,6 +24,7 @@ class ContainerBuilder
 
     /**
      * @param mixed[] $instanceMap
+     *
      * @return void
      */
     public function registerInstanceMap($instanceMap)
@@ -33,8 +35,9 @@ class ContainerBuilder
     }
 
     /**
-     * @param string $aliasName
+     * @param string   $aliasName
      * @param callable $factory
+     *
      * @return void
      */
     public function registerFactory($aliasName, $factory)
@@ -43,7 +46,7 @@ class ContainerBuilder
     }
 
     /**
-     * @return \Axytos\ECommerce\DependencyInjection\Container
+     * @return Container
      */
     public function build()
     {

@@ -2,9 +2,7 @@
 
 namespace Axytos\ECommerce\DependencyInjection;
 
-use Exception;
-
-class NotFoundException extends Exception
+class NotFoundException extends \Exception
 {
     /**
      * @param string $id
@@ -12,6 +10,6 @@ class NotFoundException extends Exception
     public function __construct($id)
     {
         $id = (string) $id;
-        parent::__construct("Container does not contain ID: $id");
+        parent::__construct("Container does not contain ID: {$id}");
     }
 }

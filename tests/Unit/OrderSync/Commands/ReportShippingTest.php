@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportShippingTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportShippingTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportShipping
+     * @var ReportShipping
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,9 +48,11 @@ class ReportShippingTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasShippingReported
      * @param bool $hasBeenShipped
-     * @param int $reportShippingInvocationCount
+     * @param int  $reportShippingInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -68,9 +74,11 @@ class ReportShippingTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasShippingReported
      * @param bool $hasBeenShipped
-     * @param int $reportShippingInvocationCount
+     * @param int  $reportShippingInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -89,9 +97,11 @@ class ReportShippingTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasShippingReported
      * @param bool $hasBeenShipped
-     * @param int $reportShippingInvocationCount
+     * @param int  $reportShippingInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -102,7 +112,7 @@ class ReportShippingTest extends TestCase
 
         $shopSystemOrder->method('hasShippingReported')->willReturn($hasShippingReported);
         $shopSystemOrder->method('hasBeenShipped')->willReturn($hasBeenShipped);
-        $this->invoiceClient->method('reportShipping')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('reportShipping')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder->expects($this->exactly($reportShippingInvocationCount))->method('saveHasShippingReported');
 
@@ -119,7 +129,7 @@ class ReportShippingTest extends TestCase
 
         $shopSystemOrder->method('hasShippingReported')->willReturn(false);
         $shopSystemOrder->method('hasBeenShipped')->willReturn(true);
-        $this->invoiceClient->method('reportShipping')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('reportShipping')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveHasShippingReported');

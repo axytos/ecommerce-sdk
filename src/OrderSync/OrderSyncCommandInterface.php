@@ -6,6 +6,7 @@ interface OrderSyncCommandInterface
 {
     /**
      * @param ShopSystemOrderInterface $shopSystemOrder
+     *
      * @return void
      */
     public function execute($shopSystemOrder);

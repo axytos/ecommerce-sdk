@@ -4,7 +4,6 @@ namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 use Axytos\ECommerce\AxytosECommerceClient;
-use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
 use Axytos\ECommerce\Clients\Checkout\CreditCheckAgreementLoadFailedException;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiHostProvider;
@@ -16,6 +15,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class CheckoutClientIntegrationTest extends TestCase
 {
     /**
@@ -25,6 +27,7 @@ class CheckoutClientIntegrationTest extends TestCase
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -36,7 +39,7 @@ class CheckoutClientIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function test_getCreditCheckAgreementInfo()
+    public function test_get_credit_check_agreement_info()
     {
         $creditCheckAgreement = $this->checkoutClient->getCreditCheckAgreementInfo();
 
@@ -48,7 +51,7 @@ class CheckoutClientIntegrationTest extends TestCase
     /**
      * @return void
      */
-    public function test_getCreditCheckAgreementInfo_throws()
+    public function test_get_credit_check_agreement_info_throws()
     {
         $this->expectException(CreditCheckAgreementLoadFailedException::class);
 

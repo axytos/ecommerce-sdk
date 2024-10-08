@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\Tests\Integration;
 
 use Axytos\ECommerce\AxytosECommerceClient;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiHostProvider;
 use Axytos\ECommerce\Tests\Integration\Providers\ApiKeyProvider;
@@ -14,6 +13,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ErrorReportingClientIntegrationTest extends TestCase
 {
     /**
@@ -23,6 +25,7 @@ class ErrorReportingClientIntegrationTest extends TestCase
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -33,11 +36,13 @@ class ErrorReportingClientIntegrationTest extends TestCase
 
     /**
      * @dataProvider reportErrorDataProvider
+     *
      * @param string $message
+     *
      * @return void
      */
     #[DataProvider('reportErrorDataProvider')]
-    public function test_reportError($message)
+    public function test_report_error($message)
     {
         try {
             throw new \Exception($message);
@@ -57,7 +62,7 @@ class ErrorReportingClientIntegrationTest extends TestCase
     {
         return [
             ['Error Message'],
-            [''] // no error message
+            [''], // no error message
         ];
     }
 }

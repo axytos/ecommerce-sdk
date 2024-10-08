@@ -20,20 +20,19 @@ class OrderSyncItem implements OrderSyncItemInterface
     private $shopSystemOrder;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
-
 
     public function __construct(
         ShopSystemOrderInterface $shopSystemOrder,
@@ -121,6 +120,7 @@ class OrderSyncItem implements OrderSyncItemInterface
 
     /**
      * @param OrderSyncCommandInterface $command
+     *
      * @return void
      */
     public function execute($command)

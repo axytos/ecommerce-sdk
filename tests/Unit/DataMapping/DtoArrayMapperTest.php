@@ -10,15 +10,19 @@ use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/DtoFactory.php';
 
+/**
+ * @internal
+ */
 class DtoArrayMapperTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoArrayMapper
+     * @var DtoArrayMapper
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -29,10 +33,12 @@ class DtoArrayMapperTest extends TestCase
 
     /**
      * @dataProvider mappingTestCases
-     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dto
+     *
+     * @param DtoInterface $dto
+     *
      * @return void
      */
-     #[DataProvider('mappingTestCases')]
+    #[DataProvider('mappingTestCases')]
     public function test_mapping($dto)
     {
         /** @phpstan-var class-string<DtoInterface> */

@@ -27,7 +27,7 @@ class ShippingTrackingInformationRequestModelDto implements DtoInterface
      */
     public $deliveryInformation;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto|null
+     * @var DeliveryAddressDto|null
      */
     public $deliveryAddress;
 }

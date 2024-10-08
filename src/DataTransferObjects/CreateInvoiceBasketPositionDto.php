@@ -17,7 +17,7 @@ class CreateInvoiceBasketPositionDto implements DtoInterface
     public $productName;
 
     /**
-     * @var int|null
+     * @var float|null
      */
     public $quantity;
 

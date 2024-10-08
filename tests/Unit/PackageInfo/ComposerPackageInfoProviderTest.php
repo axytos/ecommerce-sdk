@@ -3,19 +3,22 @@
 namespace Axytos\ECommerce\Tests\Unit\PackageInfo;
 
 use Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider;
-use OutOfBoundsException;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ComposerPackageInfoProviderTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\PackageInfo\ComposerPackageInfoProvider
+     * @var ComposerPackageInfoProvider
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -34,13 +37,13 @@ class ComposerPackageInfoProviderTest extends TestCase
         /** @var string[] */
         $config = json_decode($composerJson, true);
 
-        return $config["name"];
+        return $config['name'];
     }
 
     /**
      * @return void
      */
-    public function test_isInstalled_phpunit()
+    public function test_is_installed_phpunit()
     {
         $this->assertTrue($this->sut->isInstalled('phpunit/phpunit'));
     }
@@ -48,7 +51,7 @@ class ComposerPackageInfoProviderTest extends TestCase
     /**
      * @return void
      */
-    public function test_isInstalled_returns_true_for_actual_plugin_package_name()
+    public function test_is_installed_returns_true_for_actual_plugin_package_name()
     {
         $packageName = $this->getComposerPackageName();
 
@@ -58,15 +61,15 @@ class ComposerPackageInfoProviderTest extends TestCase
     /**
      * @return void
      */
-    public function test_isInstalled_returns_false_if_package_does_not_exist()
+    public function test_is_installed_returns_false_if_package_does_not_exist()
     {
-        $this->assertFalse($this->sut->isInstalled("does-not-exist"));
+        $this->assertFalse($this->sut->isInstalled('does-not-exist'));
     }
 
     /**
      * @return void
      */
-    public function test_getVersion_phpunit()
+    public function test_get_version_phpunit()
     {
         $version = $this->sut->getVersion('phpunit/phpunit');
 
@@ -78,7 +81,7 @@ class ComposerPackageInfoProviderTest extends TestCase
     /**
      * @return void
      */
-    public function test_getVersion_returns_not_null_for_actual_plugin_package_name()
+    public function test_get_version_returns_not_null_for_actual_plugin_package_name()
     {
         $packageName = $this->getComposerPackageName();
 
@@ -88,10 +91,10 @@ class ComposerPackageInfoProviderTest extends TestCase
     /**
      * @return void
      */
-    public function test_getVersion_throws_OutOfBoundsException_if_package_does_not_exist()
+    public function test_get_version_throws_out_of_bounds_exception_if_package_does_not_exist()
     {
-        $this->expectException(OutOfBoundsException::class);
+        $this->expectException(\OutOfBoundsException::class);
 
-        $this->assertNotNull($this->sut->getVersion("does-not-exist"));
+        $this->assertNotNull($this->sut->getVersion('does-not-exist'));
     }
 }

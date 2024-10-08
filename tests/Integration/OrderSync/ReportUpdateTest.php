@@ -8,6 +8,8 @@ include_once __DIR__ . '/OrderSyncWorkerIntegratedTestCase.php';
 
 /**
  * @group OrderSync
+ *
+ * @internal
  */
 #[Group('OrderSync')]
 class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
@@ -19,7 +21,6 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
     {
         $this->executeTestCases([[
             'order' => [
-
                 'hasCreateInvoiceReported' => false,
                 'hasBeenInvoiced' => false,
 
@@ -43,7 +44,7 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
                 'reportShipping' => false,
                 'reportTrackingInformation' => false,
                 'reportUpdate' => true,
-            ]
+            ],
         ]]);
     }
 
@@ -54,7 +55,6 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
     {
         $this->executeTestCases([[
             'order' => [
-
                 'hasCreateInvoiceReported' => true,
                 'hasBeenInvoiced' => false,
 
@@ -78,11 +78,9 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
                 'reportShipping' => false,
                 'reportTrackingInformation' => false,
                 'reportUpdate' => false,
-            ]
+            ],
         ]]);
     }
-
-
 
     /**
      * @return void
@@ -91,7 +89,6 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
     {
         $this->executeTestCases([[
             'order' => [
-
                 'hasCreateInvoiceReported' => false,
                 'hasBeenInvoiced' => false,
 
@@ -115,7 +112,7 @@ class ReportUpdateTest extends OrderSyncWorkerIntegratedTestCase
                 'reportShipping' => false,
                 'reportTrackingInformation' => false,
                 'reportUpdate' => false,
-            ]
+            ],
         ]]);
     }
 }

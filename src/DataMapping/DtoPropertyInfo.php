@@ -2,13 +2,12 @@
 
 namespace Axytos\ECommerce\DataMapping;
 
-use ReflectionProperty;
-
 class DtoPropertyInfo
 {
     /**
      * @param \ReflectionProperty $property
-     * @return \Axytos\ECommerce\DataMapping\DtoPropertyInfo
+     *
+     * @return DtoPropertyInfo
      */
     public static function create($property)
     {
@@ -20,18 +19,20 @@ class DtoPropertyInfo
      */
     private $property;
 
-    private function __construct(ReflectionProperty $property)
+    private function __construct(\ReflectionProperty $property)
     {
         $this->property = $property;
     }
 
     /**
      * @param string $typeName
+     *
      * @return bool
      */
     public function hasType($typeName)
     {
         $type = $this->getTypeName();
+
         return is_a($type, $typeName, true);
     }
 
@@ -53,6 +54,7 @@ class DtoPropertyInfo
 
     /**
      * @param DtoInterface $dto
+     *
      * @return mixed
      */
     public function getValue($dto)
@@ -62,7 +64,8 @@ class DtoPropertyInfo
 
     /**
      * @param DtoInterface $dto
-     * @param mixed $value
+     * @param mixed        $value
+     *
      * @return void
      */
     public function setValue($dto, $value)
@@ -94,9 +97,52 @@ class DtoPropertyInfo
             $type = $matches['type'];
             $type = explode('|', $type)[0];
             $type = explode('&', $type)[0];
+            $type = trim($type);
+
+            if (self::isPrimitiveTypeName($type)) {
+                return $type;
+            }
+
+            if (self::isArrayTypeName($type)) {
+                return 'array';
+            }
+
+            if (class_exists($type) || interface_exists($type)) {
+                return $type;
+            }
+
+            $candidateType = $this->property->getDeclaringClass()->getNamespaceName() . '\\' . $type;
+            if (class_exists($candidateType) || interface_exists($candidateType)) {
+                return $candidateType;
+            }
+
             return $type;
         }
 
         return 'mixed';
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private static function isPrimitiveTypeName($type)
+    {
+        $primitiveTypes = ['int', 'float', 'double', 'string', 'bool', 'array', 'object', 'mixed', 'null'];
+
+        return in_array(strtolower($type), $primitiveTypes, true);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private static function isArrayTypeName($type)
+    {
+        return 'array' === strtolower($type)
+                || 'array<' === substr(strtolower($type), 0, 6)
+                || '[]' === substr(strtolower($type), -2);
     }
 }
