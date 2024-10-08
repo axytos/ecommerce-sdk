@@ -11,6 +11,9 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class OrderSyncItemRepositoryTest extends TestCase
 {
     /**
@@ -24,12 +27,13 @@ class OrderSyncItemRepositoryTest extends TestCase
     private $orderSyncItemFactory;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\OrderSyncItemRepository
+     * @var OrderSyncItemRepository
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -47,18 +51,18 @@ class OrderSyncItemRepositoryTest extends TestCase
     /**
      * @return void
      */
-    public function test_getOrdersToSync()
+    public function test_get_orders_to_sync()
     {
         /** @var ShopSystemOrderInterface[]&MockObject[] */
         $shopSystemOrders = [
             $this->createMock(ShopSystemOrderInterface::class),
-            $this->createMock(ShopSystemOrderInterface::class)
+            $this->createMock(ShopSystemOrderInterface::class),
         ];
 
         /** @var OrderSyncItemInterface[]&MockObject[] */
         $orderSyncItems = [
             $this->createMock(OrderSyncItemInterface::class),
-            $this->createMock(OrderSyncItemInterface::class)
+            $this->createMock(OrderSyncItemInterface::class),
         ];
 
         $this->shopSystemOrderRepository->method('getOrdersToSync')->willReturn($shopSystemOrders);
@@ -72,18 +76,18 @@ class OrderSyncItemRepositoryTest extends TestCase
     /**
      * @return void
      */
-    public function test_getOrdersToUpdate()
+    public function test_get_orders_to_update()
     {
         /** @var ShopSystemOrderInterface[]&MockObject[] */
         $shopSystemOrders = [
             $this->createMock(ShopSystemOrderInterface::class),
-            $this->createMock(ShopSystemOrderInterface::class)
+            $this->createMock(ShopSystemOrderInterface::class),
         ];
 
         /** @var OrderSyncItemInterface[]&MockObject[] */
         $orderSyncItems = [
             $this->createMock(OrderSyncItemInterface::class),
-            $this->createMock(OrderSyncItemInterface::class)
+            $this->createMock(OrderSyncItemInterface::class),
         ];
 
         $this->shopSystemOrderRepository->method('getOrdersToUpdate')->willReturn($shopSystemOrders);

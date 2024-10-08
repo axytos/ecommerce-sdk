@@ -11,7 +11,7 @@ class ReportShippingDto implements DtoInterface
      */
     public $externalOrderId;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection|null
+     * @var ShippingBasketPositionDtoCollection|null
      */
     public $basketPositions;
 }

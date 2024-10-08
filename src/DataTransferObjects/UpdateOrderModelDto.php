@@ -6,13 +6,13 @@ use Axytos\ECommerce\DataMapping\DtoInterface;
 
 class UpdateOrderModelDto implements DtoInterface
 {
-  /**
-   * @var string
-   */
+    /**
+     * @var string
+     */
     public $externalOrderId;
 
-  /**
-   * @var \Axytos\ECommerce\DataTransferObjects\BasketDto
-   */
+    /**
+     * @var BasketDto
+     */
     public $basket;
 }

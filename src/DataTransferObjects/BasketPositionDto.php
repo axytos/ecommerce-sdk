@@ -22,7 +22,7 @@ class BasketPositionDto implements DtoInterface
     public $productCategory;
 
     /**
-     * @var int|null
+     * @var float|null
      */
     public $quantity;
 

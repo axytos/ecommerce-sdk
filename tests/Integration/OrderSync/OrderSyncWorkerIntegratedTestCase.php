@@ -19,6 +19,9 @@ include_once __DIR__ . '/Mocks/InvoiceClientMock.php';
 include_once __DIR__ . '/Mocks/InvoiceOrderContextMock.php';
 include_once __DIR__ . '/Mocks/ShopSystemOrderMock.php';
 
+/**
+ * @internal
+ */
 class OrderSyncWorkerIntegratedTestCase extends TestCase
 {
     /**
@@ -32,12 +35,13 @@ class OrderSyncWorkerIntegratedTestCase extends TestCase
     private $shopSystemOrderRepository;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\OrderSyncWorker
+     * @var OrderSyncWorker
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -61,6 +65,7 @@ class OrderSyncWorkerIntegratedTestCase extends TestCase
 
     /**
      * @param array<string,array<string,bool>>[] $configs
+     *
      * @return void
      */
     protected function executeTestCases($configs)
@@ -85,6 +90,7 @@ class OrderSyncWorkerIntegratedTestCase extends TestCase
                 if ($context instanceof InvoiceOrderContextMock) {
                     return $context->getShopSystemOrderMock();
                 }
+
                 return null;
             }, $callRecord);
         }
@@ -96,72 +102,72 @@ class OrderSyncWorkerIntegratedTestCase extends TestCase
             $this->assertEquals(
                 $config['expected']['reportCancel'],
                 in_array($shopSystemOrder, $callRecords['cancelOrder'], true),
-                "Send Cancel Report has unexpected outcome for configured order at index $key."
+                "Send Cancel Report has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportCancel'],
                 $config['actual']['saveHasCancelReported'],
-                "Save Cancel Report has unexpected outcome for configured order at index $key."
+                "Save Cancel Report has unexpected outcome for configured order at index {$key}."
             );
 
             // Create Invoice
             $this->assertEquals(
                 $config['expected']['reportCreateInvoice'],
                 in_array($shopSystemOrder, $callRecords['createInvoice'], true),
-                "Refund Create Invoice has unexpected outcome for configured order at index $key."
+                "Refund Create Invoice has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportCreateInvoice'],
                 $config['actual']['saveHasCreateInvoiceReported'],
-                "Save Create Invoice Reported has unexpected outcome for configured order at index $key."
+                "Save Create Invoice Reported has unexpected outcome for configured order at index {$key}."
             );
 
             // Refund
             $this->assertEquals(
                 $config['expected']['reportRefund'],
                 in_array($shopSystemOrder, $callRecords['refund'], true),
-                "Send Refund Report has unexpected outcome for configured order at index $key."
+                "Send Refund Report has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportRefund'],
                 $config['actual']['saveHasRefundReported'],
-                "Save Refund Reported has unexpected outcome for configured order at index $key."
+                "Save Refund Reported has unexpected outcome for configured order at index {$key}."
             );
 
             // Shipping
             $this->assertEquals(
                 $config['expected']['reportShipping'],
                 in_array($shopSystemOrder, $callRecords['reportShipping'], true),
-                "Send Shipping Report has unexpected outcome for configured order at index $key."
+                "Send Shipping Report has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportShipping'],
                 $config['actual']['saveHasShippingReported'],
-                "Save Shipping Reported has unexpected outcome for configured order at index $key."
+                "Save Shipping Reported has unexpected outcome for configured order at index {$key}."
             );
 
             // Tracking Information
             $this->assertEquals(
                 $config['expected']['reportTrackingInformation'],
                 in_array($shopSystemOrder, $callRecords['trackingInformation'], true),
-                "Send Tracking Information Report has unexpected outcome for configured order at index $key."
+                "Send Tracking Information Report has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportTrackingInformation'],
                 $config['actual']['saveNewTrackingInformation'],
-                "Save Tracking Information Reported has unexpected outcome for configured order at index $key."
+                "Save Tracking Information Reported has unexpected outcome for configured order at index {$key}."
             );
 
             // Order Update
             $this->assertEquals(
                 $config['expected']['reportUpdate'],
                 in_array($shopSystemOrder, $callRecords['updateOrder'], true),
-                "Send Order Update Report has unexpected outcome for configured order at index $key."
+                "Send Order Update Report has unexpected outcome for configured order at index {$key}."
             );
             $this->assertEquals(
                 $config['expected']['reportUpdate'],
                 $config['actual']['saveBasketUpdatesReported'],
-                "Save Order Update Reported has unexpected outcome for configured order at index $key."
+                "Save Order Update Reported has unexpected outcome for configured order at index {$key}."
             );
         }
     }

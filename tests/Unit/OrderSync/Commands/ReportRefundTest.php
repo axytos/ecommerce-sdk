@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportRefundTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportRefundTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportRefund
+     * @var ReportRefund
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,10 +48,12 @@ class ReportRefundTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -70,10 +76,12 @@ class ReportRefundTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -93,10 +101,12 @@ class ReportRefundTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasRefundReported
      * @param bool $hasBeenRefunded
-     * @param int $reportRefundInvocationCount
+     * @param int  $reportRefundInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -108,7 +118,7 @@ class ReportRefundTest extends TestCase
         $shopSystemOrder->method('hasCreateInvoiceReported')->willReturn($hasCreateInvoiceReported);
         $shopSystemOrder->method('hasRefundReported')->willReturn($hasRefundReported);
         $shopSystemOrder->method('hasBeenRefunded')->willReturn($hasBeenRefunded);
-        $this->invoiceClient->method('refund')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('refund')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder->expects($this->exactly($reportRefundInvocationCount))->method('saveHasRefundReported');
 
@@ -126,7 +136,7 @@ class ReportRefundTest extends TestCase
         $shopSystemOrder->method('hasCreateInvoiceReported')->willReturn(true);
         $shopSystemOrder->method('hasRefundReported')->willReturn(false);
         $shopSystemOrder->method('hasBeenRefunded')->willReturn(true);
-        $this->invoiceClient->method('refund')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('refund')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveHasRefundReported');

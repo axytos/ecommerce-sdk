@@ -2,9 +2,6 @@
 
 namespace Axytos\ECommerce\DataMapping;
 
-use ReflectionClass;
-use ReflectionProperty;
-
 class DtoToDtoMapper
 {
     /**
@@ -12,18 +9,23 @@ class DtoToDtoMapper
      * @phpstan-template TFromDtoCollection of DtoCollection<TFromDto>
      * @phpstan-template TToDto of DtoInterface
      * @phpstan-template TToDtoCollection of DtoCollection<TToDto>
+     *
      * @phpstan-param TFromDtoCollection $fromDtoCollection
      * @phpstan-param class-string<TToDtoCollection> $toDtoCollectionClassString
+     *
      * @phpstan-return TToDtoCollection
+     *
      * @param DtoCollection $fromDtoCollection
-     * @param string $toDtoCollectionClassString
+     * @param string        $toDtoCollectionClassString
+     *
      * @return DtoCollection
      */
     public function mapDtoCollection($fromDtoCollection, $toDtoCollectionClassString)
     {
-        $reflector = new ReflectionClass($toDtoCollectionClassString);
+        $reflector = new \ReflectionClass($toDtoCollectionClassString);
         /**
          * @phpstan-var TToDtoCollection
+         *
          * @var DtoCollection
          */
         $dtoCollection = $reflector->newInstanceWithoutConstructor();
@@ -38,32 +40,37 @@ class DtoToDtoMapper
             },
             $fromDtoCollection->getElements()
         );
+
         /** @phpstan-var TToDtoCollection */
-        $dtoCollection = $reflector->newInstance(...$elements);
-        return $dtoCollection;
+        return $reflector->newInstance(...$elements);
     }
 
     /**
      * @phpstan-template TFromDto of DtoInterface
      * @phpstan-template TToDto of DtoInterface
+     *
      * @phpstan-param TFromDto $fromDto
      * @phpstan-param class-string<TToDto> $toDtoClassString
+     *
      * @phpstan-return TToDto
+     *
      * @param DtoInterface $fromDto
-     * @param string $toDtoClassString
+     * @param string       $toDtoClassString
+     *
      * @return DtoInterface
      */
     public function mapDto($fromDto, $toDtoClassString)
     {
-        $toDtoReflector = new ReflectionClass($toDtoClassString);
+        $toDtoReflector = new \ReflectionClass($toDtoClassString);
 
         /**
          * @phpstan-var TToDto
+         *
          * @var DtoInterface
          */
         $toDto = $toDtoReflector->newInstanceWithoutConstructor();
-        $toDtoProperties = $toDtoReflector->getProperties(ReflectionProperty::IS_PUBLIC);
-        $fromDtoReflector = new ReflectionClass($fromDto);
+        $toDtoProperties = $toDtoReflector->getProperties(\ReflectionProperty::IS_PUBLIC);
+        $fromDtoReflector = new \ReflectionClass($fromDto);
         foreach ($toDtoProperties as $toDtoProperty) {
             $toDtoProeprtyInfo = DtoPropertyInfo::create($toDtoProperty);
             $toDtoPropertyName = $toDtoProperty->getName();
@@ -82,7 +89,7 @@ class DtoToDtoMapper
             }
             if (is_subclass_of($toDtoPropertyTypeName, DtoCollection::class)) {
                 /** @phpstan-var class-string<DtoCollection<DtoInterface>> $toDtoPropertyTypeName */
-                $toDto->{$toDtoPropertyName} =  $this->mapDtoCollection($fromDto->{$toDtoPropertyName}, $toDtoPropertyTypeName);
+                $toDto->{$toDtoPropertyName} = $this->mapDtoCollection($fromDto->{$toDtoPropertyName}, $toDtoPropertyTypeName);
             }
             if (is_subclass_of($toDtoPropertyTypeName, DtoInterface::class)) {
                 /** @phpstan-var class-string<DtoInterface> $toDtoPropertyTypeName */
@@ -90,6 +97,7 @@ class DtoToDtoMapper
             }
             $toDto->{$toDtoPropertyName} = $fromDto->{$toDtoPropertyName};
         }
+
         return $toDto;
     }
 }

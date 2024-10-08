@@ -2,13 +2,12 @@
 
 namespace Axytos\ECommerce\Clients\Checkout;
 
-use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 
 class CheckoutApiAdapter implements CheckoutApiInterface
 {
     /**
-     * @var \Axytos\FinancialServices\GuzzleHttp\ClientInterface
+     * @var ClientInterface
      */
     private $httpClient;
     /**
@@ -35,7 +34,7 @@ class CheckoutApiAdapter implements CheckoutApiInterface
          * see:
          * - https://stackoverflow.com/a/34883260
          * - https://curl.se/docs/caextract.html
-         * - https://curl.se/libcurl/c/libcurl-errors.html
+         * - https://curl.se/libcurl/c/libcurl-errors.html.
          *
          * This might be related to some system configuration issues.
          * The failure happened executing within phpunit against the sandbox api

@@ -7,59 +7,63 @@ use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 use Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface;
 use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
-use Axytos\ECommerce\UserAgent\UserAgentFactory;
-use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
+use Axytos\ECommerce\AxytosECommerceClient;
 use Axytos\ECommerce\Clients\Checkout\CheckoutApiAdapter;
 use Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface;
+use Axytos\ECommerce\Clients\Checkout\CheckoutClient;
 use Axytos\ECommerce\Clients\Checkout\CheckoutClientInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
-use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
-use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
-use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
-use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiAdapter;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface;
+use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClient;
 use Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationClientInterface;
-use Axytos\ECommerce\AxytosECommerceClient;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClient;
+use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiAdapter;
+use Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClient;
+use Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface;
 use Axytos\ECommerce\Logging\LoggerAdapterInterface;
+use Axytos\ECommerce\UserAgent\UserAgentFactory;
 use Axytos\FinancialServices\GuzzleHttp\Client;
 use Axytos\FinancialServices\GuzzleHttp\ClientInterface;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class AxytosECommerceClientTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface
+     * @var ApiHostProviderInterface
      */
     private $apiHostProvider;
     /**
-     * @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     * @var ApiKeyProviderInterface
      */
     private $apiKeyProvider;
     /**
-     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     * @var PaymentMethodConfigurationInterface
      */
     private $paymentMethodConfiguration;
     /**
-     * @var \Axytos\ECommerce\Abstractions\FallbackModeConfigurationInterface
+     * @var FallbackModeConfigurationInterface
      */
     private $fallbackModeConfiguration;
     /**
-     * @var \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface
+     * @var UserAgentInfoProviderInterface
      */
     private $userAgentInfoProvider;
     /**
-     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -105,7 +109,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_AxytosECommerceClient_can_be_constructed()
+    public function test_axytos_e_commerce_client_can_be_constructed()
     {
         $client = new AxytosECommerceClient($this->apiHostProvider, $this->apiKeyProvider, $this->paymentMethodConfiguration, $this->fallbackModeConfiguration, $this->userAgentInfoProvider, $this->logger);
         $this->assertNotNull($client);
@@ -114,33 +118,34 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_buildContainer_all_classes_registered()
+    public function test_build_container_all_classes_registered()
     {
         $container = $this->buildContainer();
 
         $ids = $this->getExpectedContainderIds();
 
         foreach ($ids as $id) {
-            $this->assertTrue($container->has($id), "Missng $id");
+            $this->assertTrue($container->has($id), "Missng {$id}");
         }
     }
 
     /**
      * @return void
      */
-    public function test_buildContainer_all_registered_classes_can_be_resolved()
+    public function test_build_container_all_registered_classes_can_be_resolved()
     {
         $container = $this->buildContainer();
 
         /**
          * @var string[]
+         *
          * @phpstan-var class-string[]
          */
         $keys = $container->keys();
 
         foreach ($keys as $key) {
             $classOrInterfaceExists = class_exists($key, true) || interface_exists($key, true);
-            $this->assertTrue($classOrInterfaceExists, "Class of Interface $key does not exist!");
+            $this->assertTrue($classOrInterfaceExists, "Class of Interface {$key} does not exist!");
 
             $instance = $container->get($key);
             $this->assertInstanceOf($key, $instance);
@@ -150,7 +155,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_buildContainer_ApiHostProviderInterface_can_be_resolved()
+    public function test_build_container_api_host_provider_interface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -163,7 +168,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_ApiKeyProviderInterface_can_be_resolved()
+    public function test_api_key_provider_interface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -176,7 +181,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_PaymentMethodConfigurationInterface_can_be_resolved()
+    public function test_payment_method_configuration_interface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -189,7 +194,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_FallbackModeConfigurationInterface_can_be_resolved()
+    public function test_fallback_mode_configuration_interface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -202,7 +207,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_UserAgentInfoProviderInterface_can_be_resolved()
+    public function test_user_agent_info_provider_interface_can_be_resolved()
     {
         $container = $this->buildContainer();
 
@@ -215,7 +220,7 @@ class AxytosECommerceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_buildContainer_does_not_disable_certificate_validation()
+    public function test_build_container_does_not_disable_certificate_validation()
     {
         $container = $this->buildContainer();
 
@@ -232,41 +237,40 @@ class AxytosECommerceClientTest extends TestCase
     }
 
     const CLASS_MAP = [
-
         UserAgentFactory::class => [
-            UserAgentFactory::class
+            UserAgentFactory::class,
         ],
 
         CheckoutClient::class => [
-            CheckoutClientInterface::class
+            CheckoutClientInterface::class,
         ],
 
         CheckoutApiAdapter::class => [
-            CheckoutApiInterface::class
+            CheckoutApiInterface::class,
         ],
 
         CredentialValidationClient::class => [
-            CredentialValidationClientInterface::class
+            CredentialValidationClientInterface::class,
         ],
 
         CredentialValidationApiAdapter::class => [
-            CredentialValidationApiInterface::class
+            CredentialValidationApiInterface::class,
         ],
 
         ErrorReportingClient::class => [
-            ErrorReportingClientInterface::class
+            ErrorReportingClientInterface::class,
         ],
 
         ErrorReportingApiAdapter::class => [
-            ErrorReportingApiInterface::class
+            ErrorReportingApiInterface::class,
         ],
 
         InvoiceClient::class => [
-            InvoiceClientInterface::class
+            InvoiceClientInterface::class,
         ],
 
         InvoiceApiAdapter::class => [
-            InvoiceApiInterface::class
+            InvoiceApiInterface::class,
         ],
     ];
 }

@@ -8,15 +8,11 @@ class ApiHostProvider implements ApiHostProviderInterface
 {
     /**
      * @return string
+     *
+     * @phpstan-return self::LIVE|self::SANDBOX
      */
     public function getApiHost()
     {
-        $configFilePath = __DIR__ . '/../config/apiHost';
-
-        if (!file_exists($configFilePath)) {
-            throw new \Exception('API Host is not configured for integration tests!');
-        }
-
-        return strval(file_get_contents($configFilePath));
+        return self::SANDBOX;
     }
 }

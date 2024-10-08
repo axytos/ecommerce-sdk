@@ -4,7 +4,7 @@ namespace Axytos\ECommerce\DependencyInjection;
 
 class FactoryContainerEntry implements ContainerEntryInterface
 {
-    /** @var callable $factory */
+    /** @var callable */
     private $factory;
 
     public function __construct(callable $factory)
@@ -13,7 +13,7 @@ class FactoryContainerEntry implements ContainerEntryInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\DependencyInjection\Container $container
+     * @param Container $container
      */
     public function getInstance($container)
     {

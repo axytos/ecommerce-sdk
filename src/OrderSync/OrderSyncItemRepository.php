@@ -2,18 +2,15 @@
 
 namespace Axytos\ECommerce\OrderSync;
 
-use Axytos\ECommerce\OrderSync\OrderSyncItemFactory;
-use Axytos\ECommerce\OrderSync\ShopSystemOrderRepositoryInterface;
-
 class OrderSyncItemRepository
 {
     /**
-     * @var \Axytos\ECommerce\OrderSync\ShopSystemOrderRepositoryInterface
+     * @var ShopSystemOrderRepositoryInterface
      */
     private $shopSystemOrderRepository;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\OrderSyncItemFactory
+     * @var OrderSyncItemFactory
      */
     private $orderSyncItemFactory;
 
@@ -31,6 +28,7 @@ class OrderSyncItemRepository
     public function getOrdersToSync()
     {
         $shopSystemOrders = $this->shopSystemOrderRepository->getOrdersToSync();
+
         return $this->orderSyncItemFactory->createMany($shopSystemOrders);
     }
 
@@ -40,6 +38,7 @@ class OrderSyncItemRepository
     public function getOrdersToUpdate()
     {
         $shopSystemOrders = $this->shopSystemOrderRepository->getOrdersToUpdate();
+
         return $this->orderSyncItemFactory->createMany($shopSystemOrders);
     }
 }

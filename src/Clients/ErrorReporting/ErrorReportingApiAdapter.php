@@ -2,20 +2,18 @@
 
 namespace Axytos\ECommerce\Clients\ErrorReporting;
 
-use Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiInterface;
 use Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper;
-use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
 
 class ErrorReportingApiAdapter implements ErrorReportingApiInterface
 {
     /**
-     * @var \Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi
+     * @var ErrorApi
      */
     private $errorApi;
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelMapper
+     * @var DtoOpenApiModelMapper
      */
     private $mapper;
 
@@ -29,6 +27,7 @@ class ErrorReportingApiAdapter implements ErrorReportingApiInterface
 
     /**
      * @param \Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto $errorRequestModelDto
+     *
      * @return void
      */
     public function reportError($errorRequestModelDto)

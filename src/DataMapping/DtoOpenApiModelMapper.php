@@ -57,9 +57,6 @@ use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrd
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPITransactionTransactionMetadata;
 use Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface;
-use DateTimeInterface;
-use InvalidArgumentException;
-use ReflectionClass;
 
 class DtoOpenApiModelMapper
 {
@@ -95,7 +92,7 @@ class DtoOpenApiModelMapper
     ];
 
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoOpenApiModelModelMappings
+     * @var DtoOpenApiModelModelMappings
      */
     private $mappings;
 
@@ -107,12 +104,16 @@ class DtoOpenApiModelMapper
     /**
      * @phpstan-template TDto of DtoInterface
      * @phpstan-template TModel of ModelInterface
+     *
      * @phpstan-param TDto $dataTransferObject
      * @phpstan-param class-string<TModel> $openApiModelName
+     *
      * @phpstan-return TModel
-     * @param \Axytos\ECommerce\DataMapping\DtoInterface $dataTransferObject
-     * @param string $openApiModelName
-     * @return \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
+     *
+     * @param DtoInterface $dataTransferObject
+     * @param string       $openApiModelName
+     *
+     * @return ModelInterface
      */
     public function toOpenApiModel($dataTransferObject, $openApiModelName)
     {
@@ -120,14 +121,14 @@ class DtoOpenApiModelMapper
         $dtoClassName = get_class($dataTransferObject);
 
         if (!is_subclass_of($openApiModelName, ModelInterface::class)) {
-            throw new InvalidArgumentException("$openApiModelName does not implement " . ModelInterface::class);
+            throw new \InvalidArgumentException("{$openApiModelName} does not implement " . ModelInterface::class);
         }
 
         if (!$this->mappings->hasMapping($dtoClassName, $openApiModelName)) {
-            throw new InvalidArgumentException("Undefined mapping: {$dtoClassName} - {$openApiModelName}");
+            throw new \InvalidArgumentException("Undefined mapping: {$dtoClassName} - {$openApiModelName}");
         }
 
-        $dtoReflector = new ReflectionClass($dataTransferObject);
+        $dtoReflector = new \ReflectionClass($dataTransferObject);
 
         /** @phpstan-var TModel */
         $openApiModel = new $openApiModelName();
@@ -153,12 +154,16 @@ class DtoOpenApiModelMapper
     /**
      * @phpstan-template TDto of DtoInterface
      * @phpstan-template TModel of ModelInterface
+     *
      * @phpstan-param TModel $openApiModel
      * @phpstan-param class-string<TDto> $dataTransferObjectName
+     *
      * @phpstan-return TDto
-     * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $openApiModel
-     * @param string $dataTransferObjectName
-     * @return \Axytos\ECommerce\DataMapping\DtoInterface
+     *
+     * @param ModelInterface $openApiModel
+     * @param string         $dataTransferObjectName
+     *
+     * @return DtoInterface
      */
     public function toDataTransferObject($openApiModel, $dataTransferObjectName)
     {
@@ -166,14 +171,14 @@ class DtoOpenApiModelMapper
         $openApiModelName = get_class($openApiModel);
 
         if (!is_subclass_of($dataTransferObjectName, DtoInterface::class)) {
-            throw new InvalidArgumentException("$dataTransferObjectName does not implement " . DtoInterface::class);
+            throw new \InvalidArgumentException("{$dataTransferObjectName} does not implement " . DtoInterface::class);
         }
 
         if (!$this->mappings->hasMapping($dataTransferObjectName, $openApiModelName)) {
-            throw new InvalidArgumentException("Undefined mapping: {$dataTransferObjectName} - {$openApiModelName}");
+            throw new \InvalidArgumentException("Undefined mapping: {$dataTransferObjectName} - {$openApiModelName}");
         }
 
-        $reflector = new ReflectionClass($dataTransferObjectName);
+        $reflector = new \ReflectionClass($dataTransferObjectName);
 
         /** @phpstan-var TDto */
         $dataTransferObject = $reflector->newInstanceWithoutConstructor();
@@ -198,6 +203,7 @@ class DtoOpenApiModelMapper
 
     /**
      * @param mixed $value
+     *
      * @return ModelInterface|\DateTimeInterface|string|int|float|bool|mixed
      */
     private function toOpenApiValue($value)
@@ -206,12 +212,13 @@ class DtoOpenApiModelMapper
             return $this->toOpenApiArray($value);
         }
 
-        if ($value instanceof DateTimeInterface) {
+        if ($value instanceof \DateTimeInterface) {
             return $this->toOpenApiDateTime($value);
         }
 
         if ($value instanceof DtoInterface) {
             $oaModelName = $this->mappings->lookupOpenApiModelName($value);
+
             return $this->toOpenApiModel($value, $oaModelName);
         }
 
@@ -224,6 +231,7 @@ class DtoOpenApiModelMapper
 
     /**
      * @param array<mixed> $values
+     *
      * @return array<mixed>
      */
     private function toOpenApiArray(array $values)
@@ -240,16 +248,20 @@ class DtoOpenApiModelMapper
     /**
      * @return string
      */
-    private function toOpenApiDateTime(DateTimeInterface $dateTime)
+    private function toOpenApiDateTime(\DateTimeInterface $dateTime)
     {
         $serializer = new DateTimeSerializer();
+
         return $serializer->serialize($dateTime);
     }
 
     /**
      * @phpstan-template TModel of ModelInterface
+     *
      * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
+     *
      * @param mixed $value
+     *
      * @return DtoCollection|DtoInterface|\DateTimeInterface|array<mixed>|mixed
      */
     private function toDataTransferObjectValue($value, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
@@ -258,15 +270,17 @@ class DtoOpenApiModelMapper
             if ($dtoPropertyInfo->hasDtoCollectionType()) {
                 return $this->toDtoCollection($value, $dtoPropertyInfo);
             }
+
             return $this->toDataTransferObjectArray($value, $attributeInfo, $dtoPropertyInfo);
         }
 
-        if (is_string($value) && $attributeInfo->getFormat() === 'date-time') {
+        if (is_string($value) && 'date-time' === $attributeInfo->getFormat()) {
             return $this->toDataTransferObjectDateTime($value);
         }
 
         if ($value instanceof ModelInterface) {
             $dtoClassName = $this->mappings->lookupDtoClassName($value);
+
             return $this->toDataTransferObject($value, $dtoClassName);
         }
 
@@ -275,9 +289,10 @@ class DtoOpenApiModelMapper
 
     /**
      * @phpstan-return \Axytos\ECommerce\DataMapping\DtoCollection<DtoInterface>
+     *
      * @param ModelInterface[] $values
-     * @param DtoPropertyInfo $dtoPropertyInfo
-     * @return \Axytos\ECommerce\DataMapping\DtoCollection
+     *
+     * @return DtoCollection
      */
     private function toDtoCollection(array $values, DtoPropertyInfo $dtoPropertyInfo)
     {
@@ -296,10 +311,11 @@ class DtoOpenApiModelMapper
 
     /**
      * @phpstan-template TModel of ModelInterface
+     *
      * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
+     *
      * @param array<mixed> $values
-     * @param OpenApiModelAttributeInfo $attributeInfo
-     * @param DtoPropertyInfo $dtoPropertyInfo
+     *
      * @return array<mixed>
      */
     private function toDataTransferObjectArray(array $values, OpenApiModelAttributeInfo $attributeInfo, DtoPropertyInfo $dtoPropertyInfo)
@@ -315,12 +331,14 @@ class DtoOpenApiModelMapper
 
     /**
      * @param string $value
+     *
      * @return \DateTimeInterface
      */
     private function toDataTransferObjectDateTime($value)
     {
         $value = (string) $value;
         $serializer = new DateTimeSerializer();
+
         return $serializer->deserialize($value);
     }
 }

@@ -8,15 +8,15 @@ use Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface;
 use Axytos\ECommerce\Clients\Invoice\ShopActions;
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
 use Axytos\ECommerce\DataTransferObjects\BasketDto;
-use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
-use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
-use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
-use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
-use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\CheckDecisions;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
+use Axytos\ECommerce\DataTransferObjects\CustomerDataDto;
+use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
+use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentTypeSecurities;
@@ -26,12 +26,14 @@ use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
-use DateTime;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class InvoiceClientTest extends TestCase
 {
     /** @var InvoiceApiInterface&MockObject */
@@ -41,7 +43,7 @@ class InvoiceClientTest extends TestCase
     private $dtoArrayMapper;
 
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClient
+     * @var InvoiceClient
      */
     private $sut;
 
@@ -56,6 +58,7 @@ class InvoiceClientTest extends TestCase
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -85,7 +88,8 @@ class InvoiceClientTest extends TestCase
     {
         $this->invoiceApi
             ->method('precheck')
-            ->willReturn($this->response);
+            ->willReturn($this->response)
+        ;
     }
 
     /**
@@ -95,7 +99,7 @@ class InvoiceClientTest extends TestCase
     {
         $orderNumber = 'orderNumber';
         $orderInvoiceNumber = 'orderInvoiceNumber';
-        $orderDate = $this->createMock(DateTime::class);
+        $orderDate = $this->createMock(\DateTime::class);
         $personalData = $this->createMock(CustomerDataDto::class);
         $invoiceAddress = $this->createMock(InvoiceAddressDto::class);
         $deliveryAddress = $this->createMock(DeliveryAddressDto::class);
@@ -125,17 +129,20 @@ class InvoiceClientTest extends TestCase
         $this->dtoArrayMapper
             ->method('toArray')
             ->with($this->response)
-            ->willReturn($this->responseData);
+            ->willReturn($this->responseData)
+        ;
 
         $this->dtoArrayMapper
             ->method('fromArray')
             ->with($this->responseData, OrderPreCheckResponseDto::class)
-            ->willReturn($this->response);
+            ->willReturn($this->response)
+        ;
     }
 
     /**
-     * @return void
      * @param string $decision
+     *
+     * @return void
      */
     private function setUpDecision($decision)
     {
@@ -145,48 +152,58 @@ class InvoiceClientTest extends TestCase
 
     /**
      * @phpstan-param mixed $value
-     * @return void
+     *
      * @param string $propertyName
+     * @param mixed  $value
+     *
+     * @return void
      */
     private function expectOrderPreCheckRequestValueEquals($propertyName, $value)
     {
         $propertyName = (string) $propertyName;
         $matcher = $this->callback(function (OrderPreCheckRequestDto $requestDto) use ($propertyName, $value) {
             /** @phpstan-ignore-next-line */
-            $propertyValue = $requestDto->$propertyName;
+            $propertyValue = $requestDto->{$propertyName};
+
             return $propertyValue === $value;
         });
 
         $this->invoiceApi
             ->expects($this->once())
             ->method('precheck')
-            ->with($matcher);
+            ->with($matcher)
+        ;
     }
 
     /**
      * @phpstan-param mixed $value
-     * @return void
+     *
      * @param string $propertyName
+     * @param mixed  $value
+     *
+     * @return void
      */
     private function expectOrderCreateRequestValueEquals($propertyName, $value)
     {
         $propertyName = (string) $propertyName;
         $matcher = $this->callback(function (OrderCreateRequestDto $requestDto) use ($propertyName, $value) {
             /** @phpstan-ignore-next-line */
-            $propertyValue = $requestDto->$propertyName;
+            $propertyValue = $requestDto->{$propertyName};
+
             return $propertyValue === $value;
         });
 
         $this->invoiceApi
             ->expects($this->once())
             ->method('confirm')
-            ->with($matcher);
+            ->with($matcher)
+        ;
     }
 
     /**
      * @return void
      */
-    public function test_precheck_sends_requestMode_SingleStep()
+    public function test_precheck_sends_request_mode_single_step()
     {
         $this->expectOrderPreCheckRequestValueEquals('requestMode', 'SingleStep');
 
@@ -196,7 +213,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_precheck_sends_proofOfInterest_AAE()
+    public function test_precheck_sends_proof_of_interest_aae()
     {
         $this->expectOrderPreCheckRequestValueEquals('proofOfInterest', 'AAE');
 
@@ -206,7 +223,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_precheck_sends_selectedPaymentType_AAE()
+    public function test_precheck_sends_selected_payment_type_aae()
     {
         $this->expectOrderPreCheckRequestValueEquals('selectedPaymentType', 'INVOICE');
 
@@ -216,7 +233,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_precheck_sends_paymentTypeSecurity_UNSAFE()
+    public function test_precheck_sends_payment_type_security_unsafe()
     {
         $this->expectOrderPreCheckRequestValueEquals('paymentTypeSecurity', PaymentTypeSecurities::UNSAFE);
 
@@ -265,8 +282,10 @@ class InvoiceClientTest extends TestCase
 
     /**
      * @dataProvider dataProvider_test_precheck_returns_expected_action
+     *
      * @param string $decision
      * @param string $expectedAction
+     *
      * @return void
      */
     #[DataProvider('dataProvider_test_precheck_returns_expected_action')]
@@ -299,17 +318,18 @@ class InvoiceClientTest extends TestCase
         $this->invoiceOrderContext
             ->expects($this->once())
             ->method('setPreCheckResponseData')
-            ->with($this->responseData);
+            ->with($this->responseData)
+        ;
 
         $this->sut->precheck($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Confirm
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_order_number()
+    public function test_confirm_order_sends_order_number()
     {
         $this->expectOrderCreateRequestValueEquals('externalOrderId', $this->invoiceOrderContext->getOrderNumber());
 
@@ -319,7 +339,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_order_date_time()
+    public function test_confirm_order_sends_order_date_time()
     {
         $this->expectOrderCreateRequestValueEquals('date', $this->invoiceOrderContext->getOrderDateTime());
 
@@ -329,7 +349,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_personal_data()
+    public function test_confirm_order_sends_personal_data()
     {
         $this->expectOrderCreateRequestValueEquals('personalData', $this->invoiceOrderContext->getPersonalData());
 
@@ -339,7 +359,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_invoice_address()
+    public function test_confirm_order_sends_invoice_address()
     {
         $this->expectOrderCreateRequestValueEquals('invoiceAddress', $this->invoiceOrderContext->getInvoiceAddress());
 
@@ -349,7 +369,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_delivery_address()
+    public function test_confirm_order_sends_delivery_address()
     {
         $this->expectOrderCreateRequestValueEquals('deliveryAddress', $this->invoiceOrderContext->getDeliveryAddress());
 
@@ -359,7 +379,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_basket()
+    public function test_confirm_order_sends_basket()
     {
         $this->expectOrderCreateRequestValueEquals('basket', $this->invoiceOrderContext->getBasket());
 
@@ -369,36 +389,35 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_confirmOrder_sends_precheck_response()
+    public function test_confirm_order_sends_precheck_response()
     {
         $this->expectOrderCreateRequestValueEquals('orderPrecheckResponse', $this->response);
 
         $this->sut->confirmOrder($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Cancel
     /**
      * @return void
      */
-    public function test_cancelOrder_calls_API()
+    public function test_cancel_order_calls_api()
     {
         $this->invoiceApi
             ->expects($this->once())
             ->method('cancelOrder')
-            ->with($this->invoiceOrderContext->getOrderNumber());
+            ->with($this->invoiceOrderContext->getOrderNumber())
+        ;
 
         $this->sut->cancelOrder($this->invoiceOrderContext);
     }
 
-
-
-    //==================================================================================================================
+    // ==================================================================================================================
     // Refund
     /**
      * @return void
      */
-    public function test_refund_calls_API()
+    public function test_refund_calls_api()
     {
         $refundRequestDto = new RefundRequestDto();
         $refundRequestDto->externalOrderId = $this->invoiceOrderContext->getOrderNumber();
@@ -408,17 +427,18 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->expects($this->once())
             ->method('refund')
-            ->with($this->equalTo($refundRequestDto));
+            ->with($this->equalTo($refundRequestDto))
+        ;
 
         $this->sut->refund($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Create Invoice
     /**
      * @return void
      */
-    public function test_createInvoice_calls_API()
+    public function test_create_invoice_calls_api()
     {
         $createInvoiceRequestDto = new CreateInvoiceRequestDto();
         $createInvoiceRequestDto->basket = $this->invoiceOrderContext->getCreateInvoiceBasket();
@@ -428,17 +448,18 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->expects($this->once())
             ->method('createInvoice')
-            ->with($this->equalTo($createInvoiceRequestDto));
+            ->with($this->equalTo($createInvoiceRequestDto))
+        ;
 
         $this->sut->createInvoice($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Return Order
     /**
      * @return void
      */
-    public function test_return_calls_API()
+    public function test_return_calls_api()
     {
         $requestDto = new ReturnRequestModelDto();
         $requestDto->externalOrderId = $this->invoiceOrderContext->getOrderNumber();
@@ -447,17 +468,18 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->expects($this->once())
             ->method('returnOrder')
-            ->with($this->equalTo($requestDto));
+            ->with($this->equalTo($requestDto))
+        ;
 
         $this->sut->returnOrder($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Report Shipping
     /**
      * @return void
      */
-    public function test_reportShipping_calls_API()
+    public function test_report_shipping_calls_api()
     {
         $requestDto = new ReportShippingDto();
         $requestDto->externalOrderId = $this->invoiceOrderContext->getOrderNumber();
@@ -466,17 +488,18 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->expects($this->once())
             ->method('reportShipping')
-            ->with($this->equalTo($requestDto));
+            ->with($this->equalTo($requestDto))
+        ;
 
         $this->sut->reportShipping($this->invoiceOrderContext);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Payment Update
     /**
      * @return void
      */
-    public function test_getInvoiceOrderPaymentUpdate_calls_API()
+    public function test_get_invoice_order_payment_update_calls_api()
     {
         $paymentId = 'paymentId';
 
@@ -490,13 +513,15 @@ class InvoiceClientTest extends TestCase
             ->expects($this->once())
             ->method('payment')
             ->with($paymentId)
-            ->willReturn($paymentResponseDto);
+            ->willReturn($paymentResponseDto)
+        ;
 
         $this->invoiceApi
             ->expects($this->once())
             ->method('paymentState')
             ->with($paymentResponseDto->externalOrderId)
-            ->willReturn($paymentStateResponseDto);
+            ->willReturn($paymentStateResponseDto)
+        ;
 
         $paymentUpdate = $this->sut->getInvoiceOrderPaymentUpdate($paymentId);
 
@@ -507,7 +532,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_getInvoiceOrderPaymentUpdate_throws_when_externalOrderId_is_null()
+    public function test_get_invoice_order_payment_update_throws_when_external_order_id_is_null()
     {
         $paymentId = 'paymentId';
 
@@ -520,13 +545,14 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->method('payment')
             ->with($paymentId)
-            ->willReturn($paymentResponseDto);
+            ->willReturn($paymentResponseDto)
+        ;
 
         $this->invoiceApi
             ->method('paymentState')
             ->with($paymentResponseDto->externalOrderId)
-            ->willReturn($paymentStateResponseDto);
-
+            ->willReturn($paymentStateResponseDto)
+        ;
 
         $this->expectExceptionMessage('ExternalOrderId not found');
 
@@ -536,7 +562,7 @@ class InvoiceClientTest extends TestCase
     /**
      * @return void
      */
-    public function test_getInvoiceOrderPaymentUpdate_throws_when_paymentState_is_null()
+    public function test_get_invoice_order_payment_update_throws_when_payment_state_is_null()
     {
         $paymentId = 'paymentId';
 
@@ -549,24 +575,26 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->method('payment')
             ->with($paymentId)
-            ->willReturn($paymentResponseDto);
+            ->willReturn($paymentResponseDto)
+        ;
 
         $this->invoiceApi
             ->method('paymentState')
             ->with($paymentResponseDto->externalOrderId)
-            ->willReturn($paymentStateResponseDto);
+            ->willReturn($paymentStateResponseDto)
+        ;
 
         $this->expectExceptionMessage('PaymentState not found');
 
         $this->sut->getInvoiceOrderPaymentUpdate($paymentId);
     }
 
-    //==================================================================================================================
+    // ==================================================================================================================
     // Update Order
     /**
      * @return void
      */
-    public function test_updateOrder_calls_API()
+    public function test_update_order_calls_api()
     {
         $requestDto = new UpdateOrderModelDto();
         $requestDto->externalOrderId = $this->invoiceOrderContext->getOrderNumber();
@@ -575,7 +603,8 @@ class InvoiceClientTest extends TestCase
         $this->invoiceApi
             ->expects($this->once())
             ->method('updateOrder')
-            ->with($this->equalTo($requestDto));
+            ->with($this->equalTo($requestDto))
+        ;
 
         $this->sut->updateOrder($this->invoiceOrderContext);
     }

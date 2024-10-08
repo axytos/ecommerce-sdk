@@ -9,17 +9,17 @@ use Axytos\ECommerce\Logging\LoggerAdapterInterface;
 class OrderSyncItemFactory
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceClientInterface
+     * @var InvoiceClientInterface
      */
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingClientInterface
+     * @var ErrorReportingClientInterface
      */
     private $errorReportingClient;
 
     /**
-     * @var \Axytos\ECommerce\Logging\LoggerAdapterInterface
+     * @var LoggerAdapterInterface
      */
     private $logger;
 
@@ -35,6 +35,7 @@ class OrderSyncItemFactory
 
     /**
      * @param ShopSystemOrderInterface $shopSystemOrder
+     *
      * @return OrderSyncItemInterface
      */
     public function create($shopSystemOrder)
@@ -49,6 +50,7 @@ class OrderSyncItemFactory
 
     /**
      * @param ShopSystemOrderInterface[] $shopSystemOrders
+     *
      * @return OrderSyncItemInterface[]
      */
     public function createMany($shopSystemOrders)

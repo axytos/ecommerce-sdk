@@ -35,7 +35,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return string
      */
     public function precheck($orderContext)
@@ -44,7 +45,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function confirmOrder($orderContext)
@@ -52,7 +54,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function cancelOrder($orderContext)
@@ -61,7 +64,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function uncancelOrder($orderContext)
@@ -70,7 +74,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function createInvoice($orderContext)
@@ -79,7 +84,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function reportShipping($orderContext)
@@ -88,7 +94,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function trackingInformation($orderContext)
@@ -97,7 +104,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function refund($orderContext)
@@ -106,7 +114,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function returnOrder($orderContext)
@@ -115,7 +124,8 @@ class InvoiceClientMock implements InvoiceClientInterface
 
     /**
      * @param string $paymentId
-     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     *
+     * @return InvoiceOrderPaymentUpdate
      */
     public function getInvoiceOrderPaymentUpdate($paymentId)
     {
@@ -123,7 +133,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function updateOrder($orderContext)
@@ -132,8 +143,8 @@ class InvoiceClientMock implements InvoiceClientInterface
     }
 
     /**
+     * @param InvoiceOrderContextInterface $orderContext
      *
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
      * @return bool
      */
     public function hasBeenPaid($orderContext)

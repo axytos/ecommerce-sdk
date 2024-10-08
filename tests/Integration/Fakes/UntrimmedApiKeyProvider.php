@@ -7,12 +7,12 @@ use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 class UntrimmedApiKeyProvider implements ApiKeyProviderInterface
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     * @var ApiKeyProviderInterface
      */
     private $apiKeyProvider;
 
     /**
-     * @param \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface $apiKeyProvider
+     * @param ApiKeyProviderInterface $apiKeyProvider
      */
     public function __construct($apiKeyProvider)
     {
@@ -24,6 +24,6 @@ class UntrimmedApiKeyProvider implements ApiKeyProviderInterface
      */
     public function getApiKey()
     {
-        return "    " . $this->apiKeyProvider->getApiKey() . "    ";
+        return '    ' . $this->apiKeyProvider->getApiKey() . '    ';
     }
 }

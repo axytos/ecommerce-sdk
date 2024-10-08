@@ -3,26 +3,27 @@
 namespace Axytos\ECommerce\DataMapping;
 
 use ArrayAccess;
-use ArrayIterator;
-use Countable;
 use IteratorAggregate;
 use Traversable;
 
 /**
  * @phpstan-template TDtoInterface of DtoInterface
+ *
  * @phpstan-implements ArrayAccess<int|string,TDtoInterface>
  * @phpstan-implements IteratorAggregate<int|string,TDtoInterface>
  */
-abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countable
+abstract class DtoCollection implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
      * @phpstan-return class-string<TDtoInterface>
+     *
      * @return string
      */
     abstract public static function getElementClass();
 
     /**
      * @phpstan-var TDtoInterface[]
+     *
      * @var mixed[]
      */
     private $values;
@@ -37,6 +38,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-return TDtoInterface[]
+     *
      * @return mixed[]
      */
     public function getElements()
@@ -46,16 +48,18 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-return Traversable<TDtoInterface>
+     *
      * @return \Traversable
      */
     #[\ReturnTypeWillChange]
     public function getIterator()
     {
-        return new ArrayIterator($this->values);
+        return new \ArrayIterator($this->values);
     }
 
     /**
      * @phpstan-param int|string $offset
+     *
      * @return bool
      */
     #[\ReturnTypeWillChange]
@@ -66,6 +70,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-param int|string $offset
+     *
      * @phpstan-return TDtoInterface
      */
     #[\ReturnTypeWillChange]
@@ -77,6 +82,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
     /**
      * @phpstan-param int|string|null $offset
      * @phpstan-param TDtoInterface $value
+     *
      * @return void
      */
     #[\ReturnTypeWillChange]
@@ -87,6 +93,7 @@ abstract class DtoCollection implements IteratorAggregate, ArrayAccess, Countabl
 
     /**
      * @phpstan-param int|string $offset
+     *
      * @return void
      */
     #[\ReturnTypeWillChange]

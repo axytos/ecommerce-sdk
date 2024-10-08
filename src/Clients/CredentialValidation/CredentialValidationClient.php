@@ -5,7 +5,7 @@ namespace Axytos\ECommerce\Clients\CredentialValidation;
 class CredentialValidationClient implements CredentialValidationClientInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\CredentialValidation\CredentialValidationApiInterface
+     * @var CredentialValidationApiInterface
      */
     private $CredentialValidationApi;
 

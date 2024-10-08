@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportCreateInvoiceTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportCreateInvoiceTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportCreateInvoice
+     * @var ReportCreateInvoice
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,9 +48,11 @@ class ReportCreateInvoiceTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasBeenInvoiced
-     * @param int $reportCreateInvoiceInvocationCount
+     * @param int  $reportCreateInvoiceInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -68,9 +74,11 @@ class ReportCreateInvoiceTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasBeenInvoiced
-     * @param int $reportCreateInvoiceInvocationCount
+     * @param int  $reportCreateInvoiceInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -89,9 +97,11 @@ class ReportCreateInvoiceTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasCreateInvoiceReported
      * @param bool $hasBeenInvoiced
-     * @param int $reportCreateInvoiceInvocationCount
+     * @param int  $reportCreateInvoiceInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -102,7 +112,7 @@ class ReportCreateInvoiceTest extends TestCase
 
         $shopSystemOrder->method('hasCreateInvoiceReported')->willReturn($hasCreateInvoiceReported);
         $shopSystemOrder->method('hasBeenInvoiced')->willReturn($hasBeenInvoiced);
-        $this->invoiceClient->method('createInvoice')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('createInvoice')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder->expects($this->exactly($reportCreateInvoiceInvocationCount))->method('saveHasCreateInvoiceReported');
 
@@ -119,7 +129,7 @@ class ReportCreateInvoiceTest extends TestCase
 
         $shopSystemOrder->method('hasCreateInvoiceReported')->willReturn(false);
         $shopSystemOrder->method('hasBeenInvoiced')->willReturn(true);
-        $this->invoiceClient->method('createInvoice')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('createInvoice')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveHasCreateInvoiceReported');

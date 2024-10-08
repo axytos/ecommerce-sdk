@@ -11,13 +11,13 @@ class RefundBasketTaxGroupDtoCollection extends DtoCollection
 {
     /**
      * @phpstan-return class-string<RefundBasketTaxGroupDto>
+     *
      * @return string
      */
     public static function getElementClass()
     {
         return RefundBasketTaxGroupDto::class;
     }
-
 
     /**
      * @phpstan-param RefundBasketTaxGroupDto ...$values

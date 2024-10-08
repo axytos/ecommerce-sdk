@@ -14,6 +14,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ReportTrackingInformationTest extends TestCase
 {
     /**
@@ -22,12 +25,13 @@ class ReportTrackingInformationTest extends TestCase
     private $invoiceClient;
 
     /**
-     * @var \Axytos\ECommerce\OrderSync\Commands\ReportTrackingInformation
+     * @var ReportTrackingInformation
      */
     private $sut;
 
     /**
      * @before
+     *
      * @return void
      */
     #[Before]
@@ -44,8 +48,10 @@ class ReportTrackingInformationTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasNewTrackingInformation
-     * @param int $reportNewTrackingInformationInvocationCount
+     * @param int  $reportNewTrackingInformationInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -66,8 +72,10 @@ class ReportTrackingInformationTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasNewTrackingInformation
-     * @param int $reportNewTrackingInformationInvocationCount
+     * @param int  $reportNewTrackingInformationInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -86,8 +94,10 @@ class ReportTrackingInformationTest extends TestCase
 
     /**
      * @dataProvider execute_cases
+     *
      * @param bool $hasNewTrackingInformation
-     * @param int $reportNewTrackingInformationInvocationCount
+     * @param int  $reportNewTrackingInformationInvocationCount
+     *
      * @return void
      */
     #[DataProvider('execute_cases')]
@@ -98,7 +108,7 @@ class ReportTrackingInformationTest extends TestCase
 
         $shopSystemOrder->method('hasNewTrackingInformation')->willReturn($hasNewTrackingInformation);
         $shopSystemOrder->method('getNewTrackingInformationReportData')->willReturn($this->createTrackingInformation());
-        $this->invoiceClient->method('trackingInformation')->willThrowException(new ApiException("", 400));
+        $this->invoiceClient->method('trackingInformation')->willThrowException(new ApiException('', 400));
 
         $shopSystemOrder->expects($this->exactly($reportNewTrackingInformationInvocationCount))->method('saveNewTrackingInformation');
 
@@ -115,7 +125,7 @@ class ReportTrackingInformationTest extends TestCase
 
         $shopSystemOrder->method('hasNewTrackingInformation')->willReturn(true);
         $shopSystemOrder->method('getNewTrackingInformationReportData')->willReturn($this->createTrackingInformation());
-        $this->invoiceClient->method('trackingInformation')->willThrowException(new ApiException("", 500));
+        $this->invoiceClient->method('trackingInformation')->willThrowException(new ApiException('', 500));
 
         $this->expectException(ApiException::class);
         $shopSystemOrder->expects($this->never())->method('saveNewTrackingInformation');

@@ -7,11 +7,11 @@ use Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface;
 class CheckoutClient implements CheckoutClientInterface
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\PaymentMethodConfigurationInterface
+     * @var PaymentMethodConfigurationInterface
      */
     private $paymentMethodConfiguration;
     /**
-     * @var \Axytos\ECommerce\Clients\Checkout\CheckoutApiInterface
+     * @var CheckoutApiInterface
      */
     private $checkoutApi;
 
@@ -25,6 +25,7 @@ class CheckoutClient implements CheckoutClientInterface
 
     /**
      * @param string $selectedPaymentMethodId
+     *
      * @return bool
      */
     public function mustShowCreditCheckAgreement($selectedPaymentMethodId)

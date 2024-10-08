@@ -7,7 +7,7 @@ use Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface;
 class UserAgentFactory
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\UserAgentInfoProviderInterface
+     * @var UserAgentInfoProviderInterface
      */
     private $userAgentInfoProvider;
 

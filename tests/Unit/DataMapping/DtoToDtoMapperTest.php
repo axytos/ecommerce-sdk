@@ -12,15 +12,19 @@ use Axytos\ECommerce\Tests\Unit\DataMapping\SampleTypes\TestDtoCollection2;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class DtoToDtoMapperTest extends TestCase
 {
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoToDtoMapper
+     * @var DtoToDtoMapper
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -36,8 +40,8 @@ class DtoToDtoMapperTest extends TestCase
     {
         $fromDto = new TestDto1();
         $fromDto->both = 1;
-        $fromDto->differentType = "differentType";
-        $fromDto->from = "fromValue";
+        $fromDto->differentType = 'differentType';
+        $fromDto->from = 'fromValue';
 
         $toDto = new TestDto2();
         $toDto->both = $fromDto->both;
@@ -54,8 +58,8 @@ class DtoToDtoMapperTest extends TestCase
     public function test_dto_collection_mapping()
     {
         $fromDto = new TestDto3();
-        $fromDto->both = "bothValue";
-        $fromDto->from = "fromValue";
+        $fromDto->both = 'bothValue';
+        $fromDto->from = 'fromValue';
         $fromDtoCollection = new TestDtoCollection1(...[$fromDto]);
         $fromDtoCollection::$classString = get_class($fromDto);
 

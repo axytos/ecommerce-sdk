@@ -9,9 +9,12 @@ use Axytos\FinancialServices\OpenAPI\Client\Api\ErrorApi;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
 use PHPUnit\Framework\Attributes\Before;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @internal
+ */
 class ErrorReportingApiAdapterTest extends TestCase
 {
     /** @var ErrorApi&MockObject */
@@ -21,12 +24,13 @@ class ErrorReportingApiAdapterTest extends TestCase
     private $mapper;
 
     /**
-     * @var \Axytos\ECommerce\Clients\ErrorReporting\ErrorReportingApiAdapter
+     * @var ErrorReportingApiAdapter
      */
     private $sut;
 
     /**
      * @return void
+     *
      * @before
      */
     #[Before]
@@ -44,7 +48,7 @@ class ErrorReportingApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError()
+    public function test_report_error()
     {
         $errorReport = $this->createMock(ErrorRequestModelDto::class);
         $errorRequest = $this->createMock(AxytosApiModelsErrorRequestModel::class);
@@ -52,12 +56,14 @@ class ErrorReportingApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($errorReport, AxytosApiModelsErrorRequestModel::class)
-            ->willReturn($errorRequest);
+            ->willReturn($errorRequest)
+        ;
 
         $this->errorApi
             ->expects($this->once())
             ->method('apiV1ErrorReportPost')
-            ->with($errorRequest);
+            ->with($errorRequest)
+        ;
 
         $this->sut->reportError($errorReport);
     }
@@ -65,7 +71,7 @@ class ErrorReportingApiAdapterTest extends TestCase
     /**
      * @return void
      */
-    public function test_reportError_does_not_propagate_errors()
+    public function test_report_error_does_not_propagate_errors()
     {
         $throwable = null;
 
@@ -75,13 +81,15 @@ class ErrorReportingApiAdapterTest extends TestCase
         $this->mapper
             ->method('toOpenApiModel')
             ->with($errorReport, AxytosApiModelsErrorRequestModel::class)
-            ->willReturn($errorRequest);
+            ->willReturn($errorRequest)
+        ;
 
         $this->errorApi
             ->expects($this->once())
             ->method('apiV1ErrorReportPost')
             ->with($errorRequest)
-            ->willThrowException(new ApiException());
+            ->willThrowException(new ApiException())
+        ;
 
         try {
             $this->sut->reportError($errorReport);

@@ -36,6 +36,7 @@ interface OrderSyncItemInterface
 
     /**
      * @param OrderSyncCommandInterface $command
+     *
      * @return void
      */
     public function execute($command);

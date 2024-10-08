@@ -8,11 +8,11 @@ use Axytos\ECommerce\Abstractions\ApiKeyProviderInterface;
 class PluginConfigurationValidator
 {
     /**
-     * @var \Axytos\ECommerce\Abstractions\ApiHostProviderInterface
+     * @var ApiHostProviderInterface
      */
     private $apiHostProvider;
     /**
-     * @var \Axytos\ECommerce\Abstractions\ApiKeyProviderInterface
+     * @var ApiKeyProviderInterface
      */
     private $apiKeyProvider;
 
@@ -44,7 +44,7 @@ class PluginConfigurationValidator
      */
     private function apiHostIsNotConfigured()
     {
-        return strval($this->apiHostProvider->getApiHost()) === '';
+        return '' === strval($this->apiHostProvider->getApiHost());
     }
 
     /**
@@ -52,6 +52,6 @@ class PluginConfigurationValidator
      */
     private function apiKeyIsNotConfigured()
     {
-        return strval($this->apiKeyProvider->getApiKey()) === '';
+        return '' === strval($this->apiKeyProvider->getApiKey());
     }
 }

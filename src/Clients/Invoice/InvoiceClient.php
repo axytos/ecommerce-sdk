@@ -3,10 +3,10 @@
 namespace Axytos\ECommerce\Clients\Invoice;
 
 use Axytos\ECommerce\DataMapping\DtoArrayMapper;
-use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\CheckDecisions;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentTypeSecurities;
 use Axytos\ECommerce\DataTransferObjects\RefundRequestDto;
@@ -14,16 +14,15 @@ use Axytos\ECommerce\DataTransferObjects\ReportShippingDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
-use Exception;
 
 class InvoiceClient implements InvoiceClientInterface
 {
     /**
-     * @var \Axytos\ECommerce\Clients\Invoice\InvoiceApiInterface
+     * @var InvoiceApiInterface
      */
     private $invoiceApi;
     /**
-     * @var \Axytos\ECommerce\DataMapping\DtoArrayMapper
+     * @var DtoArrayMapper
      */
     private $dtoArrayMapper;
 
@@ -36,7 +35,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return string
      */
     public function precheck($orderContext)
@@ -64,7 +64,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function confirmOrder($orderContext)
@@ -85,7 +86,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function cancelOrder($orderContext)
@@ -94,7 +96,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function uncancelOrder($orderContext)
@@ -103,7 +106,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function createInvoice($orderContext)
@@ -117,7 +121,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function reportShipping($orderContext)
@@ -130,7 +135,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function trackingInformation($orderContext)
@@ -151,7 +157,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function refund($orderContext)
@@ -165,7 +172,8 @@ class InvoiceClient implements InvoiceClientInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function returnOrder($orderContext)
@@ -178,18 +186,21 @@ class InvoiceClient implements InvoiceClientInterface
 
     /**
      * @param string $paymentId
-     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderPaymentUpdate
+     *
+     * @return InvoiceOrderPaymentUpdate
      */
     public function getInvoiceOrderPaymentUpdate($paymentId)
     {
         $invoiceOrderPaymentUpdate = new InvoiceOrderPaymentUpdate();
         $invoiceOrderPaymentUpdate->orderId = $this->getOrderIdFromPayment($paymentId);
         $invoiceOrderPaymentUpdate->paymentStatus = $this->getPaymentStateForOrderId($invoiceOrderPaymentUpdate->orderId);
+
         return $invoiceOrderPaymentUpdate;
     }
 
     /**
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
+     * @param InvoiceOrderContextInterface $orderContext
+     *
      * @return void
      */
     public function updateOrder($orderContext)
@@ -203,6 +214,7 @@ class InvoiceClient implements InvoiceClientInterface
 
     /**
      * @param string $paymentId
+     *
      * @return string
      */
     private function getOrderIdFromPayment($paymentId)
@@ -213,7 +225,7 @@ class InvoiceClient implements InvoiceClientInterface
         $externalOrderId = $paymentResponse->externalOrderId;
 
         if (is_null($externalOrderId)) {
-            throw new Exception('ExternalOrderId not found');
+            throw new \Exception('ExternalOrderId not found');
         }
 
         return $externalOrderId;
@@ -221,6 +233,7 @@ class InvoiceClient implements InvoiceClientInterface
 
     /**
      * @param string $orderId
+     *
      * @return string
      */
     private function getPaymentStateForOrderId($orderId)
@@ -229,22 +242,22 @@ class InvoiceClient implements InvoiceClientInterface
         $paymentState = $this->invoiceApi->paymentState($orderId)->paymentState;
 
         if (is_null($paymentState)) {
-            throw new Exception('PaymentState not found');
+            throw new \Exception('PaymentState not found');
         }
 
         return $paymentState;
     }
 
     /**
+     * @param InvoiceOrderContextInterface $orderContext
      *
-     * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $orderContext
      * @return bool
      */
     public function hasBeenPaid($orderContext)
     {
         $paymentStatus = $this->getPaymentStateForOrderId($orderContext->getOrderNumber());
 
-        return $paymentStatus === PaymentStatus::PAID
-            || $paymentStatus === PaymentStatus::OVERPAID;
+        return PaymentStatus::PAID === $paymentStatus
+            || PaymentStatus::OVERPAID === $paymentStatus;
     }
 }

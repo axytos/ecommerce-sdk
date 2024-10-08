@@ -19,7 +19,7 @@ class BasketDto implements DtoInterface
      */
     public $currency;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\BasketPositionDtoCollection
+     * @var BasketPositionDtoCollection
      */
     public $positions;
 }

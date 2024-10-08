@@ -3,7 +3,6 @@
 namespace Axytos\ECommerce\DataTransferObjects;
 
 use Axytos\ECommerce\DataMapping\DtoInterface;
-use DateTimeInterface;
 
 class CreateInvoiceRequestDto implements DtoInterface
 {
@@ -24,7 +23,7 @@ class CreateInvoiceRequestDto implements DtoInterface
      */
     public $dueDateOffsetDays;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto|null
+     * @var CreateInvoiceBasketDto|null
      */
     public $basket;
 }

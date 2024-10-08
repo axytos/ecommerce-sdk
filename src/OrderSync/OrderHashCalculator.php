@@ -25,6 +25,7 @@ class OrderHashCalculator
 
     /**
      * @param \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface $order
+     *
      * @return string
      */
     public function computeBasketHash($order)
@@ -39,6 +40,7 @@ class OrderHashCalculator
     {
         $arrayDto = $this->dtoArrayMapper->toArray($dto);
         $serializedDto = serialize($arrayDto);
+
         return $this->hashAlgorithm->compute($serializedDto);
     }
 }

@@ -23,23 +23,23 @@ class OrderPreCheckRequestDto implements DtoInterface
      */
     public $selectedPaymentType;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     * @var CustomerDataDto
      */
     public $personalData;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     * @var InvoiceAddressDto
      */
     public $invoiceAddress;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     * @var DeliveryAddressDto
      */
     public $deliveryAddress;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\BasketDto
+     * @var BasketDto
      */
     public $basket;
     /**
-     * @var \Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto|null
+     * @var OrderPreCheckResponseDto|null
      */
     public $orderPrecheckResponse;
 }

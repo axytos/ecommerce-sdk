@@ -19,13 +19,11 @@ use Axytos\ECommerce\DataTransferObjects\RefundBasketTaxGroupDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDto;
 use Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection;
 use Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection;
-use DateTime;
-use DateTimeInterface;
 
 class InvoiceOrderContextFakeFactory
 {
     /**
-     * @return \Axytos\ECommerce\Tests\Integration\Fakes\InvoiceOrderContextFake
+     * @return InvoiceOrderContextFake
      */
     public function createInvoiceOrderContext()
     {
@@ -43,7 +41,7 @@ class InvoiceOrderContextFakeFactory
         $orderContext->setCreateInvoiceBasket($this->createCreateInvoiceBasket($basket));
         $orderContext->setShippingBasketPositions($this->createShippingBasketPositions($basket));
         $orderContext->setReturnPositions($this->createReturnPositions($basket));
-        $orderContext->setRefundBasket($this->createRefundBasket($basket)); #
+        $orderContext->setRefundBasket($this->createRefundBasket($basket));
 
         $orderContext->setDeliveryWeight(42.6);
         $orderContext->setTrackingIds(['trackingId']);
@@ -74,22 +72,23 @@ class InvoiceOrderContextFakeFactory
      */
     public function createOrderDateTime()
     {
-        return new DateTime();
+        return new \DateTime();
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\CustomerDataDto
+     * @return CustomerDataDto
      */
     public function createPersonalData()
     {
         $dto = new CustomerDataDto();
         $dto->externalCustomerId = 'ecommerce-sdk-integration-test-customer';
         $dto->email = 'ecommerce-sdk-integration-test-customer@axytos.com';
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto
+     * @return InvoiceAddressDto
      */
     public function createInvoiceAddress()
     {
@@ -101,11 +100,12 @@ class InvoiceOrderContextFakeFactory
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto
+     * @return DeliveryAddressDto
      */
     public function createDeliveryAddress()
     {
@@ -117,11 +117,12 @@ class InvoiceOrderContextFakeFactory
         $dto->region = 'region';
         $dto->country = 'DE';
         $dto->addressLine1 = 'addressLine1';
+
         return $dto;
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\BasketDto
+     * @return BasketDto
      */
     public function createBasket()
     {
@@ -143,25 +144,27 @@ class InvoiceOrderContextFakeFactory
     }
 
     /**
-     * @return \Axytos\ECommerce\DataTransferObjects\BasketPositionDto
+     * @return BasketPositionDto
      */
     public function createBasketPosition()
     {
         $dto = new BasketPositionDto();
         $dto->productId = uniqid('productId-');
         $dto->productName = uniqid('productName-');
-        $dto->quantity = 1;
+        $dto->quantity = 1.1;
         $dto->taxPercent = 19;
         $dto->netPricePerUnit = 42;
         $dto->netPositionTotal = $dto->quantity * $dto->netPricePerUnit;
         $dto->grossPricePerUnit = $dto->netPricePerUnit * 1.19;
         $dto->grossPositionTotal = $dto->quantity * $dto->grossPricePerUnit;
+
         return $dto;
     }
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
-     * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
+     * @param BasketDto $basket
+     *
+     * @return CreateInvoiceBasketDto
      */
     public function createCreateInvoiceBasket($basket)
     {
@@ -172,37 +175,44 @@ class InvoiceOrderContextFakeFactory
         $dto->grossTotal = $basket->grossTotal;
         $dto->positions = $mapper->mapDtoCollection($basket->positions, CreateInvoiceBasketPositionDtoCollection::class);
         $dto->taxGroups = new CreateInvoiceTaxGroupDtoCollection(...[]);
+
         return $dto;
     }
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
-     * @return \Axytos\ECommerce\DataTransferObjects\ShippingBasketPositionDtoCollection
+     * @param BasketDto $basket
+     *
+     * @return ShippingBasketPositionDtoCollection
      */
     public function createShippingBasketPositions($basket)
     {
         $mapper = new DtoToDtoMapper();
+
         return $mapper->mapDtoCollection($basket->positions, ShippingBasketPositionDtoCollection::class);
     }
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
-     * @return \Axytos\ECommerce\DataTransferObjects\ReturnPositionModelDtoCollection
+     * @param BasketDto $basket
+     *
+     * @return ReturnPositionModelDtoCollection
      */
     public function createReturnPositions($basket)
     {
         $positions = array_map(function (BasketPositionDto $position) {
             $dto = new ReturnPositionModelDto();
-            $dto->quantityToReturn = intval($position->quantity);
+            $dto->quantityToReturn = floatval($position->quantity);
             $dto->productId = strval($position->productId);
+
             return $dto;
         }, $basket->positions->getElements());
+
         return new ReturnPositionModelDtoCollection(...$positions);
     }
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\BasketDto $basket
-     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     * @param BasketDto $basket
+     *
+     * @return RefundBasketDto
      */
     public function createRefundBasket($basket)
     {
@@ -211,6 +221,7 @@ class InvoiceOrderContextFakeFactory
             $dto->productId = $position->productId;
             $dto->netRefundTotal = $position->netPositionTotal;
             $dto->grossRefundTotal = $position->grossPositionTotal;
+
             return $dto;
         }, $basket->positions->getElements());
 
@@ -219,6 +230,7 @@ class InvoiceOrderContextFakeFactory
         $dto->grossTotal = $basket->grossTotal;
         $dto->positions = new RefundBasketPositionDtoCollection(...$positions);
         $dto->taxGroups = new RefundBasketTaxGroupDtoCollection(...[]);
+
         return $dto;
     }
 }

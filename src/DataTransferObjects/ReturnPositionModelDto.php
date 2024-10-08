@@ -7,7 +7,7 @@ use Axytos\ECommerce\DataMapping\DtoInterface;
 class ReturnPositionModelDto implements DtoInterface
 {
     /**
-     * @var int
+     * @var float
      */
     public $quantityToReturn;
     /**
