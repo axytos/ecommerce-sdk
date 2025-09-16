@@ -18,9 +18,9 @@ class TestDtoCollection2 extends DtoCollection
     public static $classString;
 
     /**
-     * @phpstan-return class-string<DtoInterface>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<DtoInterface>
      */
     public static function getElementClass()
     {

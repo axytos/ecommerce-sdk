@@ -83,12 +83,13 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
 
     /**
      * @param Invoice\InvoiceOrderContextInterface $orderContext
+     * @param bool                                 $skipPrecheck
      *
      * @return void
      */
-    public function confirmOrder($orderContext)
+    public function confirmOrder($orderContext, $skipPrecheck = true)
     {
-        $this->invoiceClient->confirmOrder($orderContext);
+        $this->invoiceClient->confirmOrder($orderContext, $skipPrecheck);
     }
 
     /**

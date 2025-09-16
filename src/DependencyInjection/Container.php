@@ -39,11 +39,11 @@ class Container
     /**
      * @param string $key
      *
-     * @return object
-     *
      * @template T
      *
      * @phpstan-param class-string<T> $key
+     *
+     * @return object
      *
      * @phpstan-return T
      */

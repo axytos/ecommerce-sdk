@@ -10,9 +10,9 @@ use Axytos\ECommerce\DataMapping\DtoCollection;
 class ShippingBasketPositionDtoCollection extends DtoCollection
 {
     /**
-     * @phpstan-return class-string<ShippingBasketPositionDto>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<ShippingBasketPositionDto>
      */
     public static function getElementClass()
     {

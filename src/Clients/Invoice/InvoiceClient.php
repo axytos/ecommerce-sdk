@@ -6,6 +6,7 @@ use Axytos\ECommerce\DataMapping\DtoArrayMapper;
 use Axytos\ECommerce\DataTransferObjects\CheckDecisions;
 use Axytos\ECommerce\DataTransferObjects\CreateInvoiceRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentTypeSecurities;
@@ -65,22 +66,32 @@ class InvoiceClient implements InvoiceClientInterface
 
     /**
      * @param InvoiceOrderContextInterface $orderContext
+     * @param bool                         $skipPrecheck
      *
      * @return void
      */
-    public function confirmOrder($orderContext)
+    public function confirmOrder($orderContext, $skipPrecheck = true)
     {
-        $requestDto = new OrderCreateRequestDto();
-        $requestDto->externalOrderId = $orderContext->getOrderNumber();
-        $requestDto->date = $orderContext->getOrderDateTime();
-        $requestDto->personalData = $orderContext->getPersonalData();
-        $requestDto->invoiceAddress = $orderContext->getInvoiceAddress();
-        $requestDto->deliveryAddress = $orderContext->getDeliveryAddress();
-        $requestDto->basket = $orderContext->getBasket();
-
-        $preCheckResponseData = $orderContext->getPreCheckResponseData();
-        $preCheckResponse = $this->dtoArrayMapper->fromArray($preCheckResponseData, OrderPreCheckResponseDto::class);
-        $requestDto->orderPrecheckResponse = $preCheckResponse;
+        if (!$skipPrecheck) {
+            $requestDto = new OrderCreateRequestDto();
+            $requestDto->externalOrderId = $orderContext->getOrderNumber();
+            $requestDto->date = $orderContext->getOrderDateTime();
+            $requestDto->personalData = $orderContext->getPersonalData();
+            $requestDto->invoiceAddress = $orderContext->getInvoiceAddress();
+            $requestDto->deliveryAddress = $orderContext->getDeliveryAddress();
+            $requestDto->basket = $orderContext->getBasket();
+            $preCheckResponseData = $orderContext->getPreCheckResponseData();
+            $preCheckResponse = $this->dtoArrayMapper->fromArray($preCheckResponseData, OrderPreCheckResponseDto::class);
+            $requestDto->orderPrecheckResponse = $preCheckResponse;
+        } else {
+            $requestDto = new OrderCreateRequestWithoutPrecheckDto();
+            $requestDto->externalOrderId = $orderContext->getOrderNumber();
+            $requestDto->date = $orderContext->getOrderDateTime();
+            $requestDto->personalData = $orderContext->getPersonalData();
+            $requestDto->invoiceAddress = $orderContext->getInvoiceAddress();
+            $requestDto->deliveryAddress = $orderContext->getDeliveryAddress();
+            $requestDto->basket = $orderContext->getBasket();
+        }
 
         $this->invoiceApi->confirm($requestDto);
     }

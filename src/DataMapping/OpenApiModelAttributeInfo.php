@@ -10,13 +10,13 @@ class OpenApiModelAttributeInfo
     /**
      * @phpstan-template TModel of \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface
      *
-     * @phpstan-param TModel $oaModel
-     *
-     * @phpstan-return OpenApiModelAttributeInfo<TModel>[]
-     *
      * @param \Axytos\FinancialServices\OpenAPI\Client\Model\ModelInterface $oaModel
      *
+     * @phpstan-param TModel $oaModel
+     *
      * @return OpenApiModelAttributeInfo[]
+     *
+     * @phpstan-return OpenApiModelAttributeInfo<TModel>[]
      */
     public static function getAttributeInfos($oaModel)
     {
@@ -76,19 +76,19 @@ class OpenApiModelAttributeInfo
     private $setterName;
 
     /**
-     * @phpstan-param class-string<TModelInterface> $modelName
-     * @phpstan-param string $name
-     * @phpstan-param string $typeName
-     * @phpstan-param ?string $format
-     * @phpstan-param string $getterName
-     * @phpstan-param string $setterName
-     *
      * @param string|null $format
      * @param string      $modelName
      * @param string      $name
      * @param string      $typeName
      * @param string      $getterName
      * @param string      $setterName
+     *
+     * @phpstan-param class-string<TModelInterface> $modelName
+     * @phpstan-param string $name
+     * @phpstan-param string $typeName
+     * @phpstan-param ?string $format
+     * @phpstan-param string $getterName
+     * @phpstan-param string $setterName
      */
     private function __construct(
         $modelName,
@@ -112,9 +112,9 @@ class OpenApiModelAttributeInfo
     }
 
     /**
-     * @phpstan-return class-string<TModelInterface>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<TModelInterface>
      */
     public function getModelName()
     {

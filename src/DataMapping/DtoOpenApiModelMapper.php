@@ -14,6 +14,7 @@ use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
@@ -70,6 +71,7 @@ class DtoOpenApiModelMapper
         BasketDto::class => AxytosCommonPublicAPIModelsOrderBasket::class,
         BasketPositionDto::class => AxytosCommonPublicAPIModelsOrderBasketPosition::class,
         OrderCreateRequestDto::class => AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class,
+        OrderCreateRequestWithoutPrecheckDto::class => AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class,
         OrderPreCheckRequestDto::class => AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest::class,
         OrderPreCheckResponseDto::class => AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse::class,
         CreateInvoiceRequestDto::class => AxytosApiModelsInvoiceCreationModel::class,
@@ -105,15 +107,15 @@ class DtoOpenApiModelMapper
      * @phpstan-template TDto of DtoInterface
      * @phpstan-template TModel of ModelInterface
      *
-     * @phpstan-param TDto $dataTransferObject
-     * @phpstan-param class-string<TModel> $openApiModelName
-     *
-     * @phpstan-return TModel
-     *
      * @param DtoInterface $dataTransferObject
      * @param string       $openApiModelName
      *
+     * @phpstan-param TDto $dataTransferObject
+     * @phpstan-param class-string<TModel> $openApiModelName
+     *
      * @return ModelInterface
+     *
+     * @phpstan-return TModel
      */
     public function toOpenApiModel($dataTransferObject, $openApiModelName)
     {
@@ -155,15 +157,15 @@ class DtoOpenApiModelMapper
      * @phpstan-template TDto of DtoInterface
      * @phpstan-template TModel of ModelInterface
      *
-     * @phpstan-param TModel $openApiModel
-     * @phpstan-param class-string<TDto> $dataTransferObjectName
-     *
-     * @phpstan-return TDto
-     *
      * @param ModelInterface $openApiModel
      * @param string         $dataTransferObjectName
      *
+     * @phpstan-param TModel $openApiModel
+     * @phpstan-param class-string<TDto> $dataTransferObjectName
+     *
      * @return DtoInterface
+     *
+     * @phpstan-return TDto
      */
     public function toDataTransferObject($openApiModel, $dataTransferObjectName)
     {
@@ -258,9 +260,9 @@ class DtoOpenApiModelMapper
     /**
      * @phpstan-template TModel of ModelInterface
      *
-     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
-     *
      * @param mixed $value
+     *
+     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
      *
      * @return DtoCollection|DtoInterface|\DateTimeInterface|array<mixed>|mixed
      */
@@ -288,11 +290,11 @@ class DtoOpenApiModelMapper
     }
 
     /**
-     * @phpstan-return \Axytos\ECommerce\DataMapping\DtoCollection<DtoInterface>
-     *
      * @param ModelInterface[] $values
      *
      * @return DtoCollection
+     *
+     * @phpstan-return \Axytos\ECommerce\DataMapping\DtoCollection<DtoInterface>
      */
     private function toDtoCollection(array $values, DtoPropertyInfo $dtoPropertyInfo)
     {
@@ -312,9 +314,9 @@ class DtoOpenApiModelMapper
     /**
      * @phpstan-template TModel of ModelInterface
      *
-     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
-     *
      * @param array<mixed> $values
+     *
+     * @phpstan-param OpenApiModelAttributeInfo<TModel> $attributeInfo
      *
      * @return array<mixed>
      */

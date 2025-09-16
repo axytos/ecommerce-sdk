@@ -10,9 +10,9 @@ use Axytos\ECommerce\DataMapping\DtoCollection;
 class CreateInvoiceBasketPositionDtoCollection extends DtoCollection
 {
     /**
-     * @phpstan-return class-string<CreateInvoiceBasketPositionDto>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<CreateInvoiceBasketPositionDto>
      */
     public static function getElementClass()
     {

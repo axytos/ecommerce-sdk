@@ -130,6 +130,19 @@ class ReportUpdateTest extends TestCase
     }
 
     /**
+     * @return mixed[]
+     */
+    public static function execute_cases()
+    {
+        return [
+            'new basket changes and not canceled -> will report' => [true, false, 1],
+            'no new basket changes and not canceled -> will not report' => [false, false, 0],
+            'new basket changes and canceled -> will not report' => [true, true, 0],
+            'no new basket changes and canceled -> will not report' => [false, true, 0],
+        ];
+    }
+
+    /**
      * @return void
      */
     public function test_execute_does_not_save_on_server_error()
@@ -145,18 +158,5 @@ class ReportUpdateTest extends TestCase
         $shopSystemOrder->expects($this->never())->method('saveBasketUpdatesReported');
 
         $this->sut->execute($shopSystemOrder);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function execute_cases()
-    {
-        return [
-            'new basket changes and not canceled -> will report' => [true, false, 1],
-            'no new basket changes and not canceled -> will not report' => [false, false, 0],
-            'new basket changes and canceled -> will not report' => [true, true, 0],
-            'no new basket changes and canceled -> will not report' => [false, true, 0],
-        ];
     }
 }

@@ -10,15 +10,15 @@ class DtoToDtoMapper
      * @phpstan-template TToDto of DtoInterface
      * @phpstan-template TToDtoCollection of DtoCollection<TToDto>
      *
-     * @phpstan-param TFromDtoCollection $fromDtoCollection
-     * @phpstan-param class-string<TToDtoCollection> $toDtoCollectionClassString
-     *
-     * @phpstan-return TToDtoCollection
-     *
      * @param DtoCollection $fromDtoCollection
      * @param string        $toDtoCollectionClassString
      *
+     * @phpstan-param TFromDtoCollection $fromDtoCollection
+     * @phpstan-param class-string<TToDtoCollection> $toDtoCollectionClassString
+     *
      * @return DtoCollection
+     *
+     * @phpstan-return TToDtoCollection
      */
     public function mapDtoCollection($fromDtoCollection, $toDtoCollectionClassString)
     {
@@ -49,15 +49,15 @@ class DtoToDtoMapper
      * @phpstan-template TFromDto of DtoInterface
      * @phpstan-template TToDto of DtoInterface
      *
-     * @phpstan-param TFromDto $fromDto
-     * @phpstan-param class-string<TToDto> $toDtoClassString
-     *
-     * @phpstan-return TToDto
-     *
      * @param DtoInterface $fromDto
      * @param string       $toDtoClassString
      *
+     * @phpstan-param TFromDto $fromDto
+     * @phpstan-param class-string<TToDto> $toDtoClassString
+     *
      * @return DtoInterface
+     *
+     * @phpstan-return TToDto
      */
     public function mapDto($fromDto, $toDtoClassString)
     {

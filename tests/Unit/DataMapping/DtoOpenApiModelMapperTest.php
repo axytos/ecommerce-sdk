@@ -16,6 +16,7 @@ use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
@@ -87,13 +88,13 @@ class DtoOpenApiModelMapperTest extends TestCase
     /**
      * @dataProvider mappingTestCases
      *
-     * @phpstan-param class-string<DtoInterface> $dtoClassName
-     * @phpstan-param class-string<Modelinterface> $modelClassName
-     * @phpstan-param DtoInterface $expectedDto
-     *
      * @param string       $dtoClassName
      * @param string       $modelClassName
      * @param DtoInterface $expectedDto
+     *
+     * @phpstan-param class-string<DtoInterface> $dtoClassName
+     * @phpstan-param class-string<Modelinterface> $modelClassName
+     * @phpstan-param DtoInterface $expectedDto
      *
      * @return void
      */
@@ -124,6 +125,7 @@ class DtoOpenApiModelMapperTest extends TestCase
             [BasketDto::class, AxytosCommonPublicAPIModelsOrderBasket::class, DtoFactory::createBasketDto()],
             [BasketPositionDto::class, AxytosCommonPublicAPIModelsOrderBasketPosition::class, DtoFactory::createBasketPositionDto()],
             [OrderCreateRequestDto::class, AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class, DtoFactory::createOrderCreateRequestDto()],
+            [OrderCreateRequestWithoutPrecheckDto::class, AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class, DtoFactory::createOrderCreateRequestWithoutPrecheckDto()],
             [OrderPreCheckRequestDto::class, AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest::class, DtoFactory::createOrderPreCheckRequestDto()],
             [OrderPreCheckResponseDto::class, AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse::class, DtoFactory::createOrderPreCheckResponseDto()],
             [CreateInvoiceRequestDto::class, AxytosApiModelsInvoiceCreationModel::class, DtoFactory::createCreateInvoiceRequestDto()],

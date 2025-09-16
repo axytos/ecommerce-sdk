@@ -10,9 +10,9 @@ use Axytos\ECommerce\DataMapping\DtoCollection;
 class RefundBasketTaxGroupDtoCollection extends DtoCollection
 {
     /**
-     * @phpstan-return class-string<RefundBasketTaxGroupDto>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<RefundBasketTaxGroupDto>
      */
     public static function getElementClass()
     {

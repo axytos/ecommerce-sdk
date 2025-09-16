@@ -22,11 +22,11 @@ class DtoOpenApiModelModelMappings
     }
 
     /**
-     * @phpstan-param class-string<DtoInterface> $dtoClassName
-     * @phpstan-param class-string<ModelInterface> $oaModelName
-     *
      * @param string $dtoClassName
      * @param string $oaModelName
+     *
+     * @phpstan-param class-string<DtoInterface> $dtoClassName
+     * @phpstan-param class-string<ModelInterface> $oaModelName
      *
      * @return bool
      */
@@ -37,11 +37,11 @@ class DtoOpenApiModelModelMappings
     }
 
     /**
-     * @phpstan-return class-string<ModelInterface>
-     *
      * @param DtoInterface $dto
      *
      * @return string
+     *
+     * @phpstan-return class-string<ModelInterface>
      */
     public function lookupOpenApiModelName($dto)
     {
@@ -55,11 +55,11 @@ class DtoOpenApiModelModelMappings
     }
 
     /**
-     * @phpstan-return class-string<DtoInterface>
-     *
      * @param ModelInterface $model
      *
      * @return string
+     *
+     * @phpstan-return class-string<DtoInterface>
      */
     public function lookupDtoClassName($model)
     {
