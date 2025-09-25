@@ -58,7 +58,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
     }
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto $requestDto
+     * @param \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto|\Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto $requestDto
      *
      * @return void
      */

@@ -151,10 +151,10 @@ class InvoiceClientTest extends TestCase
     }
 
     /**
-     * @phpstan-param mixed $value
-     *
      * @param string $propertyName
      * @param mixed  $value
+     *
+     * @phpstan-param mixed $value
      *
      * @return void
      */
@@ -176,10 +176,10 @@ class InvoiceClientTest extends TestCase
     }
 
     /**
-     * @phpstan-param mixed $value
-     *
      * @param string $propertyName
      * @param mixed  $value
+     *
+     * @phpstan-param mixed $value
      *
      * @return void
      */
@@ -333,7 +333,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('externalOrderId', $this->invoiceOrderContext->getOrderNumber());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -343,7 +343,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('date', $this->invoiceOrderContext->getOrderDateTime());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -353,7 +353,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('personalData', $this->invoiceOrderContext->getPersonalData());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -363,7 +363,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('invoiceAddress', $this->invoiceOrderContext->getInvoiceAddress());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -373,7 +373,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('deliveryAddress', $this->invoiceOrderContext->getDeliveryAddress());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -383,7 +383,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('basket', $this->invoiceOrderContext->getBasket());
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     /**
@@ -393,7 +393,7 @@ class InvoiceClientTest extends TestCase
     {
         $this->expectOrderCreateRequestValueEquals('orderPrecheckResponse', $this->response);
 
-        $this->sut->confirmOrder($this->invoiceOrderContext);
+        $this->sut->confirmOrder($this->invoiceOrderContext, false);
     }
 
     // ==================================================================================================================

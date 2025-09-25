@@ -7,13 +7,13 @@ use DateTimeInterface;
 class DtoArrayMapper
 {
     /**
-     * @phpstan-param DtoInterface $dto
-     *
-     * @phpstan-return array<mixed>
-     *
      * @param DtoInterface $dto
      *
+     * @phpstan-param DtoInterface $dto
+     *
      * @return array<mixed>
+     *
+     * @phpstan-return array<mixed>
      */
     public function toArray($dto)
     {
@@ -21,13 +21,13 @@ class DtoArrayMapper
     }
 
     /**
-     * @phpstan-param DateTimeInterface|DtoInterface|DtoCollection<DtoInterface>|array<mixed> $value
-     *
-     * @phpstan-return mixed
-     *
      * @param \DateTimeInterface|DtoInterface|DtoCollection<DtoInterface>|array<mixed> $value
      *
+     * @phpstan-param DateTimeInterface|DtoInterface|DtoCollection<DtoInterface>|array<mixed> $value
+     *
      * @return string|array<mixed>
+     *
+     * @phpstan-return mixed
      */
     private function toArrayValue($value)
     {
@@ -55,15 +55,15 @@ class DtoArrayMapper
     /**
      * @phpstan-template T of DtoInterface
      *
-     * @phpstan-param array<mixed> $array
-     * @phpstan-param class-string<T> $dtoClassName
-     *
-     * @phpstan-return T
-     *
      * @param array<mixed> $array
      * @param string       $dtoClassName
      *
+     * @phpstan-param array<mixed> $array
+     * @phpstan-param class-string<T> $dtoClassName
+     *
      * @return DtoInterface
+     *
+     * @phpstan-return T
      */
     public function fromArray($array, $dtoClassName)
     {
@@ -86,11 +86,11 @@ class DtoArrayMapper
     }
 
     /**
-     * @phpstan-param mixed $value
-     * @phpstan-param class-string<DateTimeInterface>|class-string<DtoInterface>|class-string<DtoCollection<DtoInterface>>|string $type
-     *
      * @param mixed  $value
      * @param string $type
+     *
+     * @phpstan-param mixed $value
+     * @phpstan-param class-string<DateTimeInterface>|class-string<DtoInterface>|class-string<DtoCollection<DtoInterface>>|string $type
      *
      * @return mixed
      */
@@ -122,15 +122,15 @@ class DtoArrayMapper
     /**
      * @phpstan-template T of DtoCollection
      *
-     * @phpstan-param mixed[] $values
-     * @phpstan-param class-string<T> $dtoCollectionClassName
-     *
-     * @phpstan-return T
-     *
      * @param mixed[] $values
      * @param string  $dtoCollectionClassName
      *
+     * @phpstan-param mixed[] $values
+     * @phpstan-param class-string<T> $dtoCollectionClassName
+     *
      * @return DtoCollection
+     *
+     * @phpstan-return T
      */
     private function createDtoCollection($values, $dtoCollectionClassName)
     {

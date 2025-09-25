@@ -116,6 +116,17 @@ class ReportTrackingInformationTest extends TestCase
     }
 
     /**
+     * @return mixed[]
+     */
+    public static function execute_cases()
+    {
+        return [
+            'new tracking information -> will report' => [true, 1],
+            'not new tracking information -> will not report' => [false, 0],
+        ];
+    }
+
+    /**
      * @return void
      */
     public function test_execute_does_not_save_on_server_error()
@@ -131,17 +142,6 @@ class ReportTrackingInformationTest extends TestCase
         $shopSystemOrder->expects($this->never())->method('saveNewTrackingInformation');
 
         $this->sut->execute($shopSystemOrder);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function execute_cases()
-    {
-        return [
-            'new tracking information -> will report' => [true, 1],
-            'not new tracking information -> will not report' => [false, 0],
-        ];
     }
 
     /**

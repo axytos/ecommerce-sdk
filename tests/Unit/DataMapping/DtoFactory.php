@@ -17,6 +17,7 @@ use Axytos\ECommerce\DataTransferObjects\DeliveryAddressDto;
 use Axytos\ECommerce\DataTransferObjects\ErrorRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\InvoiceAddressDto;
 use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckRequestDto;
 use Axytos\ECommerce\DataTransferObjects\OrderPreCheckResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
@@ -67,6 +68,22 @@ class DtoFactory
         $request->deliveryAddress = self::createDeliveryAddressDto();
         $request->basket = self::createBasketDto();
         $request->orderPrecheckResponse = self::createOrderPreCheckResponseDto();
+
+        return $request;
+    }
+
+    /**
+     * @return OrderCreateRequestWithoutPrecheckDto
+     */
+    public static function createOrderCreateRequestWithoutPrecheckDto()
+    {
+        $request = new OrderCreateRequestWithoutPrecheckDto();
+        $request->externalOrderId = 'externalOrderId';
+        $request->date = self::createDateTime();
+        $request->personalData = self::createCustomerDataDto();
+        $request->invoiceAddress = self::createInvoiceAddressDto();
+        $request->deliveryAddress = self::createDeliveryAddressDto();
+        $request->basket = self::createBasketDto();
 
         return $request;
     }
