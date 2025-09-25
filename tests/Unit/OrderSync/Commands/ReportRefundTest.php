@@ -126,6 +126,23 @@ class ReportRefundTest extends TestCase
     }
 
     /**
+     * @return mixed[]
+     */
+    public static function execute_cases()
+    {
+        return [
+            'invoice reported: already reported and refunded        -> will report' => [true, true, true, 0],
+            'invoice reported: already reported and not refunded    -> will report' => [true, true, false, 0],
+            'invoice reported: not yet reported and refunded        -> will report' => [true, false, true, 1],
+            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, 0],
+            'no invoice reported: already reported and refunded     -> will report' => [false, true, true, 0],
+            'no invoice reported: already reported and not refunded -> will report' => [false, true, false, 0],
+            'no invoice reported: not yet reported and refunded     -> will report' => [false, false, true, 0],
+            'no invoice reported: not yet reported and not refunded -> will report' => [false, false, false, 0],
+        ];
+    }
+
+    /**
      * @return void
      */
     public function test_execute_does_not_save_on_server_error()
@@ -142,22 +159,5 @@ class ReportRefundTest extends TestCase
         $shopSystemOrder->expects($this->never())->method('saveHasRefundReported');
 
         $this->sut->execute($shopSystemOrder);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function execute_cases()
-    {
-        return [
-            'invoice reported: already reported and refunded        -> will report' => [true, true, true, 0],
-            'invoice reported: already reported and not refunded    -> will report' => [true, true, false, 0],
-            'invoice reported: not yet reported and refunded        -> will report' => [true, false, true, 1],
-            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, 0],
-            'no invoice reported: already reported and refunded     -> will report' => [false, true, true, 0],
-            'no invoice reported: already reported and not refunded -> will report' => [false, true, false, 0],
-            'no invoice reported: not yet reported and refunded     -> will report' => [false, false, true, 0],
-            'no invoice reported: not yet reported and not refunded -> will report' => [false, false, false, 0],
-        ];
     }
 }

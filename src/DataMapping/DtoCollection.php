@@ -15,9 +15,9 @@ use Traversable;
 abstract class DtoCollection implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     /**
-     * @phpstan-return class-string<TDtoInterface>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<TDtoInterface>
      */
     abstract public static function getElementClass();
 
@@ -37,9 +37,9 @@ abstract class DtoCollection implements \IteratorAggregate, \ArrayAccess, \Count
     }
 
     /**
-     * @phpstan-return TDtoInterface[]
-     *
      * @return mixed[]
+     *
+     * @phpstan-return TDtoInterface[]
      */
     public function getElements()
     {
@@ -47,9 +47,9 @@ abstract class DtoCollection implements \IteratorAggregate, \ArrayAccess, \Count
     }
 
     /**
-     * @phpstan-return Traversable<TDtoInterface>
-     *
      * @return \Traversable
+     *
+     * @phpstan-return Traversable<TDtoInterface>
      */
     #[\ReturnTypeWillChange]
     public function getIterator()

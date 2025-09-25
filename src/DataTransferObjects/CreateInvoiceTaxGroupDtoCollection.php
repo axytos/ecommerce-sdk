@@ -10,9 +10,9 @@ use Axytos\ECommerce\DataMapping\DtoCollection;
 class CreateInvoiceTaxGroupDtoCollection extends DtoCollection
 {
     /**
-     * @phpstan-return class-string<CreateInvoiceTaxGroupDto>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<CreateInvoiceTaxGroupDto>
      */
     public static function getElementClass()
     {

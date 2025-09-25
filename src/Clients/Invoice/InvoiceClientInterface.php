@@ -13,10 +13,11 @@ interface InvoiceClientInterface
 
     /**
      * @param InvoiceOrderContextInterface $orderContext
+     * @param bool                         $skipPrecheck
      *
      * @return void
      */
-    public function confirmOrder($orderContext);
+    public function confirmOrder($orderContext, $skipPrecheck = true);
 
     /**
      * @param InvoiceOrderContextInterface $orderContext

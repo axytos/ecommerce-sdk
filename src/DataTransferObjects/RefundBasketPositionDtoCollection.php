@@ -10,9 +10,9 @@ use Axytos\ECommerce\DataMapping\DtoCollection;
 class RefundBasketPositionDtoCollection extends DtoCollection
 {
     /**
-     * @phpstan-return class-string<RefundBasketPositionDto>
-     *
      * @return string
+     *
+     * @phpstan-return class-string<RefundBasketPositionDto>
      */
     public static function getElementClass()
     {

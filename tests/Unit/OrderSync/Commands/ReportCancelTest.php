@@ -120,6 +120,19 @@ class ReportCancelTest extends TestCase
     }
 
     /**
+     * @return mixed[]
+     */
+    public static function execute_cases()
+    {
+        return [
+            'already reported and canceled     -> will not report' => [true, true, 0],
+            'already reported and not canceled -> will not report' => [true, false, 0],
+            'not yet reported and canceled     -> will report' => [false, true, 1],
+            'not yet reported and not canceled -> will not report' => [false, false, 0],
+        ];
+    }
+
+    /**
      * @return void
      */
     public function test_execute_does_not_save_on_server_error()
@@ -135,18 +148,5 @@ class ReportCancelTest extends TestCase
         $shopSystemOrder->expects($this->never())->method('saveHasCancelReported');
 
         $this->sut->execute($shopSystemOrder);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public static function execute_cases()
-    {
-        return [
-            'already reported and canceled     -> will not report' => [true, true, 0],
-            'already reported and not canceled -> will not report' => [true, false, 0],
-            'not yet reported and canceled     -> will report' => [false, true, 1],
-            'not yet reported and not canceled -> will not report' => [false, false, 0],
-        ];
     }
 }

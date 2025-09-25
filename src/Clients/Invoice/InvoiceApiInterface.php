@@ -2,6 +2,9 @@
 
 namespace Axytos\ECommerce\Clients\Invoice;
 
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto;
+use Axytos\ECommerce\DataTransferObjects\OrderCreateRequestWithoutPrecheckDto;
+
 interface InvoiceApiInterface
 {
     /**
@@ -12,7 +15,7 @@ interface InvoiceApiInterface
     public function precheck($request);
 
     /**
-     * @param \Axytos\ECommerce\DataTransferObjects\OrderCreateRequestDto $request
+     * @param OrderCreateRequestDto|OrderCreateRequestWithoutPrecheckDto $request $request
      *
      * @return void
      */
