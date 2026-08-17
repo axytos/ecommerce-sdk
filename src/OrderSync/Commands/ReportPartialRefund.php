@@ -9,7 +9,7 @@ use Axytos\ECommerce\OrderSync\OrderSyncCommandInterface;
 use Axytos\ECommerce\OrderSync\ShopSystemOrderInterface;
 use Axytos\FinancialServices\OpenAPI\Client\ApiException;
 
-class ReportRefund implements OrderSyncCommandInterface
+class ReportPartialRefund implements OrderSyncCommandInterface
 {
     /**
      * @var InvoiceClientInterface
@@ -29,7 +29,7 @@ class ReportRefund implements OrderSyncCommandInterface
     public function __construct(
         InvoiceClientInterface $invoiceClient,
         LoggerAdapterInterface $logger,
-        ErrorReportingClientInterface $errorReportingClient,
+        ErrorReportingClientInterface $errorReportingClient
     ) {
         $this->invoiceClient = $invoiceClient;
         $this->logger = $logger;
@@ -43,7 +43,7 @@ class ReportRefund implements OrderSyncCommandInterface
      */
     public function execute($shopSystemOrder)
     {
-        if ($shopSystemOrder->hasRefundReported()) {
+        if ($shopSystemOrder->hasNewPartialRefundSinceLastReport()) {
             return;
         }
 
@@ -51,19 +51,21 @@ class ReportRefund implements OrderSyncCommandInterface
             return;
         }
 
-        $this->logger->info('Order: ' . $shopSystemOrder->getOrderNumber() . ' | ReportRefund started');
+        $this->logger->info('Order: ' . $shopSystemOrder->getOrderNumber() . ' | ReportPartialRefund started');
 
-        try {
-            $this->invoiceClient->refund($shopSystemOrder->getRefundReportData());
-        } catch (ApiException $exception) {
-            if ($exception->getCode() >= 400 && $exception->getCode() < 500) {
-                $this->errorReportingClient->reportError($exception);
-                $this->logger->warning('Order: ' . $shopSystemOrder->getOrderNumber() . ' | ' . $exception);
-            } else {
-                throw $exception;
+        if ($shopSystemOrder->hasBeenPartialRefunded()) {
+            try {
+                $this->invoiceClient->refundPartial($shopSystemOrder->getRefundReportData());
+            } catch (ApiException $exception) {
+                if ($exception->getCode() >= 400 && $exception->getCode() < 500) {
+                    $this->errorReportingClient->reportError($exception);
+                    $this->logger->warning('Order: ' . $shopSystemOrder->getOrderNumber() . ' | ' . $exception);
+                } else {
+                    throw $exception;
+                }
             }
+            $shopSystemOrder->savePartialRefundReported();
         }
-        $shopSystemOrder->saveHasRefundReported();
 
         $this->logger->info('Order: ' . $shopSystemOrder->getOrderNumber() . ' | ReportRefund finished');
     }

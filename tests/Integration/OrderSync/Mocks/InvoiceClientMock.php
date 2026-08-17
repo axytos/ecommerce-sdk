@@ -119,6 +119,16 @@ class InvoiceClientMock implements InvoiceClientInterface
      *
      * @return void
      */
+    public function refundPartial($orderContext)
+    {
+        $this->callRecords['refundPartial'][] = $orderContext;
+    }
+
+    /**
+     * @param InvoiceOrderContextInterface $orderContext
+     *
+     * @return void
+     */
     public function returnOrder($orderContext)
     {
     }

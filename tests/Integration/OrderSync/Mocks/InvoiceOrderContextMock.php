@@ -92,6 +92,14 @@ class InvoiceOrderContextMock implements InvoiceOrderContextInterface
     }
 
     /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    public function getPartialRefundBasket()
+    {
+        return new \Axytos\ECommerce\DataTransferObjects\RefundBasketDto();
+    }
+
+    /**
      * @return \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
      */
     public function getCreateInvoiceBasket()

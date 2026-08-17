@@ -101,6 +101,59 @@ interface ShopSystemOrderInterface
     public function getRefundReportData();
 
     // ==================================================================================
+    // Partial Refund
+    // ==================================================================================
+
+    /**
+     * Check if the order has been partially refunded.
+     *
+     * @return bool
+     */
+    public function hasBeenPartialRefunded();
+
+    /**
+     * Check if new partial refunds occurred since the last report.
+     *
+     * @return bool
+     */
+    public function hasNewPartialRefundSinceLastReport();
+
+    /**
+     * Return timestamp of last partial refund reporting.
+     *
+     * @return \DateTimeInterface|null
+     */
+    public function getPartialRefundLastReportedAt();
+
+    /**
+     * Mark the latest partial refund reporting time.
+     *
+     * @return void
+     */
+    public function savePartialRefundLastReportedAt(\DateTimeInterface $ts);
+
+    /**
+     * Indicates if a partial refund has already been reported.
+     *
+     * @return bool
+     */
+    public function hasPartialRefundReported();
+
+    /**
+     * Mark partial refund as reported.
+     *
+     * @return void
+     */
+    public function savePartialRefundReported();
+
+    /**
+     * Return data necessary for partial refund reporting.
+     *
+     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
+     */
+    public function getPartialRefundReportData();
+
+    // ==================================================================================
     // Shipping
     // ==================================================================================
 

@@ -8,13 +8,13 @@ use Axytos\ECommerce\DataTransferObjects\PaymentResponseDto;
 use Axytos\ECommerce\DataTransferObjects\PaymentStateResponseDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsOrderCancellationReversalRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsShippingTrackingInformationRequestModel;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsInvoiceCreationInvoiceCreationModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 
@@ -98,7 +98,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
      */
     public function createInvoice($requestDto)
     {
-        $request = $this->mapper->toOpenApiModel($requestDto, AxytosApiModelsInvoiceCreationModel::class);
+        $request = $this->mapper->toOpenApiModel($requestDto, AxytosCommonModelsInvoiceCreationInvoiceCreationModel::class);
 
         $this->paymentsApi->apiV1PaymentsInvoiceOrderCreateInvoicePost($request);
     }
@@ -178,7 +178,7 @@ class InvoiceApiAdapter implements InvoiceApiInterface
      */
     public function updateOrder($updateOrderModelDto)
     {
-        $request = $this->mapper->toOpenApiModel($updateOrderModelDto, AxytosApiModelsUpdateOrderModel::class);
+        $request = $this->mapper->toOpenApiModel($updateOrderModelDto, AxytosCommonModelsUpdateOrderModel::class);
         $this->paymentsApi->apiV1PaymentsInvoiceOrderUpdatePost($request);
     }
 }
