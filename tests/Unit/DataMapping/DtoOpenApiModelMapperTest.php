@@ -33,18 +33,18 @@ use Axytos\ECommerce\DataTransferObjects\ShippingTrackingInformationRequestModel
 use Axytos\ECommerce\DataTransferObjects\TransactionMetadataDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsErrorRequestModel;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsShippingTrackingInformationRequestModel;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsInvoiceCreationInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasket;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundBasketTaxGroup;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderRefundPositionModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsOrderReturnPositionModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCompanyRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonCustomerDataRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsCommonDeliveryAddress;
@@ -128,7 +128,7 @@ class DtoOpenApiModelMapperTest extends TestCase
             [OrderCreateRequestWithoutPrecheckDto::class, AxytosCommonPublicAPIModelsOrderOrderCreateRequest::class, DtoFactory::createOrderCreateRequestWithoutPrecheckDto()],
             [OrderPreCheckRequestDto::class, AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest::class, DtoFactory::createOrderPreCheckRequestDto()],
             [OrderPreCheckResponseDto::class, AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse::class, DtoFactory::createOrderPreCheckResponseDto()],
-            [CreateInvoiceRequestDto::class, AxytosApiModelsInvoiceCreationModel::class, DtoFactory::createCreateInvoiceRequestDto()],
+            [CreateInvoiceRequestDto::class, AxytosCommonModelsInvoiceCreationInvoiceCreationModel::class, DtoFactory::createCreateInvoiceRequestDto()],
             [CreateInvoiceBasketDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasket::class, DtoFactory::createCreateInvoiceBasketDto()],
             [CreateInvoiceBasketPositionDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasketPosition::class, DtoFactory::createCreateInvoiceBasketPositionDto()],
             [CreateInvoiceTaxGroupDto::class, AxytosCommonPublicAPIModelsInvoiceInvoiceBasketTaxGroup::class, DtoFactory::createCreateInvoiceTaxGroupDto()],
@@ -144,7 +144,7 @@ class DtoOpenApiModelMapperTest extends TestCase
             [ReportShippingDto::class, AxytosApiModelsReportShippingModel::class, DtoFactory::createReportShippingDto()],
             [ShippingBasketPositionDto::class, AxytosCommonPublicAPIModelsOrderShippingBasketPosition::class, DtoFactory::createShippingBasketPositionDto()],
             [ShippingTrackingInformationRequestModelDto::class, AxytosApiModelsShippingTrackingInformationRequestModel::class, DtoFactory::createShippingTrackingInformationRequestModelDto()],
-            [UpdateOrderModelDto::class, AxytosApiModelsUpdateOrderModel::class, DtoFactory::createUpdateOrderModelDto()],
+            [UpdateOrderModelDto::class, AxytosCommonModelsUpdateOrderModel::class, DtoFactory::createUpdateOrderModelDto()],
         ];
     }
 

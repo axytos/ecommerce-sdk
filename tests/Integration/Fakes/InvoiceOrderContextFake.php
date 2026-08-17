@@ -39,6 +39,10 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
      */
     private $refundBasket;
     /**
+     * @var \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    private $refundPartialBasket;
+    /**
      * @var \Axytos\ECommerce\DataTransferObjects\CreateInvoiceBasketDto
      */
     private $createInvoiceBasket;
@@ -204,6 +208,28 @@ class InvoiceOrderContextFake implements InvoiceOrderContextInterface
     public function getRefundBasket()
     {
         return $this->refundBasket;
+    }
+
+    /**
+     * @return \Axytos\ECommerce\DataTransferObjects\RefundBasketDto
+     */
+    public function getPartialRefundBasket()
+    {
+        if (null === $this->refundPartialBasket) {
+            throw new \RuntimeException('Partial refund basket not set in InvoiceOrderContextFake.');
+        }
+
+        return $this->refundPartialBasket;
+    }
+
+    /**
+     * @param \Axytos\ECommerce\DataTransferObjects\RefundBasketDto $refundPartialBasket
+     *
+     * @return void
+     */
+    public function setPartialRefundBasket($refundPartialBasket)
+    {
+        $this->refundPartialBasket = $refundPartialBasket;
     }
 
     /**

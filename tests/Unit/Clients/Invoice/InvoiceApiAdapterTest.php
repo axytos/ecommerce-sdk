@@ -16,13 +16,13 @@ use Axytos\ECommerce\DataTransferObjects\ReturnRequestModelDto;
 use Axytos\ECommerce\DataTransferObjects\UpdateOrderModelDto;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentApi;
 use Axytos\FinancialServices\OpenAPI\Client\Api\PaymentsApi;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsInvoiceCreationModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsPaymentStateResponseModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsRefundRequestModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReportShippingModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsReturnRequestModel;
-use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosApiModelsUpdateOrderModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsInvoiceCreationInvoiceCreationModel;
+use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonModelsUpdateOrderModel;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderCreateRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsOrderOrderPreCheckRequest;
 use Axytos\FinancialServices\OpenAPI\Client\Model\AxytosCommonPublicAPIModelsPaymentControlOrderPrecheckResponse;
@@ -169,11 +169,11 @@ class InvoiceApiAdapterTest extends TestCase
     public function test_create_invoice_sends_refund_request()
     {
         $requestDto = $this->createMock(CreateInvoiceRequestDto::class);
-        $requestModel = $this->createMock(AxytosApiModelsInvoiceCreationModel::class);
+        $requestModel = $this->createMock(AxytosCommonModelsInvoiceCreationInvoiceCreationModel::class);
 
         $this->mapper
             ->method('toOpenApiModel')
-            ->with($requestDto, AxytosApiModelsInvoiceCreationModel::class)
+            ->with($requestDto, AxytosCommonModelsInvoiceCreationInvoiceCreationModel::class)
             ->willReturn($requestModel)
         ;
 
@@ -292,11 +292,11 @@ class InvoiceApiAdapterTest extends TestCase
     public function test_update_order_sends_order_update_request()
     {
         $requestDto = $this->createMock(UpdateOrderModelDto::class);
-        $requestModel = $this->createMock(AxytosApiModelsUpdateOrderModel::class);
+        $requestModel = $this->createMock(AxytosCommonModelsUpdateOrderModel::class);
 
         $this->mapper
             ->method('toOpenApiModel')
-            ->with($requestDto, AxytosApiModelsUpdateOrderModel::class)
+            ->with($requestDto, AxytosCommonModelsUpdateOrderModel::class)
             ->willReturn($requestModel)
         ;
 

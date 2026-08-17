@@ -157,6 +157,16 @@ class ClientFacade implements CheckoutClientInterface, CredentialValidationClien
      *
      * @return void
      */
+    public function refundPartial($orderContext)
+    {
+        $this->invoiceClient->refundPartial($orderContext);
+    }
+
+    /**
+     * @param Invoice\InvoiceOrderContextInterface $orderContext
+     *
+     * @return void
+     */
     public function returnOrder($orderContext)
     {
         $this->invoiceClient->returnOrder($orderContext);
