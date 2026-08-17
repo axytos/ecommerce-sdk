@@ -134,7 +134,7 @@ class ReportRefundTest extends TestCase
             'invoice reported: already reported and refunded        -> will report' => [true, true, true, 0],
             'invoice reported: already reported and not refunded    -> will report' => [true, true, false, 0],
             'invoice reported: not yet reported and refunded        -> will report' => [true, false, true, 1],
-            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, 0],
+            'invoice reported: not yet reported and not refunded    -> will report' => [true, false, false, 1],
             'no invoice reported: already reported and refunded     -> will report' => [false, true, true, 0],
             'no invoice reported: already reported and not refunded -> will report' => [false, true, false, 0],
             'no invoice reported: not yet reported and refunded     -> will report' => [false, false, true, 0],

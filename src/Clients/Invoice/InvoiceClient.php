@@ -187,6 +187,25 @@ class InvoiceClient implements InvoiceClientInterface
      *
      * @return void
      */
+    public function refundPartial($orderContext)
+    {
+        if (!$orderContext instanceof SupportsPartialRefundInvoiceOrderContextInterface) {
+            throw new \LogicException('Partial refund is not supported by this shop system.');
+        }
+
+        $requestDto = new RefundRequestDto();
+        $requestDto->externalOrderId = $orderContext->getOrderNumber();
+        $requestDto->originalInvoiceNumber = $orderContext->getOrderInvoiceNumber();
+        $requestDto->basket = $orderContext->getPartialRefundBasket();
+
+        $this->invoiceApi->refund($requestDto);
+    }
+
+    /**
+     * @param InvoiceOrderContextInterface $orderContext
+     *
+     * @return void
+     */
     public function returnOrder($orderContext)
     {
         $requestDto = new ReturnRequestModelDto();

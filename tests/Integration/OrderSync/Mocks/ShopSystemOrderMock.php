@@ -12,18 +12,19 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
     private $orderNumber;
 
     /**
-     * @var array<string,array<string,bool>>
+     * @var array<string,array<string,mixed>>
      */
     private $config;
 
     /**
-     * @param string|int|null                  $orderNumber
-     * @param array<string,array<string,bool>> $config
+     * @param string|int|null                   $orderNumber
+     * @param array<string,array<string,mixed>> $config
      */
     public function __construct($orderNumber, $config)
     {
         $this->orderNumber = $orderNumber;
         $this->config = $config;
+
         $this->config['actual'] = [
             'saveHasCancelReported' => false,
             'saveHasCreateInvoiceReported' => false,
@@ -31,11 +32,12 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
             'saveHasShippingReported' => false,
             'saveNewTrackingInformation' => false,
             'saveBasketUpdatesReported' => false,
+            'savePartialRefundReported' => false,
         ];
     }
 
     /**
-     * @return array<string,array<string,bool>>
+     * @return array<string,array<string,mixed>>
      */
     public function getTestConfig()
     {
@@ -84,7 +86,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasCreateInvoiceReported()
     {
-        return $this->config['order']['hasCreateInvoiceReported'];
+        return isset($this->config['order']['hasCreateInvoiceReported'])
+            ? (bool) $this->config['order']['hasCreateInvoiceReported']
+            : false;
     }
 
     /**
@@ -100,7 +104,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasBeenInvoiced()
     {
-        return $this->config['order']['hasBeenInvoiced'];
+        return isset($this->config['order']['hasBeenInvoiced'])
+            ? (bool) $this->config['order']['hasBeenInvoiced']
+            : false;
     }
 
     /**
@@ -120,7 +126,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasCancelReported()
     {
-        return $this->config['order']['hasCancelReported'];
+        return isset($this->config['order']['hasCancelReported'])
+            ? (bool) $this->config['order']['hasCancelReported']
+            : false;
     }
 
     /**
@@ -136,7 +144,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasBeenCanceled()
     {
-        return $this->config['order']['hasBeenCanceled'];
+        return isset($this->config['order']['hasBeenCanceled'])
+            ? (bool) $this->config['order']['hasBeenCanceled']
+            : false;
     }
 
     /**
@@ -156,7 +166,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasRefundReported()
     {
-        return $this->config['order']['hasRefundReported'];
+        return isset($this->config['order']['hasRefundReported'])
+            ? (bool) $this->config['order']['hasRefundReported']
+            : false;
     }
 
     /**
@@ -172,13 +184,85 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasBeenRefunded()
     {
-        return $this->config['order']['hasBeenRefunded'];
+        return isset($this->config['order']['hasBeenRefunded'])
+            ? (bool) $this->config['order']['hasBeenRefunded']
+            : false;
     }
 
     /**
      * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
      */
     public function getRefundReportData()
+    {
+        return new InvoiceOrderContextMock($this);
+    }
+
+    // ==================================================================================
+    // Partial Refund
+    // ==================================================================================
+
+    /**
+     * @return bool
+     */
+    public function hasPartialRefundReported()
+    {
+        return isset($this->config['order']['hasPartialRefundReported'])
+            ? (bool) $this->config['order']['hasPartialRefundReported']
+            : false;
+    }
+
+    /**
+     * @return void
+     */
+    public function savePartialRefundReported()
+    {
+        $this->config['actual']['savePartialRefundReported'] = true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasBeenPartialRefunded()
+    {
+        return isset($this->config['order']['hasBeenPartialRefunded'])
+            ? (bool) $this->config['order']['hasBeenPartialRefunded']
+            : false;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNewPartialRefundSinceLastReport()
+    {
+        return isset($this->config['order']['hasNewPartialRefundSinceLastReport'])
+            ? (bool) $this->config['order']['hasNewPartialRefundSinceLastReport']
+            : false;
+    }
+
+    /**
+     * @return \DateTimeInterface|null
+     */
+    public function getPartialRefundLastReportedAt()
+    {
+        $value = isset($this->config['order']['partialRefundLastReportedAt'])
+            ? $this->config['order']['partialRefundLastReportedAt']
+            : null;
+
+        return ($value instanceof \DateTimeInterface) ? $value : null;
+    }
+
+    /**
+     * @return void
+     */
+    public function savePartialRefundLastReportedAt(\DateTimeInterface $ts)
+    {
+        $this->config['order']['partialRefundLastReportedAt'] = $ts;
+    }
+
+    /**
+     * @return \Axytos\ECommerce\Clients\Invoice\InvoiceOrderContextInterface
+     */
+    public function getPartialRefundReportData()
     {
         return new InvoiceOrderContextMock($this);
     }
@@ -192,7 +276,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasShippingReported()
     {
-        return $this->config['order']['hasShippingReported'];
+        return isset($this->config['order']['hasShippingReported'])
+            ? (bool) $this->config['order']['hasShippingReported']
+            : false;
     }
 
     /**
@@ -208,7 +294,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasBeenShipped()
     {
-        return $this->config['order']['hasBeenShipped'];
+        return isset($this->config['order']['hasBeenShipped'])
+            ? (bool) $this->config['order']['hasBeenShipped']
+            : false;
     }
 
     /**
@@ -228,7 +316,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasNewTrackingInformation()
     {
-        return $this->config['order']['hasNewTrackingInformation'];
+        return isset($this->config['order']['hasNewTrackingInformation'])
+            ? (bool) $this->config['order']['hasNewTrackingInformation']
+            : false;
     }
 
     /**
@@ -256,7 +346,9 @@ class ShopSystemOrderMock implements ShopSystemOrderInterface
      */
     public function hasBasketUpdates()
     {
-        return $this->config['order']['hasBasketUpdates'];
+        return isset($this->config['order']['hasBasketUpdates'])
+            ? (bool) $this->config['order']['hasBasketUpdates']
+            : false;
     }
 
     /**

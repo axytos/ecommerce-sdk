@@ -66,6 +66,13 @@ interface InvoiceClientInterface
      *
      * @return void
      */
+    public function refundPartial($orderContext);
+
+    /**
+     * @param InvoiceOrderContextInterface $orderContext
+     *
+     * @return void
+     */
     public function returnOrder($orderContext);
 
     /**
